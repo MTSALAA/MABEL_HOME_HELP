@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none">
+<path d="M120 14c48-2 92 20 102 60 10 38-14 76-52 94-36 16-84 16-118-2C20 148 6 110 18 74 30 38 72 16 120 14z" fill="#F4EEDF"/>
+<path d="M36 186c30-12 62 4 92-4s48-6 76-12" stroke="#E2D7BD" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 13"/>
+<rect x="114" y="40" width="11" height="130" rx="3" fill="#E2D7BD" stroke="#1F3D2B" stroke-width="3"/>
+<path d="M125 54h44l15 14-15 14h-44z" fill="#4E8B66" stroke="#1F3D2B" stroke-width="3" stroke-linejoin="round"/>
+<path d="M114 94H72l-15 14 15 14h42z" fill="#9CC5AB" stroke="#1F3D2B" stroke-width="3" stroke-linejoin="round"/>
+<path d="M48 170h146" stroke="#1F3D2B" stroke-width="3" stroke-linecap="round"/>
+<path d="M140 170c-10 0-14-12-6-18 0-12 14-18 22-10 8-8 24-4 24 8 10 2 12 20-2 20z" fill="#4E8B66" stroke="#1F3D2B" stroke-width="3" stroke-linejoin="round"/>
+<circle cx="150" cy="156" r="3.5" fill="#E3A857"/>
+<circle cx="168" cy="150" r="3.5" fill="#E3A857"/>
+<path d="M78 170l-3-9M85 170v-11M92 170l3-9" stroke="#1F3D2B" stroke-width="3" stroke-linecap="round"/>
+<path d="M46 46c3-6 9-6 11 0 2-6 8-6 11 0M76 34c2-5 7-5 9 0 2-5 7-5 9 0" stroke="#1F3D2B" stroke-width="3" stroke-linecap="round"/>
+</svg>

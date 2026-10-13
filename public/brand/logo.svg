@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64" fill="none" role="img" aria-label="Mabel Home Help">
+  <rect x="2" y="8" width="48" height="48" rx="14" fill="#2F5D43"/>
+  <path d="M12.5 32.5 26 20.5l13.5 12" stroke="#FBF8F1" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16.5 30.5V41a3 3 0 0 0 3 3h13a3 3 0 0 0 3-3V30.5" stroke="#FBF8F1" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M26 40.6c-3.5-2.3-5.1-4.1-5.1-6.1a2.65 2.65 0 0 1 5.1-1 2.65 2.65 0 0 1 5.1 1c0 2-1.6 3.8-5.1 6.1Z" fill="#E3A857"/>
+  <text x="64" y="35" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="28" font-weight="700" fill="#1F3D2B">Mabel</text>
+  <text x="65" y="53" font-family="'Atkinson Hyperlegible', Helvetica, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2.4" fill="#2F5D43">HOME HELP</text>
+</svg>

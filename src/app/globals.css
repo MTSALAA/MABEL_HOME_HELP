@@ -1,0 +1,188 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Brand palette (cahier des charges, section 11.2). */
+@theme {
+  --color-forest-950: #16291d;
+  --color-forest-900: #1f3d2b;
+  --color-forest-700: #2f5d43;
+  --color-forest-600: #3c7153;
+  --color-forest-500: #4e8b66;
+  --color-forest-300: #9cc5ab;
+  --color-forest-100: #e3efe6;
+  --color-forest-50: #f1f7f2;
+
+  --color-cream-50: #fbf8f1;
+  --color-cream-100: #f4eedf;
+  --color-cream-200: #ece3cd;
+  --color-cream-300: #e2d7bd;
+
+  --color-ink: #1c241f;
+  --color-ink-muted: #4f5a53;
+  --color-honey: #e3a857;
+  --color-honey-soft: #f8e7c8;
+  --color-clay: #d9825b;
+  --color-danger: #b3261e;
+  --color-danger-soft: #fbeae8;
+
+  --shadow-soft: 0 1px 2px rgb(31 61 43 / 0.05), 0 8px 24px rgb(31 61 43 / 0.07);
+  --shadow-lift: 0 2px 4px rgb(31 61 43 / 0.06), 0 16px 40px rgb(31 61 43 / 0.12);
+
+  --breakpoint-xs: 22.5rem;
+}
+
+/* Tokens consumed by the shadcn/ui components (admin). */
+:root {
+  --radius: 0.75rem;
+  --background: #fbf8f1;
+  --foreground: #1c241f;
+  --card: #ffffff;
+  --card-foreground: #1c241f;
+  --popover: #ffffff;
+  --popover-foreground: #1c241f;
+  --primary: #2f5d43;
+  --primary-foreground: #ffffff;
+  --secondary: #f4eedf;
+  --secondary-foreground: #1f3d2b;
+  --muted: #f4eedf;
+  --muted-foreground: #4f5a53;
+  --accent: #e3efe6;
+  --accent-foreground: #1f3d2b;
+  --destructive: #b3261e;
+  --border: #e2d7bd;
+  /* Form control borders need 3:1 contrast against the page. */
+  --input: #869083;
+  --ring: #4e8b66;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 12px);
+  --radius-3xl: calc(var(--radius) + 20px);
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), ui-serif, Georgia, serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Keep focused fields and anchors clear of the sticky header and the
+       sticky action bar on phones. */
+    scroll-padding-top: 6rem;
+    scroll-padding-bottom: 6rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One clear, consistent focus indicator everywhere. */
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background-color: var(--color-forest-300);
+    color: var(--color-forest-950);
+  }
+}
+
+@layer components {
+  /* Page gutter: 16px on phones, wider on larger screens. */
+  .page-container {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .page-container {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .page-container {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Long-form text (legal pages, about story). */
+  .prose-mabel {
+    max-width: 70ch;
+  }
+
+  .prose-mabel p + p {
+    margin-top: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The page behind the open phone menu (a modal <dialog>) does not scroll. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
