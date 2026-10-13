@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mabel Home Help: logo options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest-950: #16291d;
+    --forest-900: #1f3d2b;
+    --forest-700: #2f5d43;
+    --forest-100: #e3ede5;
+    --honey: #e3a857;
+    --cream-50: #fbf8f1;
+    --cream-100: #f5efe2;
+    --cream-300: #e3d8c1;
+    --ink-muted: #55615a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 56px 56px 64px;
+    background: var(--cream-100);
+    color: var(--forest-900);
+    font-family: "Atkinson Hyperlegible", Helvetica, Arial, sans-serif;
+  }
+  h1 { margin: 0; font: 700 44px/1.1 Fraunces, Georgia, serif; }
+  .lead { margin: 10px 0 40px; max-width: 900px; font-size: 20px; line-height: 1.5; color: var(--ink-muted); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 28px; }
+  .card { overflow: hidden; border: 1px solid var(--cream-300); border-radius: 22px; background: #fff; }
+  .card header { display: flex; align-items: baseline; gap: 14px; padding: 22px 26px 0; }
+  .num { font: 700 15px/1 "Atkinson Hyperlegible", sans-serif; letter-spacing: .14em; color: var(--forest-700); }
+  .card h2 { margin: 0; font: 700 26px/1.2 Fraunces, Georgia, serif; }
+  .pick { margin-left: auto; padding: 5px 12px; border-radius: 999px; background: var(--honey); font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+  .why { margin: 6px 26px 18px; font-size: 17px; line-height: 1.45; color: var(--ink-muted); }
+  .stage { display: grid; grid-template-columns: 190px 1fr; }
+  .big { display: grid; place-items: center; padding: 26px; background: var(--cream-50); border-top: 1px solid var(--cream-300); border-right: 1px solid var(--cream-300); }
+  .big svg { width: 132px; height: 132px; }
+  .rows { display: grid; grid-template-rows: 1fr 1fr; }
+  .row { display: flex; align-items: center; padding: 20px 26px; border-top: 1px solid var(--cream-300); }
+  .light { background: var(--cream-50); --a: var(--forest-700); --a2: var(--forest-900); --b: var(--honey); --c: var(--cream-50); }
+  .dark { background: var(--forest-900); --a: var(--cream-50); --a2: var(--cream-50); --b: var(--honey); --c: var(--forest-900); }
+  .big { --a: var(--forest-700); --a2: var(--forest-900); --b: var(--honey); --c: var(--cream-50); }
+  .lockup { display: inline-flex; align-items: center; gap: 14px; }
+  .lockup svg { width: 58px; height: 58px; flex: none; }
+  .word { display: flex; flex-direction: column; line-height: 1; }
+  .word b { font: 700 34px/1 Fraunces, Georgia, serif; letter-spacing: -.01em; color: var(--a2); }
+  .word span { margin-top: 6px; font-size: 13px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--a); }
+  .dark .word span { color: #a9cdb6; }
+  .sizes { display: flex; align-items: center; gap: 18px; padding: 16px 26px; border-top: 1px solid var(--cream-300); font-size: 13px; color: var(--ink-muted); --a: var(--forest-700); --a2: var(--forest-900); --b: var(--honey); --c: #fff; }
+  .sizes svg:nth-of-type(1) { width: 48px; height: 48px; }
+  .sizes svg:nth-of-type(2) { width: 32px; height: 32px; }
+  .sizes svg:nth-of-type(3) { width: 20px; height: 20px; }
+  .sizes .mono { margin-left: auto; --a: #111; --a2: #111; --b: #111; --c: #fff; display: flex; align-items: center; gap: 10px; }
+  .sizes .mono svg { width: 40px; height: 40px; }
+  .extras { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; margin-top: 28px; }
+  .extra { display: flex; align-items: center; gap: 24px; padding: 26px; border: 1px solid var(--cream-300); border-radius: 22px; background: #fff; }
+  .extra h3 { margin: 0 0 6px; font: 700 21px/1.2 Fraunces, Georgia, serif; }
+  .extra p { margin: 0; font-size: 16px; line-height: 1.45; color: var(--ink-muted); }
+  .extra svg { flex: none; }
+  .foot { margin-top: 34px; font-size: 15px; color: var(--ink-muted); }
+</style>
+</head>
+<body>
+
+<!-- The marks. Colours come from CSS variables so one drawing serves light,
+     dark and one-colour uses: --a main, --a2 darker main, --b accent,
+     --c the background showing through. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <path id="heart" d="M12 21s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 8.2a4.3 4.3 0 0 1 7.5 2.6C19.5 16.4 12 21 12 21z"/>
+
+    <!-- 1. Roof and M -->
+    <symbol id="m1" viewBox="0 0 64 64">
+      <g fill="none" stroke="var(--a)" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8.5 28.5 32 8.5l23.5 20"/>
+        <path d="M17 54.5V34l15 13.5L47 34v20.5"/>
+      </g>
+      <use href="#heart" fill="var(--b)" transform="translate(23.6 19.2) scale(.7)"/>
+    </symbol>
+
+    <!-- 2. Heart at home (the mark the site uses today) -->
+    <symbol id="m2" viewBox="0 0 64 64">
+      <rect width="64" height="64" rx="18" fill="var(--a)"/>
+      <g fill="none" stroke="var(--c)" stroke-width="4.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 32.5 32 16.5l18 16"/>
+        <path d="M19.5 30v14a4 4 0 0 0 4 4h17a4 4 0 0 0 4-4V30"/>
+      </g>
+      <use href="#heart" fill="var(--b)" transform="translate(22.4 26.2) scale(.8)"/>
+    </symbol>
+
+    <!-- 3. The friendly visit -->
+    <symbol id="m3" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="32" fill="var(--a)"/>
+      <path d="M16.5 31.5h27V37a13.5 13.5 0 0 1-27 0z" fill="var(--c)"/>
+      <g fill="none" stroke="var(--c)" stroke-width="3.6" stroke-linecap="round">
+        <path d="M43.5 34.5H46a5.2 5.2 0 0 1 0 10.4h-3.4"/>
+        <path d="M15.5 54.5h29"/>
+      </g>
+      <use href="#heart" fill="var(--b)" transform="translate(18.6 4.6) scale(.95)"/>
+    </symbol>
+
+    <!-- 4. A new day at home -->
+    <symbol id="m4" viewBox="0 0 64 64">
+      <circle cx="44" cy="20" r="13" fill="var(--b)"/>
+      <path d="M29 16 6.5 36.5h6.5V54a2.5 2.5 0 0 0 2.5 2.5h27A2.5 2.5 0 0 0 45 54V36.5h6.5z" fill="var(--a)" stroke="var(--a)" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M23.5 56.5V46a5.5 5.5 0 0 1 11 0v10.5z" fill="var(--c)"/>
+    </symbol>
+
+    <!-- 5. Held with care -->
+    <symbol id="m5" viewBox="0 0 64 64">
+      <path d="M32 7 13.5 23.5h5.5V38a2.2 2.2 0 0 0 2.2 2.2h21.6A2.2 2.2 0 0 0 45 38V23.5h5.5z" fill="var(--a2)" stroke="var(--a2)" stroke-width="2.2" stroke-linejoin="round"/>
+      <use href="#heart" fill="var(--b)" transform="translate(23.6 17.4) scale(.7)"/>
+      <path d="M6 39c4.500 12.500 14 19.500 26 19.500S53.500 51.500 58 39c-6.500 7.500-15 11.500-26 11.500S12.500 46.500 6 39z" fill="var(--a)"/>
+    </symbol>
+
+    <!-- 6. Mabel's initial -->
+    <symbol id="m6" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="32" fill="var(--a)"/>
+      <text x="30.5" y="47.5" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="40" fill="var(--c)">M</text>
+      <use href="#heart" fill="var(--b)" transform="translate(40.5 4.5) scale(.62)"/>
+    </symbol>
+
+    <!-- App icon version of 1: the same drawing on a solid tile -->
+    <symbol id="m1-tile" viewBox="0 0 64 64">
+      <rect width="64" height="64" rx="18" fill="#2f5d43"/>
+      <g transform="translate(8.6 8.9) scale(.73)">
+        <g fill="none" stroke="#fbf8f1" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8.5 28.5 32 8.5l23.5 20"/>
+          <path d="M17 54.5V34l15 13.5L47 34v20.5"/>
+        </g>
+        <use href="#heart" fill="#e3a857" transform="translate(23.6 19.2) scale(.7)"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<h1>Mabel Home Help: logo options</h1>
+<p class="lead">Six directions for the brand mark, each shown large, with the name on a light and a dark background, at small sizes, and in one colour (for stamps, invoices and embroidery).</p>
+
+<div class="grid">
+
+  <section class="card">
+    <header><span class="num">OPTION 1</span><h2>Roof and M</h2><span class="pick">RECOMMENDED</span></header>
+    <p class="why">An M for Mabel standing under a roof, with a heart where the two meet. It is the option that most belongs to this name alone, it stays clear when very small, and it is the one on the website now.</p>
+    <div class="stage">
+      <div class="big"><svg><use href="#m1"/></svg></div>
+      <div class="rows">
+        <div class="row light"><span class="lockup"><svg><use href="#m1"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+        <div class="row dark"><span class="lockup"><svg><use href="#m1"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+      </div>
+    </div>
+    <div class="sizes"><svg><use href="#m1"/></svg><svg><use href="#m1"/></svg><svg><use href="#m1"/></svg><span>48, 32 and 20 px</span><span class="mono">one colour <svg><use href="#m1"/></svg></span></div>
+  </section>
+
+  <section class="card">
+    <header><span class="num">OPTION 2</span><h2>Heart at home</h2></header>
+    <p class="why">A house with a heart inside: the first mark the website used. Instantly understood, but many home-care companies use the same idea.</p>
+    <div class="stage">
+      <div class="big"><svg><use href="#m2"/></svg></div>
+      <div class="rows">
+        <div class="row light"><span class="lockup"><svg><use href="#m2"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+        <div class="row dark"><span class="lockup"><svg><use href="#m2"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+      </div>
+    </div>
+    <div class="sizes"><svg><use href="#m2"/></svg><svg><use href="#m2"/></svg><svg><use href="#m2"/></svg><span>48, 32 and 20 px</span><span class="mono">one colour <svg><use href="#m2"/></svg></span></div>
+  </section>
+
+  <section class="card">
+    <header><span class="num">OPTION 3</span><h2>The friendly visit</h2></header>
+    <p class="why">A cup of tea with a heart rising from it. It says company and conversation rather than chores, which is what sets Mabel apart.</p>
+    <div class="stage">
+      <div class="big"><svg><use href="#m3"/></svg></div>
+      <div class="rows">
+        <div class="row light"><span class="lockup"><svg><use href="#m3"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+        <div class="row dark"><span class="lockup"><svg><use href="#m3"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+      </div>
+    </div>
+    <div class="sizes"><svg><use href="#m3"/></svg><svg><use href="#m3"/></svg><svg><use href="#m3"/></svg><span>48, 32 and 20 px</span><span class="mono">one colour <svg><use href="#m3"/></svg></span></div>
+  </section>
+
+  <section class="card">
+    <header><span class="num">OPTION 4</span><h2>A new day at home</h2></header>
+    <p class="why">A home with the sun coming up behind it: warmth, routine and peace of mind. The most colourful of the six.</p>
+    <div class="stage">
+      <div class="big"><svg><use href="#m4"/></svg></div>
+      <div class="rows">
+        <div class="row light"><span class="lockup"><svg><use href="#m4"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+        <div class="row dark"><span class="lockup"><svg><use href="#m4"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+      </div>
+    </div>
+    <div class="sizes"><svg><use href="#m4"/></svg><svg><use href="#m4"/></svg><svg><use href="#m4"/></svg><span>48, 32 and 20 px</span><span class="mono">one colour <svg><use href="#m4"/></svg></span></div>
+  </section>
+
+  <section class="card">
+    <header><span class="num">OPTION 5</span><h2>Held with care</h2></header>
+    <p class="why">A home resting in a supporting hand, which also reads as a smile. It speaks most directly about looking after someone.</p>
+    <div class="stage">
+      <div class="big"><svg><use href="#m5"/></svg></div>
+      <div class="rows">
+        <div class="row light"><span class="lockup"><svg><use href="#m5"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+        <div class="row dark"><span class="lockup"><svg><use href="#m5"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+      </div>
+    </div>
+    <div class="sizes"><svg><use href="#m5"/></svg><svg><use href="#m5"/></svg><svg><use href="#m5"/></svg><span>48, 32 and 20 px</span><span class="mono">one colour <svg><use href="#m5"/></svg></span></div>
+  </section>
+
+  <section class="card">
+    <header><span class="num">OPTION 6</span><h2>Mabel's initial</h2></header>
+    <p class="why">The M of the name in its own lettering, with a small heart. Classic and calm, like a signature; it says less about what the business does.</p>
+    <div class="stage">
+      <div class="big"><svg><use href="#m6"/></svg></div>
+      <div class="rows">
+        <div class="row light"><span class="lockup"><svg><use href="#m6"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+        <div class="row dark"><span class="lockup"><svg><use href="#m6"/></svg><span class="word"><b>Mabel</b><span>Home Help</span></span></span></div>
+      </div>
+    </div>
+    <div class="sizes"><svg><use href="#m6"/></svg><svg><use href="#m6"/></svg><svg><use href="#m6"/></svg><span>48, 32 and 20 px</span><span class="mono">one colour <svg><use href="#m6"/></svg></span></div>
+  </section>
+
+</div>
+
+<div class="extras">
+  <div class="extra">
+    <svg width="150" height="150" viewBox="0 0 200 200" role="img" aria-label="Round seal">
+      <defs>
+        <path id="arc-top" d="M 26 100 A 74 74 0 0 1 174 100"/>
+        <path id="arc-bottom" d="M 16 100 A 84 84 0 0 0 184 100"/>
+      </defs>
+      <circle cx="100" cy="100" r="98" fill="#2f5d43"/>
+      <circle cx="100" cy="100" r="93.5" fill="none" stroke="#fbf8f1" stroke-width="1.2" opacity=".5"/>
+      <circle cx="100" cy="100" r="58" fill="#fbf8f1"/>
+      <text font-family="'Atkinson Hyperlegible', sans-serif" font-size="17.5" font-weight="700" letter-spacing="3.6" fill="#fbf8f1"><textPath href="#arc-top" startOffset="50%" text-anchor="middle">MABEL HOME HELP</textPath></text>
+      <text font-family="'Atkinson Hyperlegible', sans-serif" font-size="12.5" font-weight="700" letter-spacing="3.2" fill="#e3a857"><textPath href="#arc-bottom" startOffset="50%" text-anchor="middle">EDMONTON · ALBERTA</textPath></text>
+      <g transform="translate(62 60) scale(1.19)" style="--a:#2f5d43;--b:#e3a857"><use href="#m1" width="64" height="64"/></g>
+    </svg>
+    <div><h3>Round seal</h3><p>For stickers, car magnets, uniforms and stamps. Shown with option 1; it can be redrawn around any of the six.</p></div>
+  </div>
+  <div class="extra">
+    <svg width="120" height="120"><use href="#m1-tile"/></svg>
+    <div><h3>App and browser icon</h3><p>The same mark on a solid tile, for the browser tab, phone home screen and social profile picture.</p></div>
+  </div>
+  <div class="extra" style="background:var(--forest-900)">
+    <span class="lockup dark" style="background:none;flex-direction:column;gap:12px;text-align:center;flex:none">
+      <svg style="width:74px;height:74px"><use href="#m1"/></svg>
+      <span class="word" style="align-items:center"><b>Mabel</b><span>Home Help</span></span>
+    </span>
+    <div><h3 style="color:#fbf8f1">Stacked version</h3><p style="color:#c9dccf">For square spaces: signs, the top of a letter, the back of a card.</p></div>
+  </div>
+</div>
+
+<p class="foot">Colours: forest green #2F5D43, deep green #1F3D2B, honey #E3A857, cream #FBF8F1. Lettering: Fraunces (name) and Atkinson Hyperlegible (descriptor), both free to use.</p>
+
+</body>
+</html>

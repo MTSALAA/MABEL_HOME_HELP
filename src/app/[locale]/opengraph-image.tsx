@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
+import { BRAND_COLORS, BRAND_MARK } from "@/lib/brand";
 import { getSettings } from "@/server/queries/content";
 
 export const alt = "Mabel Home Help";
@@ -34,26 +35,22 @@ export default async function OpenGraphImage({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-          <svg width="104" height="104" viewBox="0 0 48 48" fill="none">
-            <rect width="48" height="48" rx="14" fill="#2F5D43" />
+          <svg width="104" height="104" viewBox={BRAND_MARK.viewBox} fill="none">
             <path
-              d="M10.5 24.5 24 12.5l13.5 12"
-              stroke="#FBF8F1"
-              strokeWidth="3.2"
+              d={BRAND_MARK.roof}
+              stroke={BRAND_COLORS.cream}
+              strokeWidth={BRAND_MARK.strokeWidth}
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
-              d="M14.5 22.5V33a3 3 0 0 0 3 3h13a3 3 0 0 0 3-3V22.5"
-              stroke="#FBF8F1"
-              strokeWidth="3.2"
+              d={BRAND_MARK.letter}
+              stroke={BRAND_COLORS.cream}
+              strokeWidth={BRAND_MARK.strokeWidth}
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-            <path
-              d="M24 32.6c-3.5-2.3-5.1-4.1-5.1-6.1a2.65 2.65 0 0 1 5.1-1 2.65 2.65 0 0 1 5.1 1c0 2-1.6 3.8-5.1 6.1Z"
-              fill="#E3A857"
-            />
+            <path d={BRAND_MARK.heart} fill={BRAND_COLORS.honey} />
           </svg>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 64, fontWeight: 700, lineHeight: 1 }}>Mabel</div>

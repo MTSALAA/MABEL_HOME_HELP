@@ -1,32 +1,33 @@
+import { BRAND_COLORS, BRAND_MARK } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
-export function LogoMark({ className }: { className?: string }) {
+type Tone = "dark" | "light";
+
+/** The symbol on its own. `tone="light"` is for dark backgrounds. */
+export function LogoMark({
+  className,
+  tone = "dark",
+}: {
+  className?: string;
+  tone?: Tone;
+}) {
   return (
     <svg
-      viewBox="0 0 48 48"
+      viewBox={BRAND_MARK.viewBox}
       fill="none"
       aria-hidden="true"
-      className={cn("size-11 shrink-0", className)}
+      className={cn("size-[2.9rem] shrink-0", className)}
     >
-      <rect width="48" height="48" rx="14" fill="#2F5D43" />
-      <path
-        d="M10.5 24.5 24 12.5l13.5 12"
-        stroke="#FBF8F1"
-        strokeWidth="3.2"
+      <g
+        stroke={tone === "light" ? BRAND_COLORS.cream : BRAND_COLORS.forest}
+        strokeWidth={BRAND_MARK.strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
-      <path
-        d="M14.5 22.5V33a3 3 0 0 0 3 3h13a3 3 0 0 0 3-3V22.5"
-        stroke="#FBF8F1"
-        strokeWidth="3.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M24 32.6c-3.5-2.3-5.1-4.1-5.1-6.1a2.65 2.65 0 0 1 5.1-1 2.65 2.65 0 0 1 5.1 1c0 2-1.6 3.8-5.1 6.1Z"
-        fill="#E3A857"
-      />
+      >
+        <path d={BRAND_MARK.roof} />
+        <path d={BRAND_MARK.letter} />
+      </g>
+      <path d={BRAND_MARK.heart} fill={BRAND_COLORS.honey} />
     </svg>
   );
 }
@@ -37,11 +38,11 @@ export function Logo({
   tone = "dark",
 }: {
   className?: string;
-  tone?: "dark" | "light";
+  tone?: Tone;
 }) {
   return (
     <span className={cn("inline-flex items-center gap-3", className)}>
-      <LogoMark />
+      <LogoMark tone={tone} />
       <span className="flex flex-col leading-none">
         <span
           className={cn(
