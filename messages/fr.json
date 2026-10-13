@@ -1,0 +1,517 @@
+{
+  "Meta": {
+    "titleTemplate": "%s | Mabel Home Help",
+    "defaultTitle": "Mabel Home Help | Aide à domicile chaleureuse pour aînés à Edmonton",
+    "defaultDescription": "Une aide abordable, chaleureuse et non médicale pour les tâches du quotidien, offerte aux aînés, aux personnes handicapées et aux familles d'Edmonton, de St. Albert, de Sherwood Park et des environs.",
+    "ogAlt": "Mabel Home Help. Petits travaux. Visites amicales. Tranquillité d'esprit."
+  },
+  "Nav": {
+    "home": "Accueil",
+    "services": "Services",
+    "pricing": "Tarifs",
+    "about": "À propos",
+    "sponsor": "Parrainer un aîné",
+    "contact": "Contact",
+    "book": "Réserver un service",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "mainNavigation": "Navigation principale",
+    "skipToContent": "Aller au contenu principal",
+    "languageLabel": "Langue",
+    "switchTo": "English",
+    "current": "Français"
+  },
+  "Actions": {
+    "callNow": "Appeler",
+    "textUs": "Texter",
+    "book": "Réserver un service",
+    "bookShort": "Réserver",
+    "callNumber": "Appeler le {phone}",
+    "quickActions": "Actions de contact rapide",
+    "phoneComingSoon": "Numéro de téléphone à venir"
+  },
+  "Footer": {
+    "contactTitle": "Nous joindre",
+    "areasTitle": "Où nous aidons",
+    "exploreTitle": "Explorer",
+    "hoursTitle": "Heures",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "manageMembership": "Gérer mon abonnement",
+    "rights": "© {year} {name}. Tous droits réservés.",
+    "scopeTitle": "Ce que nous faisons et ne faisons pas"
+  },
+  "Common": {
+    "learnMore": "En savoir plus",
+    "optional": "facultatif",
+    "required": "obligatoire",
+    "sending": "Envoi en cours…",
+    "loading": "Chargement…",
+    "backHome": "Retour à l'accueil",
+    "orCall": "Vous préférez parler? Appelez-nous au <tel>{phone}</tel>.",
+    "notSure": "Je ne sais pas encore",
+    "other": "Autre",
+    "scopeLabel": "À noter",
+    "labelWithDetail": "{label} : {detail}"
+  },
+  "Home": {
+    "metaTitle": "Aide à domicile chaleureuse pour aînés à Edmonton",
+    "hero": {
+      "eyebrow": "Aide à domicile non médicale à Edmonton et dans les environs",
+      "lead": "Une aide abordable et chaleureuse pour les tâches du quotidien, offerte aux aînés, aux personnes handicapées et aux familles qui veillent sur eux.",
+      "illustrationAlt": "Une aide et une dame âgée qui discutent sur le perron d'une maison accueillante",
+      "point1": "Des aides fiables et chaleureuses",
+      "point2": "Sans contrat. Annulez en tout temps",
+      "point3": "Des nouvelles pour la famille après les visites"
+    },
+    "services": {
+      "title": "Comment nous aidons",
+      "lead": "D'une visite amicale aux tâches devenues difficiles, nous nous occupons des petites choses qui font qu'on se sent bien chez soi.",
+      "all": "Voir les 13 services"
+    },
+    "steps": {
+      "title": "C'est simple de commencer",
+      "lead": "Aucun formulaire à imprimer, aucune pression. Simplement une conversation sur ce qui vous aiderait.",
+      "one": {
+        "title": "Communiquez avec nous",
+        "body": "Appelez, textez ou envoyez une demande en ligne. Dites-nous qui a besoin d'un coup de main, et pour quoi."
+      },
+      "two": {
+        "title": "Nous planifions ensemble",
+        "body": "Nous convenons des tâches, des journées et du prix avant de commencer."
+      },
+      "three": {
+        "title": "Nous venons aider",
+        "body": "Une aide chaleureuse arrive à l'heure, fait le travail et, si vous le souhaitez, informe la famille."
+      }
+    },
+    "plans": {
+      "title": "Des forfaits simples, des prix clairs",
+      "lead": "Payez à la visite ou économisez avec un abonnement mensuel. Aucuns frais cachés.",
+      "all": "Comparer tous les forfaits"
+    },
+    "areas": {
+      "title": "Où nous aidons",
+      "lead": "Nous nous rendons dans les maisons, les condos et les propriétés rurales de la région d'Edmonton."
+    },
+    "mission": {
+      "label": "Notre mission",
+      "quote": "Aider les familles à avoir l'esprit tranquille en sachant que leurs proches peuvent compter sur une personne fiable pour les tâches du quotidien."
+    },
+    "sponsor": {
+      "title": "Aidez un voisin qui n'a pas les moyens de se faire aider",
+      "body": "Certains aînés ont besoin d'un coup de main, mais leur revenu fixe ne le permet pas. Le programme Parrainer un aîné permet à notre communauté de leur offrir des visites.",
+      "cta": "Découvrir Parrainer un aîné"
+    },
+    "cta": {
+      "title": "Nous sommes prêts quand vous l'êtes",
+      "body": "Dites-nous ce qui vous faciliterait la vie. Nous nous occupons du reste."
+    }
+  },
+  "Services": {
+    "metaTitle": "Nos services",
+    "metaDescription": "Visites de vérification, compagnie, ménage, entretien du terrain, déneigement, courses et plus encore. Découvrez les 13 façons dont Mabel Home Help soutient les aînés et les familles.",
+    "title": "Nos services",
+    "lead": "Treize façons concrètes d'aider les aînés à rester à l'aise, en sécurité et bien entourés à la maison.",
+    "request": "Demander ce service",
+    "empty": "Nos services sont en cours de mise à jour. Veuillez nous appeler pour en savoir plus.",
+    "ctaTitle": "Vous ne trouvez pas ce qu'il vous faut?",
+    "ctaBody": "Demandez-nous. S'il s'agit d'une tâche courante et non médicale, il y a de bonnes chances que nous puissions aider."
+  },
+  "Pricing": {
+    "metaTitle": "Abonnements et tarifs",
+    "metaDescription": "Des tarifs clairs et abordables pour l'aide à domicile à Edmonton. Payez à la visite ou choisissez un abonnement mensuel de 4 ou 8 visites.",
+    "title": "Abonnements et tarifs",
+    "lead": "Choisissez ce qui convient à votre famille. Chaque forfait comprend la même aide fiable et chaleureuse.",
+    "join": "S'abonner",
+    "request": "Demander ce forfait",
+    "popular": "Le plus populaire",
+    "includes": "Comprend",
+    "currencyNote": "Les prix sont en dollars canadiens. Aucune taxe n'est ajoutée au paiement.",
+    "manage": "Déjà membre? Gérer mon abonnement",
+    "empty": "Nos forfaits sont en cours de mise à jour. Veuillez nous appeler pour connaître les tarifs actuels.",
+    "faqTitle": "Questions fréquentes",
+    "faq": {
+      "visit": {
+        "q": "Qu'est-ce qui compte comme une visite?",
+        "a": "Une visite correspond à un déplacement au domicile, pour la durée comprise dans votre forfait et les tâches convenues ensemble. Les travaux plus longs ou plus importants font l'objet d'un prix distinct avant de commencer."
+      },
+      "cancel": {
+        "q": "Puis-je annuler un abonnement?",
+        "a": "Oui, en tout temps et sans frais. Votre abonnement reste actif jusqu'à la fin du mois déjà payé, puis il prend fin."
+      },
+      "unused": {
+        "q": "Qu'arrive-t-il aux visites non utilisées?",
+        "a": "Les visites sont valables pour le mois en cours et ne sont pas reportées. En cas d'imprévu, appelez-nous et nous ferons de notre mieux pour reporter la visite dans le même mois."
+      },
+      "area": {
+        "q": "Vous déplacez-vous dans mon secteur?",
+        "a": "Nous servons Edmonton, St. Albert, Sherwood Park, les collectivités avoisinantes et les propriétés rurales. En cas de doute, demandez-nous."
+      },
+      "pay": {
+        "q": "Comment puis-je payer?",
+        "a": "Les abonnements mensuels se paient par carte en ligne et se renouvellent automatiquement chaque mois. Les services à la visite et sur devis se règlent directement avec nous."
+      },
+      "medical": {
+        "q": "Offrez-vous des soins médicaux ou personnels?",
+        "a": "Non. Nous offrons uniquement une aide non médicale et non urgente. Nous n'offrons pas de soins infirmiers, de soins personnels ni d'intervention d'urgence."
+      }
+    }
+  },
+  "Book": {
+    "metaTitle": "Réserver un service",
+    "metaDescription": "Demandez une visite ou un service à Mabel Home Help. Dites-nous ce qu'il vous faut et nous communiquerons avec vous pour confirmer.",
+    "title": "Réserver un service",
+    "lead": "Dites-nous ce qui vous aiderait. Il s'agit d'une demande et non d'une réservation confirmée. Nous communiquerons avec vous pour confirmer les détails.",
+    "asideTitle": "La suite",
+    "aside1": "Nous lisons votre demande, habituellement le jour même.",
+    "aside2": "Nous vous appelons, textons ou écrivons, selon votre préférence.",
+    "aside3": "Nous convenons ensemble des tâches, de la journée et du prix.",
+    "successTitle": "Merci, nous avons bien reçu votre demande",
+    "successBody": "Nous communiquerons bientôt avec vous pour confirmer les détails. Si c'est urgent, veuillez nous appeler.",
+    "another": "Envoyer une autre demande"
+  },
+  "Contact": {
+    "metaTitle": "Nous joindre",
+    "metaDescription": "Appelez, textez ou écrivez à Mabel Home Help. Nous servons Edmonton, St. Albert, Sherwood Park et les collectivités avoisinantes.",
+    "title": "Nous joindre",
+    "lead": "Une question, un devis, ou vous ne savez pas par où commencer? Nous serons heureux d'en parler.",
+    "phoneTitle": "Téléphone",
+    "textTitle": "Texto",
+    "emailTitle": "Courriel",
+    "areasTitle": "Secteurs desservis",
+    "hoursTitle": "Heures",
+    "locationTitle": "Établis à",
+    "formTitle": "Écrivez-nous",
+    "messageLabel": "Comment pouvons-nous aider?",
+    "successTitle": "Message envoyé",
+    "successBody": "Merci de nous avoir écrit. Nous vous répondrons bientôt.",
+    "another": "Envoyer un autre message",
+    "notProvided": "À venir"
+  },
+  "About": {
+    "metaTitle": "À propos",
+    "metaDescription": "Mabel Home Help offre une aide chaleureuse, abordable et non médicale pour que les aînés restent à l'aise chez eux et que les familles s'inquiètent moins.",
+    "title": "Un coup de main chaleureux au quotidien",
+    "lead": "Mabel Home Help existe pour une raison simple : de petites tâches ne devraient pas s'interposer entre une personne et la maison qu'elle aime.",
+    "illustrationAlt": "Une aide et un homme âgé qui partagent un café à la table de la cuisine",
+    "storyTitle": "Pourquoi nous avons commencé",
+    "story1": "Pour bien des aînés, ce ne sont pas les grandes choses qui rendent la vie à la maison difficile. Ce sont les bacs à sortir un matin de neige, l'entrée après une tempête, l'aller-retour à la pharmacie, ou simplement une semaine sans une bonne conversation.",
+    "story2": "Nous offrons une aide abordable, chaleureuse et non médicale aux aînés, aux personnes handicapées et aux familles qui ont besoin d'un coup de main pour les tâches du quotidien. Nous arrivons quand nous l'avons dit, nous faisons bien le travail et nous traitons chaque foyer avec respect.",
+    "story3": "Et comme les personnes qui s'inquiètent le plus sont souvent loin, nous pouvons donner des nouvelles à la famille après chaque visite, avec la permission du client.",
+    "missionTitle": "Notre mission",
+    "valuesTitle": "Ce sur quoi vous pouvez compter",
+    "values": {
+      "reliable": {
+        "title": "Fiables",
+        "body": "Nous arrivons à l'heure convenue. Si les plans changent, vous êtes les premiers avertis."
+      },
+      "friendly": {
+        "title": "Chaleureux",
+        "body": "Une visite, c'est plus qu'une tâche. Il y a toujours du temps pour un bonjour et un brin de jasette."
+      },
+      "affordable": {
+        "title": "Abordables",
+        "body": "Des prix clairs, convenus avant de commencer. Sans contrat et sans surprise."
+      },
+      "respectful": {
+        "title": "Respectueux",
+        "body": "Votre maison, vos habitudes, vos choix. Nous aidons de la façon dont vous voulez être aidé."
+      }
+    },
+    "areasTitle": "Où nous travaillons",
+    "ctaTitle": "Parlons de ce qui vous aiderait",
+    "ctaBody": "Un court appel suffit pour commencer."
+  },
+  "Sponsor": {
+    "metaTitle": "Parrainer un aîné",
+    "metaDescription": "Aidez un aîné de la région d'Edmonton qui n'a pas les moyens de payer de l'aide à domicile. Parrainez des visites ou parlez-nous d'une personne dans le besoin.",
+    "title": "Parrainer un aîné",
+    "lead": "Certains de nos voisins ont besoin d'aide à la maison sans en avoir les moyens. Grâce à votre soutien, ils n'ont pas à s'en passer.",
+    "illustrationAlt": "Des mains réunies autour d'une petite maison surmontée d'un cœur",
+    "howTitle": "Comment ça fonctionne",
+    "how": {
+      "sponsor": {
+        "title": "Parrainez des visites",
+        "body": "Des personnes, des familles et des entreprises locales peuvent offrir des visites, du déneigement ou des courses à un aîné qui en a besoin."
+      },
+      "nominate": {
+        "title": "Parlez-nous de quelqu'un",
+        "body": "Vous connaissez un aîné en difficulté qui n'a pas les moyens de se faire aider? Dites-le-nous, avec sa permission, et nous verrons ce qu'il est possible d'organiser."
+      },
+      "match": {
+        "title": "Nous faisons le reste",
+        "body": "Nous jumelons le soutien offert avec des aînés dans le besoin et tenons les parrains au courant de la différence qu'ils font."
+      }
+    },
+    "note": "Parrainer un aîné est un programme communautaire géré par Mabel Home Help. Nous vous expliquerons précisément comment votre soutien est utilisé lors de notre conversation.",
+    "formTitle": "Amorcez la conversation",
+    "formLead": "Remplissez le formulaire et nous communiquerons avec vous pour discuter de la façon dont vous souhaitez aider. Aucun paiement n'est demandé ici.",
+    "organization": "Organisme ou entreprise",
+    "intentLabel": "Comment souhaitez-vous aider?",
+    "intent": {
+      "SPONSOR_VISITS": "Parrainer des visites pour un aîné",
+      "NOMINATE_SENIOR": "Vous parler d'un aîné qui a besoin d'aide",
+      "OTHER": "Autre chose"
+    },
+    "messageLabel": "Y a-t-il autre chose que nous devrions savoir?",
+    "successTitle": "Merci d'avoir à cœur nos aînés",
+    "successBody": "Nous avons bien reçu votre message et communiquerons bientôt avec vous.",
+    "another": "Envoyer un autre message"
+  },
+  "Membership": {
+    "metaTitle": "S'abonner au forfait {plan}",
+    "genericMetaTitle": "Abonnement",
+    "title": "S'abonner au forfait {plan}",
+    "lead": "Deux étapes rapides : dites-nous à qui les visites sont destinées, puis payez par carte en toute sécurité.",
+    "summaryTitle": "Votre abonnement",
+    "perMonth": "{price} par mois",
+    "summaryRenew": "Renouvellement automatique chaque mois. Annulez en tout temps; l'annulation prend effet à la fin du mois payé.",
+    "summaryNext": "Après le paiement, nous vous appelons dans un délai d'un jour ouvrable pour planifier la première visite.",
+    "summarySecure": "Les renseignements de votre carte sont saisis sur la page sécurisée de Stripe. Nous ne voyons ni ne conservons jamais votre numéro de carte.",
+    "payerTitle": "Vos coordonnées",
+    "payerName": "Votre nom complet",
+    "payerEmailHelp": "Pour les reçus et la gestion de votre abonnement.",
+    "recipientTitle": "À qui les visites sont destinées",
+    "whoLabel": "Qui recevra les visites?",
+    "recipientName": "Son nom complet",
+    "recipientPhone": "Son numéro de téléphone",
+    "addressTitle": "Lieu des visites",
+    "address": "Adresse du service",
+    "addressHelp": "Rue, ville et code postal.",
+    "notes": "Notes pour la première visite",
+    "notesHelp": "Par exemple, le meilleur moment pour appeler ou comment trouver la porte. Veuillez ne pas inscrire de renseignements médicaux.",
+    "terms": "J'accepte les <terms>Conditions d'utilisation</terms>, la facturation mensuelle jusqu'à l'annulation et d'être contacté au sujet de cet abonnement.",
+    "submit": "Passer au paiement sécurisé",
+    "redirecting": "Ouverture du paiement sécurisé…",
+    "outsideArea": "L'inscription en ligne est offerte seulement dans notre territoire de service. Envoyez-nous plutôt une demande et nous verrons comment vous aider.",
+    "outsideAreaCta": "Envoyer une demande",
+    "unavailableTitle": "L'inscription en ligne n'est pas offerte pour le moment",
+    "unavailableBody": "Vous pouvez tout de même vous abonner à ce forfait. Envoyez-nous une demande ou appelez-nous et nous le mettrons en place avec vous.",
+    "unavailableCta": "Demander ce forfait",
+    "success": {
+      "metaTitle": "Bienvenue chez Mabel Home Help",
+      "title": "Bienvenue et merci",
+      "body": "Votre abonnement est en place. Nous vous appellerons dans un délai d'un jour ouvrable pour planifier la première visite.",
+      "pendingBody": "Merci. Votre paiement est en cours de confirmation et vous recevrez un courriel sous peu. Nous vous appellerons dans un délai d'un jour ouvrable pour planifier la première visite.",
+      "plan": "Forfait",
+      "amount": "Montant mensuel",
+      "nextBilling": "Prochaine date de facturation",
+      "receipt": "Un reçu a été envoyé par courriel à {email}.",
+      "manage": "Gérer mon abonnement"
+    },
+    "manage": {
+      "metaTitle": "Gérer mon abonnement",
+      "title": "Gérer mon abonnement",
+      "lead": "Entrez le courriel utilisé lors de votre inscription. Nous vous enverrons un lien sécurisé pour mettre à jour votre carte, consulter vos factures ou annuler.",
+      "submit": "Envoyez-moi un lien",
+      "sentTitle": "Vérifiez votre boîte de réception",
+      "sentBody": "Si un abonnement existe pour ce courriel, un lien est en route. Il est valide pendant 30 minutes.",
+      "expired": "Ce lien a expiré ou a déjà été utilisé. Entrez votre courriel pour en recevoir un nouveau.",
+      "help": "Vous ne trouvez pas le courriel? Appelez-nous et nous vous aiderons."
+    }
+  },
+  "NotFound": {
+    "title": "Nous n'avons pas trouvé cette page",
+    "body": "La page a peut-être été déplacée, ou le lien n'est plus à jour. Remettons-vous sur la bonne voie.",
+    "illustrationAlt": "Un poteau indicateur avec deux flèches vierges"
+  },
+  "Error": {
+    "title": "Une erreur s'est produite",
+    "body": "Nous en sommes désolés. Veuillez réessayer, ou appelez-nous et nous vous aiderons tout de suite.",
+    "retry": "Réessayer"
+  },
+  "Forms": {
+    "fullName": "Nom complet",
+    "phone": "Numéro de téléphone",
+    "email": "Courriel",
+    "requesterRole": "Je fais cette demande pour",
+    "role": {
+      "SELF": "Moi-même",
+      "FAMILY": "Un membre de ma famille",
+      "OTHER": "Une autre personne"
+    },
+    "service": "Service",
+    "servicePlaceholder": "Choisissez un service",
+    "plan": "Forfait souhaité",
+    "planPlaceholder": "Choisissez un forfait",
+    "area": "Ville ou secteur",
+    "areaPlaceholder": "Choisissez un secteur",
+    "contactMethod": "Comment préférez-vous être joint?",
+    "method": {
+      "CALL": "Appelez-moi",
+      "TEXT": "Textez-moi",
+      "EMAIL": "Écrivez-moi par courriel"
+    },
+    "preferredTime": "Jour ou moment préféré",
+    "preferredTimeHelp": "Par exemple, les matins en semaine.",
+    "message": "Message",
+    "messageHelp": "Veuillez ne pas inscrire de renseignements médicaux ou de santé.",
+    "consent": "J'accepte d'être contacté au sujet de cette demande. Consultez notre <privacy>Politique de confidentialité</privacy>.",
+    "submitRequest": "Envoyer ma demande",
+    "submitMessage": "Envoyer le message",
+    "honeypot": "Laissez ce champ vide",
+    "fixErrors": "Veuillez vérifier les champs en surbrillance.",
+    "errors": {
+      "required": "Ce champ est obligatoire.",
+      "nameShort": "Veuillez entrer un nom complet.",
+      "nameInvalid": "Veuillez utiliser uniquement des lettres dans le nom.",
+      "tooLong": "Ce texte est trop long.",
+      "phoneInvalid": "Veuillez entrer un numéro de téléphone valide de 10 chiffres.",
+      "emailInvalid": "Veuillez entrer une adresse courriel valide.",
+      "emailNeededForContact": "Veuillez ajouter un courriel pour que nous puissions vous répondre par courriel.",
+      "consentRequired": "Veuillez cocher la case pour continuer.",
+      "addressShort": "Veuillez entrer l'adresse complète.",
+      "recipientRequired": "Veuillez nous dire à qui les visites sont destinées.",
+      "messageShort": "Veuillez écrire un court message."
+    },
+    "serverErrors": {
+      "validation": "Certains renseignements semblent incorrects. Veuillez vérifier le formulaire et réessayer.",
+      "rateLimited": "Trop de tentatives. Veuillez patienter quelques minutes ou nous appeler.",
+      "spam": "Nous n'avons pas pu vérifier la demande. Veuillez actualiser la page et réessayer, ou appelez-nous et nous prendrons votre demande par téléphone.",
+      "unavailable": "Ce service n'est pas offert en ligne pour le moment. Veuillez nous appeler.",
+      "server": "Une erreur s'est produite de notre côté. Veuillez réessayer ou nous appeler."
+    }
+  },
+  "Legal": {
+    "updated": "Dernière mise à jour : {date}",
+    "privacy": {
+      "metaTitle": "Politique de confidentialité",
+      "title": "Politique de confidentialité",
+      "intro": "Mabel Home Help respecte votre vie privée. La présente politique explique quels renseignements personnels nous recueillons au moyen de ce site Web, pourquoi nous les recueillons et ce que nous en faisons. Nous nous conformons à la loi albertaine sur la protection des renseignements personnels (Personal Information Protection Act, ou PIPA).",
+      "sections": {
+        "collect": {
+          "title": "Ce que nous recueillons",
+          "body": "Lorsque vous envoyez une demande, un message ou une demande de parrainage, nous recueillons les renseignements que vous nous fournissez : votre nom, votre numéro de téléphone, votre adresse courriel, le service et le secteur qui vous intéressent, ainsi que tout ce que vous écrivez dans le message.\n\nLorsque vous achetez un abonnement, nous recueillons aussi le nom et le numéro de téléphone de la personne qui reçoit les visites, l'adresse du service et les notes que vous ajoutez.\n\nNous ne demandons aucun renseignement médical ou de santé. Veuillez ne pas en inscrire dans les formulaires."
+        },
+        "use": {
+          "title": "Pourquoi nous les recueillons",
+          "body": "Nous utilisons vos renseignements uniquement pour vous répondre, pour organiser et fournir les services, pour gérer les abonnements et la facturation, et pour tenir les dossiers que nous sommes tenus de conserver. Nous ne vendons pas vos renseignements et ne les utilisons pas à des fins publicitaires."
+        },
+        "payments": {
+          "title": "Paiements",
+          "body": "Les paiements d'abonnement sont traités par Stripe. Les renseignements de votre carte sont saisis sur les pages sécurisées de Stripe; nous ne les voyons ni ne les conservons jamais. Nous conservons seulement une référence à votre dossier client Stripe, votre forfait et l'état de votre facturation. La politique de confidentialité de Stripe explique comment Stripe traite vos renseignements."
+        },
+        "share": {
+          "title": "Avec qui nous les partageons",
+          "body": "Nous partageons des renseignements uniquement avec les fournisseurs de services qui nous aident à exploiter ce site Web et notre entreprise, par exemple nos fournisseurs d'hébergement, de base de données, de courriel et de paiement, et seulement dans la mesure nécessaire à ces fins. Certains de ces fournisseurs peuvent conserver des renseignements à l'extérieur du Canada. Nous pouvons aussi communiquer des renseignements lorsque la loi l'exige."
+        },
+        "family": {
+          "title": "Nouvelles aux membres de la famille",
+          "body": "Nous donnons des nouvelles des visites aux membres de la famille uniquement avec la permission du client."
+        },
+        "retain": {
+          "title": "Durée de conservation",
+          "body": "Nous conservons les demandes pendant un maximum de 24 mois, puis nous les supprimons ou les rendons anonymes. Nous conservons les dossiers d'abonnement et de facturation aussi longtemps que l'exigent les règles fiscales et comptables."
+        },
+        "cookies": {
+          "title": "Témoins et mesure d'audience",
+          "body": "Ce site Web utilise uniquement les témoins nécessaires à son fonctionnement, par exemple pour mémoriser votre langue. Nous utilisons un outil de mesure d'audience respectueux de la vie privée, qui n'utilise pas de témoins et ne vous identifie pas."
+        },
+        "rights": {
+          "title": "Vos choix",
+          "body": "Vous pouvez demander à consulter les renseignements personnels que nous détenons à votre sujet, nous demander de les corriger ou de les supprimer. Communiquez avec nous à l'aide des coordonnées de notre page Contact et nous vous répondrons dans un délai raisonnable."
+        },
+        "contact": {
+          "title": "Questions",
+          "body": "Si vous avez une question ou une préoccupation au sujet de votre vie privée, veuillez communiquer avec nous. Si notre réponse ne vous satisfait pas, vous pouvez vous adresser au Commissariat à l'information et à la protection de la vie privée de l'Alberta."
+        }
+      }
+    },
+    "terms": {
+      "metaTitle": "Conditions d'utilisation",
+      "title": "Conditions d'utilisation",
+      "intro": "Les présentes conditions s'appliquent lorsque vous utilisez ce site Web ou achetez un abonnement auprès de Mabel Home Help. Veuillez les lire attentivement.",
+      "sections": {
+        "scope": {
+          "title": "Ce que nous offrons",
+          "body": "Nous offrons une aide non médicale et non urgente pour les tâches du quotidien. Nous n'offrons pas de soins infirmiers, de soins personnels ni d'intervention d'urgence. En cas d'urgence, composez le 911."
+        },
+        "requests": {
+          "title": "Demandes et réservations",
+          "body": "L'envoi d'une demande au moyen de ce site Web ne constitue pas une réservation confirmée. Un service est confirmé seulement lorsque nous avons communiqué avec vous et convenu des tâches, du moment et du prix."
+        },
+        "membership": {
+          "title": "Abonnements mensuels",
+          "body": "Un abonnement comprend chaque mois le nombre de visites indiqué pour votre forfait. Une visite correspond à un déplacement au domicile pour les tâches convenues, pour la durée comprise dans votre forfait. Les visites non utilisées au cours d'un mois ne sont pas reportées au mois suivant."
+        },
+        "billing": {
+          "title": "Facturation et renouvellement",
+          "body": "Les abonnements sont facturés à l'avance, en dollars canadiens, sur la carte que vous fournissez. Votre abonnement se renouvelle automatiquement chaque mois, à la même date, jusqu'à ce que vous l'annuliez. Si un paiement échoue, nous communiquerons avec vous et pourrons suspendre les visites jusqu'à ce que la situation soit réglée."
+        },
+        "cancel": {
+          "title": "Annulation et remboursements",
+          "body": "Vous pouvez annuler en tout temps à l'aide du lien Gérer mon abonnement ou en communiquant avec nous. L'annulation prend effet à la fin du mois déjà payé. Nous ne remboursons pas une partie de mois. Si nous ne sommes pas en mesure de fournir vos visites, nous corrigerons la situation au moyen d'un crédit ou d'un remboursement."
+        },
+        "changes": {
+          "title": "Changements de prix",
+          "body": "Si le prix de votre forfait change, nous vous en informerons avant que le changement s'applique à vous. Vous pouvez annuler avant l'entrée en vigueur du nouveau prix."
+        },
+        "conduct": {
+          "title": "Sécurité et respect",
+          "body": "Nous pouvons refuser ou interrompre un service si une tâche est dangereuse, si elle dépasse ce que nous offrons, ou si nos aides ne sont pas traitées avec respect. L'assistance routière est une aide limitée et non urgente réservée aux membres mensuels, selon la sécurité et la disponibilité."
+        },
+        "liability": {
+          "title": "Notre responsabilité",
+          "body": "Nous prenons soin de tout ce que nous faisons. Dans la mesure permise par la loi, notre responsabilité à l'égard de toute perte se limite au montant que vous nous avez payé pour le service en question. Rien dans les présentes conditions ne limite les droits que vous confère la législation albertaine sur la protection du consommateur."
+        },
+        "law": {
+          "title": "Droit applicable",
+          "body": "Les présentes conditions sont régies par les lois de l'Alberta et les lois du Canada qui s'y appliquent."
+        },
+        "contact": {
+          "title": "Contact",
+          "body": "Des questions sur ces conditions? Veuillez communiquer avec nous à l'aide des coordonnées de notre page Contact."
+        }
+      }
+    }
+  },
+  "Emails": {
+    "greeting": "Bonjour {name},",
+    "signoff": "Cordialement,",
+    "team": "L'équipe de Mabel Home Help",
+    "footer": "Mabel Home Help offre uniquement des services non médicaux et non urgents.",
+    "callUs": "Des questions? Appelez-nous au {phone}.",
+    "requestConfirm": {
+      "subject": "Nous avons bien reçu votre demande",
+      "heading": "Merci, nous avons bien reçu votre demande",
+      "body": "Nous avons reçu votre demande et communiquerons bientôt avec vous pour confirmer les détails. Il ne s'agit pas encore d'une réservation confirmée.",
+      "urgent": "Si c'est urgent, veuillez nous appeler."
+    },
+    "contactConfirm": {
+      "subject": "Nous avons bien reçu votre message",
+      "heading": "Merci de votre message",
+      "body": "Nous avons reçu votre message et vous répondrons bientôt."
+    },
+    "sponsorConfirm": {
+      "subject": "Merci de votre intérêt pour Parrainer un aîné",
+      "heading": "Merci d'avoir à cœur nos aînés",
+      "body": "Nous avons reçu votre message au sujet du programme Parrainer un aîné et communiquerons bientôt avec vous pour discuter de la façon dont vous souhaitez aider."
+    },
+    "welcome": {
+      "subject": "Bienvenue chez Mabel Home Help",
+      "heading": "Votre abonnement est actif",
+      "body": "Merci de vous être abonné. Nous vous appellerons dans un délai d'un jour ouvrable pour planifier la première visite.",
+      "plan": "Forfait",
+      "amount": "Montant mensuel",
+      "nextBilling": "Prochaine date de facturation",
+      "manage": "Vous pouvez mettre à jour votre carte, consulter vos factures ou annuler en tout temps :",
+      "manageCta": "Gérer mon abonnement",
+      "receipt": "Stripe vous envoie votre reçu de paiement séparément."
+    },
+    "paymentFailed": {
+      "subject": "Nous n'avons pas pu traiter le paiement de votre abonnement",
+      "heading": "Votre paiement n'a pas été accepté",
+      "body": "Nous n'avons pas pu débiter votre carte pour votre abonnement {plan}. Il s'agit habituellement d'une carte expirée ou d'un blocage temporaire de la banque.",
+      "action": "Veuillez mettre à jour votre carte pour que vos visites se poursuivent :",
+      "cta": "Mettre à jour ma carte"
+    },
+    "portalLink": {
+      "subject": "Votre lien pour gérer votre abonnement",
+      "heading": "Gérer votre abonnement",
+      "body": "Utilisez le bouton ci-dessous pour mettre à jour votre carte, consulter vos factures ou annuler. Le lien est valide pendant 30 minutes.",
+      "cta": "Ouvrir mon abonnement",
+      "ignore": "Si vous n'avez pas fait cette demande, vous pouvez ignorer ce courriel."
+    }
+  }
+}
