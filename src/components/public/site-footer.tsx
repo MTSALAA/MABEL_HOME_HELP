@@ -24,7 +24,7 @@ export async function SiteFooter({
   return (
     // Extra bottom padding on small screens keeps the sticky action bar from
     // covering the last lines.
-    <footer className="bg-forest-900 pb-28 text-cream-50 lg:pb-0">
+    <footer className="bg-forest-900 pb-24 text-cream-50 lg:pb-0">
       <div className="page-container grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <Logo tone="light" />
