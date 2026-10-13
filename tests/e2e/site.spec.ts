@@ -124,7 +124,7 @@ test.describe("phone action bar", () => {
   test("steps aside while scrolling down and comes back on the way up", async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/services");
     const bar = page.getByRole("navigation", { name: "Quick contact actions" });
     await expect(bar).toBeInViewport();
 
@@ -132,6 +132,20 @@ test.describe("phone action bar", () => {
     await expect(bar).toHaveAttribute("data-hidden", "true");
     await expect(bar).not.toBeInViewport();
 
+    await page.mouse.wheel(0, -200);
+    await expect(bar).not.toHaveAttribute("data-hidden", "true");
+    await expect(bar).toBeInViewport();
+  });
+
+  test("stays away while the page's own buttons are on screen", async ({ page }) => {
+    // The home page opens with Call, Text and Book: no second set below them.
+    await page.goto("/");
+    const bar = page.getByRole("navigation", { name: "Quick contact actions" });
+    await expect(page.getByRole("link", { name: "Book a Service" }).first()).toBeInViewport();
+    await expect(bar).toHaveAttribute("data-hidden", "true");
+
+    // Further down, scrolling back up brings it in.
+    await page.mouse.wheel(0, 1600);
     await page.mouse.wheel(0, -200);
     await expect(bar).not.toHaveAttribute("data-hidden", "true");
     await expect(bar).toBeInViewport();

@@ -21,7 +21,11 @@ export async function ContactActions({
     phone ? tCommon("labelWithDetail", { label, detail: formatPhone(phone) }) : label;
 
   return (
-    <div className={cn("flex flex-col gap-3 sm:flex-row sm:flex-wrap", className)}>
+    // The phone action bar hides while these same buttons are on screen.
+    <div
+      data-contact-actions
+      className={cn("flex flex-col gap-3 sm:flex-row sm:flex-wrap", className)}
+    >
       {phone ? (
         <ButtonAnchor
           href={telHref(phone)}

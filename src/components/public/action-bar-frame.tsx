@@ -10,10 +10,12 @@ function isActionPage(pathname: string): boolean {
 }
 
 /**
- * Keeps the phone action bar out of the way: it slides off while the visitor
- * scrolls down to read or types in a form, and comes back as soon as they
- * scroll up. The links stay in the page throughout, so keyboard and screen
- * reader users can always reach them (focusing one brings the bar back).
+ * Keeps the phone action bar out of the way. It slides off while the visitor
+ * scrolls down to read or types in a form, and while the page's own Call,
+ * Text and Book buttons are on screen (the home page opens with them); it
+ * comes back as soon as they scroll up. The links stay in the page
+ * throughout, so keyboard and screen reader users can always reach them
+ * (focusing one brings the bar back).
  */
 export function ActionBarFrame({
   label,
@@ -28,6 +30,13 @@ export function ActionBarFrame({
   const pathname = usePathname();
   const [scrolledAway, setScrolledAway] = useState(false);
   const [typing, setTyping] = useState(false);
+  // Whether the page's own buttons are on screen, as last measured for a
+  // given page. Until a page has been measured, assume they are only on the
+  // home page, which opens with them: no flash of the bar on first load.
+  const [twins, setTwins] = useState<{ pathname: string; visible: boolean } | null>(
+    null,
+  );
+  const twinVisible = twins?.pathname === pathname ? twins.visible : pathname === "/";
 
   useEffect(() => {
     let last = Math.max(0, window.scrollY);
@@ -68,16 +77,39 @@ export function ActionBarFrame({
     };
   }, []);
 
+  // Watch the page's own button groups (ContactActions). They differ from
+  // page to page, so this starts again after every navigation.
+  useEffect(() => {
+    const onScreen = new Set<Element>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) onScreen.add(entry.target);
+          else onScreen.delete(entry.target);
+        }
+        setTwins({ pathname, visible: onScreen.size > 0 });
+      },
+      { threshold: 0.35 },
+    );
+    document
+      .querySelectorAll("[data-contact-actions]")
+      .forEach((group) => observer.observe(group));
+    return () => observer.disconnect();
+  }, [pathname]);
+
   if (isActionPage(pathname)) return null;
 
-  const hidden = scrolledAway || typing;
+  const hidden = scrolledAway || typing || twinVisible;
 
   return (
     <nav
       aria-label={label}
       data-hidden={hidden ? "true" : undefined}
       // Tabbing into the bar while it is tucked away brings it back.
-      onFocus={() => setScrolledAway(false)}
+      onFocus={() => {
+        setScrolledAway(false);
+        setTwins({ pathname, visible: false });
+      }}
       className={cn(
         "fixed bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-40 motion-safe:transition-transform motion-safe:duration-300 lg:hidden print:hidden",
         floating
