@@ -14,10 +14,21 @@ Read `README.md` ("How it is put together") before changing structure, and
 `docs/CAHIER_DE_CHARGES.md` for what the product must do.
 
 - **Two root layouts, no `app/layout.tsx`**: `src/app/[locale]/` (public,
-  English and French) and `src/app/admin/` (English only).
+  English and French by URL) and `src/app/admin/` (English and French by
+  cookie, see below).
 - **Every visible public string** lives in `messages/en.json` and
   `messages/fr.json` with identical keys (`npm test` fails otherwise). Never
   hard-code public copy.
+- **Admin text** is translated too, under `Admin` in the same two files. The
+  admin's language is a cookie read by `getAdminLocale()`
+  (`src/server/admin-i18n.ts`), so anything that shows text must render inside
+  `<AdminIntl>`, which sits inside a `<Suspense>` boundary. Async server code
+  uses `getAdminT("Area")`, `getAdminLabels()` and `getAdminFormat()`; client
+  and non-async components use `useTranslations("Admin.Area")`. Server Actions
+  return `error` already translated; Zod messages in
+  `lib/validation/admin.ts` are keys of `Admin.Validation`, turned into text by
+  `useValidationMessage()`. English wording is what the end-to-end tests look
+  for.
 - **Editable content** (services, plans, settings) has `...En` / `...Fr`
   columns; read it through `src/server/queries/content.ts`, and call
   `updateTag(CONTENT_TAG)` after any admin write.

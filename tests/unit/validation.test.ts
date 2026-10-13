@@ -177,6 +177,7 @@ describe("settingsSchema", () => {
     disclaimerEn: "Non-medical services only.",
     disclaimerFr: "",
     notificationEmails: [],
+    staffLocale: "EN",
   };
 
   it("allows phone and email to be empty until the client confirms them", () => {

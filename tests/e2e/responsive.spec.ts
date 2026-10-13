@@ -125,9 +125,13 @@ for (const viewport of VIEWPORTS) {
       }
     });
 
-    test("admin screens fit the screen", async ({ page }) => {
+    test("admin screens fit the screen in English and French", async ({
+      page,
+      context,
+      baseURL,
+    }) => {
       test.skip(!hasAdminCredentials, "SEED_ADMIN_* must be set in .env");
-      test.setTimeout(120_000);
+      test.setTimeout(240_000);
 
       const [request, plan, service] = await Promise.all([
         prisma.bookingRequest.findFirst({ orderBy: { createdAt: "desc" } }),
@@ -157,6 +161,15 @@ for (const viewport of VIEWPORTS) {
       for (const path of paths) {
         await expectSoundLayout(page, path);
       }
+
+      // The same screens in French: the language is a cookie, not an address.
+      await context.addCookies([
+        { name: "mabel_admin_locale", value: "fr", url: `${baseURL}/admin` },
+      ]);
+      for (const path of paths) {
+        await expectSoundLayout(page, path);
+      }
+      await expect(page.locator("html")).toHaveAttribute("lang", "fr-CA");
     });
   });
 }

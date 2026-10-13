@@ -118,11 +118,82 @@ test.describe("public site", () => {
   });
 });
 
+test.describe("phone action bar", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test("steps aside while scrolling down and comes back on the way up", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const bar = page.getByRole("navigation", { name: "Quick contact actions" });
+    await expect(bar).toBeInViewport();
+
+    await page.mouse.wheel(0, 900);
+    await expect(bar).toHaveAttribute("data-hidden", "true");
+    await expect(bar).not.toBeInViewport();
+
+    await page.mouse.wheel(0, -200);
+    await expect(bar).not.toHaveAttribute("data-hidden", "true");
+    await expect(bar).toBeInViewport();
+  });
+
+  test("is left out of the booking page and hides while typing", async ({ page }) => {
+    await page.goto("/book");
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(
+      page.getByRole("navigation", { name: "Quick contact actions" }),
+    ).toHaveCount(0);
+
+    await page.goto("/contact");
+    const bar = page.getByRole("navigation", { name: "Quick contact actions" });
+    await expect(bar).toBeInViewport();
+    await page.getByLabel("Full name").focus();
+    await expect(bar).toHaveAttribute("data-hidden", "true");
+  });
+});
+
 test.describe("admin", () => {
   test.skip(
     !hasAdminCredentials,
     "SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD must be set in .env",
   );
+
+  test("the dashboard can be switched to French and back", async ({ page }) => {
+    await signIn(page);
+    const sidebar = page.getByRole("complementary");
+    await expect(sidebar.getByRole("link", { name: "Overview" })).toBeVisible();
+
+    await sidebar.getByRole("button", { name: "Français" }).click();
+    await expect(sidebar.getByRole("link", { name: "Vue d'ensemble" })).toBeVisible();
+    await expect(page.locator("html")).toHaveAttribute("lang", "fr-CA");
+
+    // The choice is remembered, on every screen, including a fresh load.
+    await page.goto("/admin/settings");
+    await expect(page.getByRole("heading", { level: 1, name: "Paramètres" })).toBeVisible();
+    await page.goto("/admin/requests");
+    await expect(page.getByRole("heading", { level: 1, name: "Demandes" })).toBeVisible();
+    await expect(page).toHaveTitle(/Demandes/);
+
+    await page.getByRole("complementary").getByRole("button", { name: "English" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Requests" })).toBeVisible();
+    await expect(page.locator("html")).toHaveAttribute("lang", "en-CA");
+  });
+
+  test("the sign-in page follows the browser language until one is chosen", async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({ locale: "fr-CA" });
+    const page = await context.newPage();
+    await page.goto("/admin/login");
+    await expect(page.getByRole("heading", { name: "Connexion" })).toBeVisible();
+    await expect(page.getByLabel("Courriel")).toBeVisible();
+
+    await page.getByRole("button", { name: "English" }).click();
+    await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+    await page.reload();
+    await expect(page.getByLabel("Email")).toBeVisible();
+    await context.close();
+  });
 
   test("the admin is not reachable without signing in", async ({ page }) => {
     await page.goto("/admin");

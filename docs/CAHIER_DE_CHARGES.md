@@ -548,7 +548,7 @@ model SponsorInquiry {
 - Admin mutations and public form submissions use Server Actions; the only API routes are the auth handler and the Stripe webhook.
 - All database access goes through a `server/` layer; components never import Prisma directly.
 - Stripe is the source of truth for billing state. The `Membership` table is a mirror updated only by verified webhooks, plus the contact details collected at sign-up.
-- Public routes sit under a `[locale]` segment; the admin is English only and sits outside it.
+- Public routes sit under a `[locale]` segment; the admin sits outside it and takes its language (English or French) from a per-browser preference (see section 22).
 
 ### 10.2 Folder structure
 
@@ -951,3 +951,30 @@ as a remaining limit.
 - Everything in section 20 that needs live accounts (Stripe, Resend, Turnstile,
   Upstash, Sentry) is still unverified against the real services.
 - A French speaker should review the French copy.
+
+---
+
+## 22. Changes before handover (2026-10-13)
+
+Requested after the first review of the deployed site.
+
+| Area | Was | Now | Why |
+|---|---|---|---|
+| 5.1 Mobile action bar | A full-width bar fixed to the bottom of every page | A slim floating bar that slides away while scrolling down or typing and returns on scrolling up; left out of the booking and membership pages; a single small "Book" button when no phone number is set | The fixed bar covered a tenth of a phone screen and got in the way of reading |
+| 11 Logo | House with a heart on a green tile | An M under a roof with a heart ("Roof and M") | Chosen from six directions drawn for the client; all six are in `docs/brand/` and any of them can replace it |
+| 8 Admin language | English only | English or French, switched from the menu or the sign-in page and remembered per browser; on a first visit it follows the browser's language | The owner and staff may prefer French |
+| 8 Emails to the team | Always English | English or French, chosen in Settings ("Language of emails sent to the team") | Same reason; emails to visitors already follow the visitor's language |
+| 10.3 Database URL | `DIRECT_URL` | `DATABASE_URL_UNPOOLED` | The name the Neon integration on Vercel creates |
+| 14 Seeding | Run by hand once | Run by every Vercel build; fills an empty database only and creates the first admin only while there are no users | A new environment sets itself up, and a deploy never undoes admin changes |
+
+Notes:
+
+- The admin's language is stored in the `mabel_admin_locale` cookie. Nothing
+  about it is stored per user, so it does not follow a person to another
+  device.
+- Names of service areas are stored on requests and memberships in English,
+  as typed on the English tab of Settings, and are shown that way in the
+  French admin too.
+- Text in SVG files under `public/brand/` and `docs/brand/` uses the web
+  fonts; a print shop needs the PNG sheet or outlined text.
+

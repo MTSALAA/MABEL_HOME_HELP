@@ -96,7 +96,8 @@
     <td width="50%"><img src="docs/screenshots/admin-plan-editor.jpg" alt="Admin: plan editor with English and French tabs"></td>
     <td width="50%" valign="top">
       <br>
-      The admin is English only and works on a phone. Every field that
+      The admin works on a phone and can be used in English or French
+      (a switch in the menu, remembered per browser). Every field that
       appears on the public site has an English and a French version; a French
       field left empty falls back to English.
     </td>
@@ -108,7 +109,9 @@
 </table>
 
 The illustrations and logo are original SVGs in `public/illustrations/` and
-`public/brand/`. Phone numbers and emails in the screenshots are placeholders.
+`public/brand/`. The other logo directions that were drawn, on one sheet, are
+in [`docs/brand/`](docs/brand/logo-options.png). Phone numbers and emails in
+the screenshots are placeholders.
 
 ## Built with
 
@@ -171,7 +174,7 @@ First end-to-end run on a machine: `npx playwright install chromium`.
 | Area | Where | Notes |
 |---|---|---|
 | Public pages | `src/app/[locale]/` | Statically prerendered. Text comes from `messages/en.json` and `messages/fr.json` |
-| Admin | `src/app/admin/` | English only, its own root layout. Every page and action calls `requireAdmin()` |
+| Admin | `src/app/admin/` | English and French (a cookie, not a URL), its own root layout. Text is under `Admin` in the message files. Every page and action calls `requireAdmin()` |
 | Editable content | `src/server/queries/content.ts` | Cached with `use cache` and one tag; admin saves call `updateTag` so the site updates at once |
 | Forms | `src/components/forms/`, `src/server/actions/public.ts` | Zod schemas in `src/lib/validation/` are shared by browser and server |
 | Admin actions | `src/server/actions/admin/` | Server Actions; the only API routes are auth and the Stripe webhook |
