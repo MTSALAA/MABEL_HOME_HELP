@@ -1,0 +1,14 @@
+# Store text with LF line endings so Windows and Linux/macOS checkouts agree.
+* text=auto eol=lf
+
+# Binary assets are never converted.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.ico binary
+*.woff2 binary
+
+# Generated or vendored: collapsed in diffs and left out of language stats.
+package-lock.json linguist-generated=true -diff
+prisma/migrations/** linguist-generated=true
+src/components/ui/** linguist-vendored=true
