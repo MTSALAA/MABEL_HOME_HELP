@@ -1,0 +1,25 @@
+name: Change request
+description: A new feature, or a change to how something works or reads
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What is needed, and for whom
+      description: The problem to solve, in the visitor's or the owner's words.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Suggested change
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: This touches
+      options:
+        - label: Public website
+        - label: Admin dashboard
+        - label: Payments or memberships
+        - label: Emails
+        - label: English or French wording

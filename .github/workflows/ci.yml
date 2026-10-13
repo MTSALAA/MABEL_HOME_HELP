@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: mabel
+          POSTGRES_PASSWORD: mabel
+          POSTGRES_DB: mabel
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U mabel"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    # Throwaway values for the ephemeral CI database only. Real secrets live in
+    # the hosting provider, never in this file.
+    env:
+      DATABASE_URL: postgresql://mabel:mabel@localhost:5433/mabel
+      DIRECT_URL: postgresql://mabel:mabel@localhost:5433/mabel
+      BETTER_AUTH_SECRET: ci-only-secret-never-used-outside-this-workflow
+      BETTER_AUTH_URL: http://localhost:3100
+      NEXT_PUBLIC_SITE_URL: http://localhost:3100
+      SEED_ADMIN_EMAIL: owner@mabelhomehelp.test
+      SEED_ADMIN_PASSWORD: ci-only-password-0000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Prepare the database
+        run: |
+          npx prisma migrate deploy
+          npm run db:seed
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # Includes the check that en.json and fr.json have the same keys.
+      - name: Unit tests
+        run: npm test
+
+      - name: Install the test browser
+        run: npx playwright install --with-deps chromium
+
+      # Builds the site (which also proves the production build works) and
+      # runs the end-to-end scenarios against it.
+      - name: End-to-end tests
+        run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results
+          path: test-results/
+          retention-days: 7

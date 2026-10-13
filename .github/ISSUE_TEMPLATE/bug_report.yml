@@ -1,0 +1,38 @@
+name: Bug report
+description: Something on the site or in the admin does not work as it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you saw instead.
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Page or screen
+      placeholder: /fr/book, or Admin > Plans & pricing
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - Phone
+        - Tablet
+        - Laptop or desktop
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: Safari on iPhone, Chrome on Windows
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or anything else
+      description: Please do not paste customer names, phone numbers or addresses.
