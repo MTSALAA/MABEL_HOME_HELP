@@ -1,0 +1,272 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum RequestType {
+  BOOKING
+  GENERAL
+}
+
+enum RequestStatus {
+  NEW
+  CONTACTED
+  SCHEDULED
+  DONE
+  ARCHIVED
+}
+
+enum SponsorStatus {
+  NEW
+  CONTACTED
+  CLOSED
+  ARCHIVED
+}
+
+enum ContactMethod {
+  CALL
+  TEXT
+  EMAIL
+}
+
+enum RequesterRole {
+  SELF
+  FAMILY
+  OTHER
+}
+
+enum SponsorIntent {
+  SPONSOR_VISITS
+  NOMINATE_SENIOR
+  OTHER
+}
+
+enum Locale {
+  EN
+  FR
+}
+
+enum MembershipStatus {
+  PENDING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+model Service {
+  id            String           @id @default(cuid())
+  slug          String           @unique
+  titleEn       String
+  titleFr       String?
+  descriptionEn String
+  descriptionFr String?
+  // Key of an SVG under public/illustrations (without extension).
+  illustration  String
+  // Optional uploaded replacement for the illustration.
+  imageUrl      String?
+  sortOrder     Int              @default(0)
+  isActive      Boolean          @default(true)
+  isFeatured    Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  requests      BookingRequest[]
+}
+
+model Plan {
+  id              String           @id @default(cuid())
+  slug            String           @unique
+  nameEn          String
+  nameFr          String?
+  priceTextEn     String
+  priceTextFr     String?
+  includesEn      String
+  includesFr      String?
+  noteEn          String?
+  noteFr          String?
+  sortOrder       Int              @default(0)
+  isActive        Boolean          @default(true)
+  isHighlighted   Boolean          @default(false)
+  isPurchasable   Boolean          @default(false)
+  // CAD cents, required when purchasable.
+  monthlyCents    Int?
+  stripeProductId String?
+  // Current Stripe price offered to new members.
+  stripePriceId   String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  requests        BookingRequest[]
+  memberships     Membership[]
+}
+
+// Single row, id is always 1.
+model SiteSettings {
+  id                 Int      @id @default(1)
+  businessName       String
+  taglineEn          String
+  taglineFr          String?
+  phone              String?
+  email              String?
+  location           String
+  serviceAreasEn     String[]
+  serviceAreasFr     String[]
+  hoursEn            String?
+  hoursFr            String?
+  disclaimerEn       String
+  disclaimerFr       String?
+  notificationEmails String[]
+  updatedAt          DateTime @updatedAt
+}
+
+model BookingRequest {
+  id            String         @id @default(cuid())
+  type          RequestType    @default(BOOKING)
+  status        RequestStatus  @default(NEW)
+  locale        Locale         @default(EN)
+  fullName      String
+  phone         String
+  email         String?
+  requesterRole RequesterRole?
+  serviceId     String?
+  service       Service?       @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  planId        String?
+  plan          Plan?          @relation(fields: [planId], references: [id], onDelete: SetNull)
+  area          String?
+  contactMethod ContactMethod?
+  preferredTime String?
+  message       String?
+  adminNotes    String?
+  consentAt     DateTime
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model SponsorInquiry {
+  id           String        @id @default(cuid())
+  status       SponsorStatus @default(NEW)
+  locale       Locale        @default(EN)
+  fullName     String
+  phone        String?
+  email        String
+  organization String?
+  intent       SponsorIntent
+  message      String?
+  adminNotes   String?
+  consentAt    DateTime
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model Membership {
+  id                      String           @id @default(cuid())
+  status                  MembershipStatus @default(PENDING)
+  planId                  String
+  plan                    Plan             @relation(fields: [planId], references: [id], onDelete: Restrict)
+  locale                  Locale           @default(EN)
+  payerName               String
+  payerPhone              String
+  payerEmail              String
+  requesterRole           RequesterRole
+  recipientName           String?
+  recipientPhone          String?
+  serviceAddress          String
+  area                    String
+  notes                   String?
+  adminNotes              String?
+  stripeCheckoutSessionId String?          @unique
+  stripeCustomerId        String?
+  stripeSubscriptionId    String?          @unique
+  // Price the member actually pays (may differ from the plan's current price).
+  stripePriceId           String?
+  currentPeriodEnd        DateTime?
+  cancelAtPeriodEnd       Boolean          @default(false)
+  canceledAt              DateTime?
+  consentAt               DateTime
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+
+  @@index([status, createdAt])
+  @@index([payerEmail])
+  @@index([stripeCustomerId])
+}
+
+// Stripe webhook events, for idempotency. processedAt is set only once the
+// handler has finished, so an event interrupted part-way is retried.
+model StripeEvent {
+  id          String    @id
+  type        String
+  receivedAt  DateTime  @default(now())
+  processedAt DateTime?
+}
+
+// --- Better Auth tables -----------------------------------------------------
+
+model User {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
