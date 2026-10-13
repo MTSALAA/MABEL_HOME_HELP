@@ -11,17 +11,14 @@ updates:
       minor-and-patch:
         update-types: [minor, patch]
     ignore:
-      # Major upgrades of these change framework behaviour and are done by hand.
-      - dependency-name: next
+      # Major upgrades change behaviour or need code changes, so they are done
+      # by hand, one at a time, with the full test suite.
+      - dependency-name: "*"
         update-types: [version-update:semver-major]
-      - dependency-name: react
-        update-types: [version-update:semver-major]
-      - dependency-name: react-dom
-        update-types: [version-update:semver-major]
-      - dependency-name: prisma
-        update-types: [version-update:semver-major]
-      - dependency-name: "@prisma/client"
-        update-types: [version-update:semver-major]
+      # Present only to keep the npm tree valid (see README, Troubleshooting).
+      # Their versions follow what @hookform/resolvers asks for.
+      - dependency-name: ajv
+      - dependency-name: ajv-formats
   - package-ecosystem: github-actions
     directory: /
     schedule:
