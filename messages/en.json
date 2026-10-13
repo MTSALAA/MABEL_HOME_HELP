@@ -512,6 +512,641 @@
       "body": "Use the button below to update your card, see your invoices or cancel. The link works for 30 minutes.",
       "cta": "Open my membership",
       "ignore": "If you didn't ask for this, you can ignore this email."
+    },
+    "staff": {
+      "footer": "Sent by the Mabel Home Help website.",
+      "openInAdmin": "Open in admin",
+      "labels": {
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email",
+        "requestingFor": "Requesting for",
+        "service": "Service",
+        "plan": "Plan",
+        "area": "Area",
+        "contactBy": "Contact by",
+        "preferredTime": "Preferred time",
+        "message": "Message",
+        "language": "Language",
+        "organization": "Organization",
+        "wantsTo": "Wants to",
+        "payer": "Payer",
+        "payerPhone": "Payer phone",
+        "payerEmail": "Payer email",
+        "visitsFor": "Visits are for",
+        "thePayer": "The payer",
+        "recipientPhone": "Recipient phone",
+        "address": "Address",
+        "notes": "Notes",
+        "customerEmail": "Customer email",
+        "stripeCustomer": "Stripe customer",
+        "stripeSubscription": "Stripe subscription",
+        "checkoutSession": "Checkout session"
+      },
+      "role": {
+        "SELF": "Themselves",
+        "FAMILY": "A family member",
+        "OTHER": "Someone else"
+      },
+      "contact": {
+        "CALL": "Call",
+        "TEXT": "Text",
+        "EMAIL": "Email"
+      },
+      "intent": {
+        "SPONSOR_VISITS": "Sponsor visits",
+        "NOMINATE_SENIOR": "Nominate a senior in need",
+        "OTHER": "Other"
+      },
+      "languageName": {
+        "EN": "English",
+        "FR": "French"
+      },
+      "request": {
+        "subjectBooking": "New service request from {name}",
+        "subjectMessage": "New message from {name}",
+        "headingBooking": "New service request",
+        "headingMessage": "New contact message",
+        "bodyBooking": "{name} sent a service request through the website.",
+        "bodyMessage": "{name} sent a message through the website."
+      },
+      "sponsor": {
+        "subject": "New Sponsor a Senior inquiry from {name}",
+        "heading": "New Sponsor a Senior inquiry",
+        "body": "{name} would like to talk about Sponsor a Senior."
+      },
+      "member": {
+        "subject": "New member: {name} ({plan})",
+        "heading": "New membership",
+        "body": "{name} just joined {plan}. Call within one business day to schedule the first visit."
+      },
+      "paymentFailed": {
+        "subject": "Payment failed: {name} ({plan})",
+        "heading": "Membership payment failed",
+        "body": "The card payment for the {plan} membership of {name} failed. Stripe will retry automatically, and the member has been asked to update their card."
+      },
+      "ended": {
+        "subject": "Membership ended: {name} ({plan})",
+        "heading": "Membership ended",
+        "body": "The {plan} membership of {name} has ended. No further payments will be taken."
+      },
+      "unmatched": {
+        "subject": "Action needed: a membership payment has no sign-up record",
+        "heading": "A payment needs your attention",
+        "body1": "Stripe reports a paid membership checkout, but the website has no sign-up record for it. The customer is being billed and does not appear in the Members list.",
+        "body2": "Open the customer in Stripe, contact them for their visit details, and either add them by hand or cancel and refund the subscription.",
+        "openStripe": "Open Stripe"
+      },
+      "password": {
+        "inviteSubject": "You've been invited to the Mabel Home Help admin",
+        "resetSubject": "Reset your Mabel Home Help admin password",
+        "invitePreview": "Set your password to get started.",
+        "resetPreview": "Reset your password.",
+        "inviteHeading": "Set up your admin account",
+        "resetHeading": "Reset your password",
+        "inviteBody": "You've been given access to the Mabel Home Help admin dashboard. Choose a password to get started.",
+        "resetBody": "We received a request to reset the password for your admin account.",
+        "inviteCta": "Choose my password",
+        "resetCta": "Reset my password",
+        "expiry": "This link works for one hour. If you didn't expect this email, you can ignore it."
+      }
+    }
+  },
+  "Admin": {
+    "Common": {
+      "language": "Language",
+      "back": "Back",
+      "actionFailed": "That didn't work. Check your connection, refresh the page and try again.",
+      "search": "Search",
+      "exportCsv": "Export CSV",
+      "exporting": "Exporting…",
+      "nothingToExport": "Nothing to export.",
+      "status": "Status",
+      "statusUpdated": "Status updated.",
+      "privateNotes": "Private notes",
+      "notesPlaceholder": "Only admins can see these.",
+      "save": "Save",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "saveNotes": "Save notes",
+      "notesSaved": "Notes saved.",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "working": "Working…",
+      "edit": "Edit",
+      "hasErrors": "has errors",
+      "frenchFallback": "Anything left empty here is shown in English on the French site.",
+      "reorder": "Reorder {title}",
+      "orderSaved": "Order saved.",
+      "loading": "Loading",
+      "notSure": "Not sure yet",
+      "yes": "Yes",
+      "no": "No",
+      "pagination": {
+        "label": "Pagination",
+        "showing": "Showing {from}–{to} of {total}",
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {page} of {pages}"
+      },
+      "invalidRequest": "That request was not valid. Refresh the page and try again.",
+      "callNumber": "Call {phone}",
+      "sendText": "Text",
+      "sendEmail": "Email",
+      "noteTooLong": "The note is too long.",
+      "checkFields": "Please check the highlighted fields.",
+      "orderNotSaved": "Could not save the new order."
+    },
+    "Nav": {
+      "label": "Admin",
+      "overview": "Overview",
+      "requests": "Requests",
+      "members": "Members",
+      "sponsors": "Sponsor inquiries",
+      "services": "Services",
+      "plans": "Plans & pricing",
+      "settings": "Settings",
+      "users": "Admin users",
+      "viewWebsite": "View the website",
+      "signOut": "Sign out",
+      "openMenu": "Open menu",
+      "navigation": "Admin navigation",
+      "badgeNew": "new",
+      "badgePastDue": "past due"
+    },
+    "Labels": {
+      "NEW": "New",
+      "CONTACTED": "Contacted",
+      "SCHEDULED": "Scheduled",
+      "DONE": "Done",
+      "CLOSED": "Closed",
+      "ARCHIVED": "Archived",
+      "ACTIVE": "Active",
+      "PAST_DUE": "Past due",
+      "CANCELED": "Ended",
+      "PENDING": "Unpaid checkout",
+      "BOOKING": "Service request",
+      "GENERAL": "Message",
+      "SELF": "Themselves",
+      "FAMILY": "A family member",
+      "OTHER": "Someone else",
+      "CALL": "Call",
+      "TEXT": "Text",
+      "EMAIL": "Email",
+      "SPONSOR_VISITS": "Sponsor visits",
+      "NOMINATE_SENIOR": "Nominate a senior",
+      "EN": "English",
+      "FR": "French"
+    },
+    "Errors": {
+      "screenTitle": "This screen could not load",
+      "screenText": "Nothing was changed. Try again; if it keeps happening, note the time and the reference below for your developer.",
+      "reference": "Reference: {code}",
+      "tryAgain": "Try again",
+      "notFoundTitle": "Page not found",
+      "notFoundText": "This admin page doesn't exist, or the item was deleted.",
+      "notFoundLink": "Back to the dashboard"
+    },
+    "Auth": {
+      "login": {
+        "title": "Sign in",
+        "description": "Mabel Home Help admin dashboard."
+      },
+      "forgot": {
+        "title": "Forgot your password?",
+        "description": "Enter your admin email and we'll send you a link to choose a new one."
+      },
+      "reset": {
+        "title": "Choose a password",
+        "description": "Pick a password you don't use anywhere else."
+      },
+      "passwordChanged": "Your password was changed. Sign in with the new one.",
+      "email": "Email",
+      "password": "Password",
+      "signingIn": "Signing in…",
+      "signIn": "Sign in",
+      "forgotLink": "Forgot your password?",
+      "resetSent": "If that email belongs to an admin, a reset link is on its way. It works for one hour.",
+      "backToSignIn": "Back to sign in",
+      "sending": "Sending…",
+      "emailLink": "Email me a reset link",
+      "linkExpired": "This link has expired or was already used.",
+      "linkInvalid": "This link is not valid. Request a new one.",
+      "requestNewLink": "Request a new link",
+      "newPassword": "New password",
+      "passwordHelp": "At least 10 characters.",
+      "repeatPassword": "Repeat the new password",
+      "saveNewPassword": "Save new password",
+      "errors": {
+        "tooMany": "Too many attempts. Please wait 15 minutes and try again.",
+        "badCredentials": "Incorrect email or password.",
+        "invalidEmail": "Enter a valid email.",
+        "checkForm": "Please check the form.",
+        "linkUsed": "This link has expired or was already used. Request a new one."
+      }
+    },
+    "Overview": {
+      "hello": "Hello, {name}",
+      "lead": "Here's what needs your attention.",
+      "warnings": {
+        "email": "Email sending is not set up (RESEND_API_KEY). Requests are saved here, but no notification or confirmation emails are being sent.",
+        "sender": "No sender address is set (EMAIL_FROM), so emails go out from a test address that most visitors will never receive.",
+        "spam": "Spam protection is not set up (Turnstile keys). The forms are only protected by basic checks.",
+        "rateLimit": "Rate limiting is not connected to Upstash, so the limits on forms and sign-in are weaker than intended.",
+        "phone": "No phone number is set, so the Call Now and Text Us buttons are hidden on the website.",
+        "phoneAction": "Add the phone number",
+        "businessEmail": "No business email is set. Notifications have nowhere to go unless notification emails are listed.",
+        "businessEmailAction": "Add the email",
+        "stripe": "Stripe is not connected, so memberships can't be bought online yet. Visitors see “Request this plan” instead.",
+        "stripeAction": "Review plans",
+        "stripeWebhook": "Stripe is only half connected: the webhook secret (STRIPE_WEBHOOK_SECRET) is missing. Online purchase stays switched off until it is set, so nobody can pay without being recorded.",
+        "planPrice": "“{plan}” is marked Buy online but has no Stripe price yet.",
+        "planPriceAction": "Open the plan and save it"
+      },
+      "stats": {
+        "newRequests": "New requests",
+        "requestsThisWeek": "Requests this week",
+        "activeMembers": "Active members",
+        "pastDueMembers": "Past-due members",
+        "newSponsors": "New sponsor inquiries"
+      },
+      "latestRequests": "Latest requests",
+      "noRequests": "No requests yet.",
+      "latestMemberships": "Latest memberships",
+      "noMemberships": "No memberships yet."
+    },
+    "Validation": {
+      "required": "This field is required.",
+      "tooLong": "Too long.",
+      "slugShort": "Slug is too short.",
+      "slugLong": "Slug is too long.",
+      "slugFormat": "Use lowercase letters, numbers and dashes only.",
+      "illustration": "Choose an illustration.",
+      "httpsUrl": "Must be an https:// address.",
+      "monthlyAmount": "Enter the monthly amount in dollars, for example 200 or 199.99.",
+      "amountMin": "The amount must be at least $1.",
+      "tooManyAreas": "Too many areas.",
+      "phone": "Enter a valid 10-digit phone number, or leave it empty.",
+      "emailOrEmpty": "Enter a valid email, or leave it empty.",
+      "areaRequired": "Add at least one service area.",
+      "notificationEmail": "One of the notification emails is not valid.",
+      "tooManyNotificationEmails": "Too many notification emails.",
+      "areasMismatch": "The French list must have the same number of areas, in the same order, as the English list (or be empty).",
+      "email": "Enter a valid email.",
+      "password": "Enter your password.",
+      "passwordMin": "Use at least 10 characters.",
+      "passwordMismatch": "The passwords don't match.",
+      "emailTaken": "An admin with this email already exists."
+    },
+    "Users": {
+      "title": "Admin users",
+      "description": "People who can sign in to this dashboard. Everyone here has full access.",
+      "whoHasAccess": "Who has access",
+      "deactivated": "Deactivated",
+      "added": "{email} · added {date}",
+      "inviteTitle": "Invite someone",
+      "inviteDescription": "They get an email with a link to choose their own password.",
+      "name": "Name",
+      "email": "Email",
+      "sending": "Sending…",
+      "sendInvitation": "Send invitation",
+      "invitationSent": "Invitation sent. If the email doesn't arrive, they can use “Forgot your password?” on the sign-in page.",
+      "thisIsYou": "This is you",
+      "reactivate": "Reactivate",
+      "reactivated": "{name} can sign in again.",
+      "deactivate": "Deactivate",
+      "deactivateTitle": "Deactivate {name}?",
+      "deactivateDescription": "They are signed out immediately and can no longer sign in. You can reactivate them later.",
+      "deactivatedToast": "{name} was deactivated.",
+      "errors": {
+        "checkFields": "Please check the highlighted fields.",
+        "ownAccount": "You can't deactivate your own account.",
+        "lastAdmin": "At least one admin must stay active."
+      }
+    },
+    "Requests": {
+      "title": "Requests",
+      "detailTitle": "Request",
+      "description": "Service requests and messages sent through the website. They are kept for {months} months, then deleted automatically.",
+      "searchPlaceholder": "Search by name, phone or email",
+      "allStatuses": "All except archived",
+      "allTypes": "All types",
+      "empty": "No requests match these filters.",
+      "areaOther": "Other",
+      "areaOtherDetail": "Other (outside listed areas)",
+      "backToList": "All requests",
+      "received": "{type, select, GENERAL {Message received {date}} other {Service request received {date}}}",
+      "contact": "Contact",
+      "details": "Details",
+      "fields": {
+        "received": "Received",
+        "type": "Type",
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email",
+        "requestingFor": "Requesting for",
+        "service": "Service",
+        "plan": "Plan",
+        "planOfInterest": "Plan of interest",
+        "area": "Area",
+        "contactBy": "Contact by",
+        "prefersContactBy": "Prefers contact by",
+        "preferredTime": "Preferred time",
+        "message": "Message",
+        "language": "Language",
+        "consentGiven": "Consent given",
+        "adminNotes": "Admin notes"
+      },
+      "delete": {
+        "title": "Delete this request",
+        "description": "Removes it permanently, for example when someone asks for their information to be deleted.",
+        "button": "Delete permanently",
+        "confirmTitle": "Delete this request?",
+        "confirmDescription": "This permanently removes {name}'s request and cannot be undone."
+      }
+    },
+    "Sponsors": {
+      "title": "Sponsor inquiries",
+      "detailTitle": "Sponsor inquiry",
+      "description": "People and organizations interested in Sponsor a Senior.",
+      "searchPlaceholder": "Search by name, email, phone or organization",
+      "allStatuses": "All except archived",
+      "empty": "No sponsor inquiries match these filters.",
+      "intentOther": "Something else",
+      "backToList": "All sponsor inquiries",
+      "received": "Sponsor inquiry received {date}",
+      "contact": "Contact",
+      "details": "Details",
+      "fields": {
+        "received": "Received",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "organization": "Organization",
+        "wantsTo": "Wants to",
+        "message": "Message",
+        "language": "Language",
+        "consentGiven": "Consent given",
+        "adminNotes": "Admin notes"
+      },
+      "delete": {
+        "title": "Delete this inquiry",
+        "description": "Removes it permanently, for example when someone asks for their information to be deleted.",
+        "button": "Delete permanently",
+        "confirmTitle": "Delete this inquiry?",
+        "confirmDescription": "This permanently removes {name}'s inquiry and cannot be undone."
+      }
+    },
+    "Members": {
+      "title": "Members",
+      "detailTitle": "Member",
+      "description": "Monthly memberships bought online. Billing is handled by Stripe.",
+      "searchPlaceholder": "Search by name, phone or email",
+      "allStatuses": "All paid memberships",
+      "allPlans": "All plans",
+      "empty": "No memberships match these filters.",
+      "endsAtPeriodEnd": "Ends at period end",
+      "backToList": "All members",
+      "joined": "{plan} · joined {date}",
+      "contactPayer": "Contact the payer",
+      "whoAndWhere": "Who and where",
+      "thePayer": "The payer",
+      "fields": {
+        "member": "Member",
+        "visitsFor": "Visits for",
+        "plan": "Plan",
+        "started": "Started",
+        "nextBilling": "Next billing",
+        "area": "Area",
+        "payer": "Payer",
+        "payerPhone": "Payer phone",
+        "payerEmail": "Payer email",
+        "visitsAreFor": "Visits are for",
+        "recipient": "Recipient",
+        "recipientPhone": "Recipient phone",
+        "serviceAddress": "Service address",
+        "address": "Address",
+        "notesFromSignUp": "Notes from sign-up",
+        "signUpNotes": "Sign-up notes",
+        "language": "Language",
+        "termsAccepted": "Terms accepted",
+        "cancelsAtPeriodEnd": "Cancels at period end",
+        "adminNotes": "Admin notes"
+      },
+      "billing": {
+        "title": "Billing",
+        "live": "Live from Stripe.",
+        "stale": "From the last update Stripe sent. Live details are unavailable right now.",
+        "amount": "Amount",
+        "perMonth": "{price} per month",
+        "stripeStatus": "Stripe status",
+        "ended": "Ended",
+        "endsOn": "Ends on",
+        "nextBillingDate": "Next billing date",
+        "cancellation": "Cancellation",
+        "cancellationScheduled": "Scheduled for the end of the paid period",
+        "cancellationNotScheduled": "Not scheduled",
+        "openInStripe": "Open in Stripe"
+      },
+      "cancel": {
+        "button": "Cancel at period end",
+        "title": "Cancel this membership?",
+        "description": "{name} keeps their visits until {date}, then billing stops. Refunds and immediate cancellation are done in the Stripe dashboard.",
+        "descriptionNoDate": "{name} keeps their visits until the end of the paid period, then billing stops. Refunds and immediate cancellation are done in the Stripe dashboard.",
+        "confirm": "Cancel membership",
+        "success": "Cancellation scheduled."
+      },
+      "errors": {
+        "noSubscription": "This membership has no Stripe subscription.",
+        "alreadyEnded": "This membership has already ended.",
+        "stripeFailed": "Stripe could not schedule the cancellation. Try again or use the Stripe dashboard."
+      }
+    },
+    "Services": {
+      "title": "Services",
+      "description": "Drag to change the order on the website. Changes are live as soon as you make them.",
+      "add": "Add a service",
+      "all": "All services",
+      "empty": "No services yet. Add the first one.",
+      "noFrenchTitle": "No French title",
+      "shown": "Shown",
+      "featured": "Featured",
+      "editTitle": "Edit service",
+      "editDescription": "Edit this service.",
+      "create": "Create service",
+      "saved": "Service saved. The website is updated.",
+      "slugTaken": "Another service already uses this slug.",
+      "textPanel": "Text",
+      "fields": {
+        "title": "Title",
+        "description": "Description"
+      },
+      "french": {
+        "title": "Titre",
+        "description": "Description"
+      },
+      "illustration": {
+        "title": "Illustration",
+        "description": "Pick the drawing shown on the service card.",
+        "ownImage": "Or use your own image (optional)",
+        "ownImageHelp": "A full https:// address of a photo. When set, it replaces the illustration."
+      },
+      "illustrations": {
+        "senior-home-check-ins": "senior home check ins",
+        "companionship": "companionship",
+        "garbage-recycling": "garbage recycling",
+        "light-house-cleaning": "light house cleaning",
+        "garage-cleaning": "garage cleaning",
+        "car-cleaning": "car cleaning",
+        "snow-removal": "snow removal",
+        "lawn-yard-maintenance": "lawn yard maintenance",
+        "grocery-pharmacy-pickup": "grocery pharmacy pickup",
+        "errands-shopping": "errands shopping",
+        "family-updates": "family updates",
+        "acreage-rural-help": "acreage rural help",
+        "basic-roadside-assistance": "basic roadside assistance"
+      },
+      "visibility": {
+        "title": "Visibility",
+        "shown": "Shown on the website",
+        "shownDescription": "Turn off to hide this service without deleting it.",
+        "featured": "Featured on the home page",
+        "featuredDescription": "Up to six featured services appear under “How we help”."
+      },
+      "address": {
+        "title": "Web address",
+        "slug": "Slug",
+        "slugHelp": "Used in links such as /book?service=slug. Lowercase letters, numbers and dashes."
+      },
+      "delete": {
+        "title": "Delete this service",
+        "description": "If requests already mention this service, it is hidden instead so their history stays readable.",
+        "button": "Delete service",
+        "confirmTitle": "Delete this service?",
+        "confirmDescription": "It will be removed from the website.",
+        "hidden": "The service is used by existing requests, so it was hidden instead.",
+        "done": "Service deleted."
+      }
+    },
+    "Plans": {
+      "title": "Plans & pricing",
+      "description": "Drag to change the order on the website. Changes are live as soon as you make them.",
+      "add": "Add a plan",
+      "all": "All plans",
+      "empty": "No plans yet. Add the first one.",
+      "shown": "Shown",
+      "mostPopular": "Most popular",
+      "editTitle": "Edit plan",
+      "editDescription": "Edit this plan.",
+      "create": "Create plan",
+      "saved": "Plan saved. The website is updated.",
+      "slugTaken": "Another plan already uses this slug.",
+      "badges": {
+        "buyOnline": "Buy online",
+        "stripeNotConnected": "Buy online: Stripe not connected",
+        "needsSaving": "Buy online: needs saving",
+        "activeMembers": "{count, plural, one {# active member} other {# active members}}"
+      },
+      "textPanel": "Text",
+      "fields": {
+        "name": "Plan name",
+        "priceText": "Price shown on the website",
+        "priceTextHelp": "Free text, for example “$200/month”, “$15–$20 per visit” or “Custom quote”.",
+        "includes": "Includes",
+        "includesHelp": "For example “4 visits” or “Up to 45 minutes”.",
+        "note": "Short note (optional)"
+      },
+      "french": {
+        "name": "Nom du forfait",
+        "priceText": "Prix affiché sur le site",
+        "priceTextHelp": "Par exemple « 200 $ par mois » ou « Sur devis ».",
+        "includes": "Comprend",
+        "note": "Courte note (facultatif)"
+      },
+      "online": {
+        "title": "Online purchase",
+        "description": "Let visitors subscribe to this plan by card, billed every month.",
+        "buyOnline": "Buy online",
+        "buyOnlineDescription": "Shows a “Join now” button. When off, visitors see “Request this plan”.",
+        "amount": "Monthly amount (CAD)",
+        "amountHelp": "The amount actually charged each month. Make it match the price shown above.",
+        "changingPrice": "Changing the amount creates a new price for new members only.",
+        "creatingPrice": "Saving creates the price in Stripe for you.",
+        "currentMembers": "{count, plural, one {The # current member keeps the price they signed up with.} other {The # current members keep the price they signed up with.}}",
+        "existingMembers": "Existing members always keep the price they signed up with.",
+        "stripeNotConnected": "Stripe is not connected yet. You can save this, but the “Join now” button only appears once Stripe keys are added to the site."
+      },
+      "visibility": {
+        "title": "Visibility",
+        "shown": "Shown on the website",
+        "shownDescription": "Turn off to hide the plan. Existing members are not affected.",
+        "highlight": "Highlight as “Most popular”"
+      },
+      "address": {
+        "title": "Web address",
+        "slug": "Slug",
+        "slugHelp": "Used in links such as /membership/slug. Lowercase letters, numbers and dashes."
+      },
+      "warnings": {
+        "stripeNotConnected": "Saved. Stripe is not fully connected yet, so this plan can't be bought online until it is. Save the plan again afterwards.",
+        "stripeFailed": "Saved, but Stripe could not create the price. The plan can't be bought online until you save it again successfully."
+      },
+      "delete": {
+        "title": "Delete this plan",
+        "description": "A plan that has had members is hidden instead of deleted, and its members are not affected.",
+        "button": "Delete plan",
+        "confirmTitle": "Delete this plan?",
+        "confirmDescription": "It will be removed from the website.",
+        "hidden": "This plan has members, so it was hidden instead.",
+        "done": "Plan deleted."
+      }
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Contact details and wording used across the website.",
+      "save": "Save settings",
+      "saved": "Settings saved. The website is updated.",
+      "contact": {
+        "title": "Contact details",
+        "description": "Shown in the header, footer and contact page of the website.",
+        "businessName": "Business name",
+        "phone": "Phone number",
+        "phoneHelp": "Powers the Call Now and Text Us buttons. Leave empty to hide them.",
+        "email": "Business email",
+        "emailPlaceholder": "hello@example.com",
+        "emailHelp": "Shown on the website and used as the reply address for emails to visitors.",
+        "location": "Location",
+        "locationHelp": "For example “Edmonton, Alberta, Canada”."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Who gets an email when a request, sponsor inquiry or membership comes in.",
+        "emails": "Notification emails",
+        "emailsPlaceholder": "owner@example.com\nassistant@example.com",
+        "emailsHelp": "One per line. If empty, notifications go to the business email.",
+        "staffLanguage": "Language of emails sent to the team",
+        "staffLanguageHelp": "Used for new requests, new members, payment problems and admin invitations. Emails to visitors always follow the language they used on the site."
+      },
+      "text": {
+        "title": "Text in both languages",
+        "description": "Tagline, service areas, hours and the scope disclaimer."
+      },
+      "fields": {
+        "tagline": "Tagline",
+        "hours": "Hours (optional)",
+        "hoursPlaceholder": "Monday to Friday, 9 am to 5 pm",
+        "serviceAreas": "Service areas",
+        "serviceAreasHelp": "One per line, in the order they should appear. These are also the choices in the booking form.",
+        "disclaimer": "Scope disclaimer",
+        "disclaimerHelp": "Shown on every page."
+      },
+      "french": {
+        "tagline": "Slogan",
+        "hours": "Heures (facultatif)",
+        "serviceAreas": "Secteurs desservis",
+        "serviceAreasHelp": "One per line, in the same order and the same number as the English list.",
+        "disclaimer": "Avis sur la portée des services"
+      }
     }
   }
 }

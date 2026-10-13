@@ -1,4 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +19,7 @@ export function PageHeader({
   backLabel?: string;
   children?: ReactNode;
 }) {
+  const t = useTranslations("Admin.Common");
   return (
     <div className="mb-6">
       {backHref ? (
@@ -26,7 +28,7 @@ export function PageHeader({
           className="mb-3 inline-flex min-h-9 items-center gap-1 rounded-md text-sm font-bold text-forest-700 hover:underline"
         >
           <ChevronLeftIcon className="size-4" aria-hidden="true" />
-          {backLabel ?? "Back"}
+          {backLabel ?? t("back")}
         </Link>
       ) : null}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -86,38 +88,20 @@ const STATUS_STYLES: Record<string, string> = {
   PENDING: "bg-cream-100 text-ink-muted border-cream-300",
 };
 
-const STATUS_LABELS: Record<string, string> = {
-  NEW: "New",
-  CONTACTED: "Contacted",
-  SCHEDULED: "Scheduled",
-  DONE: "Done",
-  CLOSED: "Closed",
-  ARCHIVED: "Archived",
-  ACTIVE: "Active",
-  PAST_DUE: "Past due",
-  CANCELED: "Ended",
-  PENDING: "Unpaid checkout",
-  BOOKING: "Service request",
-  GENERAL: "Message",
-  SELF: "Themselves",
-  FAMILY: "A family member",
-  OTHER: "Someone else",
-  CALL: "Call",
-  TEXT: "Text",
-  EMAIL: "Email",
-  SPONSOR_VISITS: "Sponsor visits",
-  NOMINATE_SENIOR: "Nominate a senior",
-  EN: "English",
-  FR: "French",
-};
-
-/** Human label for any enum value shown in the admin. */
-export function label(value: string | null | undefined): string {
-  if (!value) return "";
-  return STATUS_LABELS[value] ?? value;
+/**
+ * Label for any enum value shown in the admin (NEW, PAST_DUE, CALL...), in the
+ * admin's language. In async server code use getAdminLabels() instead.
+ */
+export function useLabel() {
+  const t = useTranslations("Admin.Labels");
+  return (value: string | null | undefined): string => {
+    if (!value) return "";
+    return t.has(value) ? t(value) : value;
+  };
 }
 
 export function StatusBadge({ status }: { status: string }) {
+  const label = useLabel();
   return (
     <Badge variant="outline" className={cn("font-bold", STATUS_STYLES[status])}>
       {label(status)}
@@ -125,22 +109,18 @@ export function StatusBadge({ status }: { status: string }) {
   );
 }
 
-const dateTimeFormat = new Intl.DateTimeFormat("en-CA", {
-  dateStyle: "medium",
-  timeStyle: "short",
-  timeZone: "America/Edmonton",
-});
-const dateFormat = new Intl.DateTimeFormat("en-CA", {
-  dateStyle: "medium",
-  timeZone: "America/Edmonton",
-});
-
-export function formatDateTime(date: Date): string {
-  return dateTimeFormat.format(date);
-}
-
-export function formatDay(date: Date | null | undefined): string {
-  return date ? dateFormat.format(date) : "";
+/**
+ * Dates in the admin's language and the business's time zone. In async server
+ * code use getAdminFormat() instead.
+ */
+export function useAdminFormat() {
+  const format = useFormatter();
+  return {
+    dateTime: (date: Date) =>
+      format.dateTime(date, { dateStyle: "medium", timeStyle: "short" }),
+    day: (date: Date | null | undefined) =>
+      date ? format.dateTime(date, { dateStyle: "medium" }) : "",
+  };
 }
 
 /** Definition list used on detail pages. Empty values are skipped. */
@@ -177,6 +157,7 @@ export function Pagination({
   basePath: string;
   searchParams: Record<string, string>;
 }) {
+  const t = useTranslations("Admin.Common.pagination");
   const pages = Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE));
   if (total === 0) return null;
 
@@ -197,35 +178,35 @@ export function Pagination({
 
   return (
     <nav
-      aria-label="Pagination"
+      aria-label={t("label")}
       className="mt-4 flex flex-col items-center justify-between gap-3 sm:flex-row"
     >
       <p className="text-sm text-muted-foreground">
-        Showing {from}–{to} of {total}
+        {t("showing", { from, to, total })}
       </p>
       <div className="flex items-center gap-2">
         {page > 1 ? (
           <Link href={hrefFor(page - 1)} className={linkClass}>
             <ChevronLeftIcon className="size-4" aria-hidden="true" />
-            Previous
+            {t("previous")}
           </Link>
         ) : (
           <span className={disabledClass} aria-disabled="true">
             <ChevronLeftIcon className="size-4" aria-hidden="true" />
-            Previous
+            {t("previous")}
           </span>
         )}
         <span className="px-2 text-sm font-bold">
-          Page {page} of {pages}
+          {t("pageOf", { page, pages })}
         </span>
         {page < pages ? (
           <Link href={hrefFor(page + 1)} className={linkClass}>
-            Next
+            {t("next")}
             <ChevronRightIcon className="size-4" aria-hidden="true" />
           </Link>
         ) : (
           <span className={disabledClass} aria-disabled="true">
-            Next
+            {t("next")}
             <ChevronRightIcon className="size-4" aria-hidden="true" />
           </span>
         )}

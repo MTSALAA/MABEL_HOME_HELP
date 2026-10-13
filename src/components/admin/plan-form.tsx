@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InfoIcon, Trash2Icon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
@@ -17,9 +18,10 @@ import {
   SwitchField,
   TextAreaField,
   TextField,
+  useValidationMessage,
 } from "./form-fields";
 import { Panel } from "./ui";
-import { runAction } from "./run-action";
+import { useRunAction } from "./run-action";
 
 export function PlanForm({
   id,
@@ -34,6 +36,10 @@ export function PlanForm({
   hasStripePrice: boolean;
   activeMembers: number;
 }) {
+  const t = useTranslations("Admin.Plans");
+  const tCommon = useTranslations("Admin.Common");
+  const msg = useValidationMessage();
+  const runAction = useRunAction();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | null>(null);
@@ -74,7 +80,7 @@ export function PlanForm({
         return;
       }
       if (result.warning) toast.warning(result.warning, { duration: 10000 });
-      else toast.success("Plan saved. The website is updated.");
+      else toast.success(t("saved"));
       router.push("/admin/plans");
     });
   });
@@ -82,7 +88,7 @@ export function PlanForm({
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
       <div className="flex min-w-0 flex-col gap-6">
-        <Panel title="Text">
+        <Panel title={t("textPanel")}>
           <LanguageTabs
             englishHasError={Boolean(
               errors.nameEn || errors.priceTextEn || errors.includesEn || errors.noteEn,
@@ -93,8 +99,8 @@ export function PlanForm({
             english={
               <>
                 <TextField
-                  label="Plan name"
-                  error={errors.nameEn?.message}
+                  label={t("fields.name")}
+                  error={msg(errors.nameEn?.message)}
                   defaultValue={initial.nameEn}
                   {...register("nameEn", {
                     onChange: (event) => {
@@ -105,23 +111,23 @@ export function PlanForm({
                   })}
                 />
                 <TextField
-                  label="Price shown on the website"
-                  help="Free text, for example “$200/month”, “$15–$20 per visit” or “Custom quote”."
-                  error={errors.priceTextEn?.message}
+                  label={t("fields.priceText")}
+                  help={t("fields.priceTextHelp")}
+                  error={msg(errors.priceTextEn?.message)}
                   defaultValue={initial.priceTextEn}
                   {...register("priceTextEn")}
                 />
                 <TextField
-                  label="Includes"
-                  help="For example “4 visits” or “Up to 45 minutes”."
-                  error={errors.includesEn?.message}
+                  label={t("fields.includes")}
+                  help={t("fields.includesHelp")}
+                  error={msg(errors.includesEn?.message)}
                   defaultValue={initial.includesEn}
                   {...register("includesEn")}
                 />
                 <TextAreaField
-                  label="Short note (optional)"
+                  label={t("fields.note")}
                   rows={2}
-                  error={errors.noteEn?.message}
+                  error={msg(errors.noteEn?.message)}
                   defaultValue={initial.noteEn}
                   {...register("noteEn")}
                 />
@@ -130,32 +136,32 @@ export function PlanForm({
             french={
               <>
                 <TextField
-                  label="Nom du forfait"
+                  label={t("french.name")}
                   lang="fr"
-                  error={errors.nameFr?.message}
+                  error={msg(errors.nameFr?.message)}
                   defaultValue={initial.nameFr}
                   {...register("nameFr")}
                 />
                 <TextField
-                  label="Prix affiché sur le site"
+                  label={t("french.priceText")}
                   lang="fr"
-                  help="Par exemple « 200 $ par mois » ou « Sur devis »."
-                  error={errors.priceTextFr?.message}
+                  help={t("french.priceTextHelp")}
+                  error={msg(errors.priceTextFr?.message)}
                   defaultValue={initial.priceTextFr}
                   {...register("priceTextFr")}
                 />
                 <TextField
-                  label="Comprend"
+                  label={t("french.includes")}
                   lang="fr"
-                  error={errors.includesFr?.message}
+                  error={msg(errors.includesFr?.message)}
                   defaultValue={initial.includesFr}
                   {...register("includesFr")}
                 />
                 <TextAreaField
-                  label="Courte note (facultatif)"
+                  label={t("french.note")}
                   lang="fr"
                   rows={2}
-                  error={errors.noteFr?.message}
+                  error={msg(errors.noteFr?.message)}
                   defaultValue={initial.noteFr}
                   {...register("noteFr")}
                 />
@@ -165,13 +171,13 @@ export function PlanForm({
         </Panel>
 
         <Panel
-          title="Online purchase"
-          description="Let visitors subscribe to this plan by card, billed every month."
+          title={t("online.title")}
+          description={t("online.description")}
         >
           <div className="flex flex-col gap-4">
             <SwitchField
-              label="Buy online"
-              description="Shows a “Join now” button. When off, visitors see “Request this plan”."
+              label={t("online.buyOnline")}
+              description={t("online.buyOnlineDescription")}
               checked={isPurchasable}
               onCheckedChange={(value) =>
                 setValue("isPurchasable", value, { shouldDirty: true })
@@ -180,28 +186,25 @@ export function PlanForm({
             {isPurchasable ? (
               <>
                 <TextField
-                  label="Monthly amount (CAD)"
+                  label={t("online.amount")}
                   inputMode="decimal"
                   placeholder="200.00"
-                  help="The amount actually charged each month. Make it match the price shown above."
-                  error={errors.monthlyAmount?.message}
+                  help={t("online.amountHelp")}
+                  error={msg(errors.monthlyAmount?.message)}
                   {...register("monthlyAmount")}
                 />
                 <p className="flex items-start gap-2.5 rounded-lg border border-forest-300 bg-forest-50 p-3 text-sm text-forest-950">
                   <InfoIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
                   <span>
-                    {hasStripePrice
-                      ? "Changing the amount creates a new price for new members only. "
-                      : "Saving creates the price in Stripe for you. "}
+                    {hasStripePrice ? t("online.changingPrice") : t("online.creatingPrice")}{" "}
                     {activeMembers > 0
-                      ? `The ${activeMembers} current member${activeMembers === 1 ? "" : "s"} keep${activeMembers === 1 ? "s" : ""} the price they signed up with.`
-                      : "Existing members always keep the price they signed up with."}
+                      ? t("online.currentMembers", { count: activeMembers })
+                      : t("online.existingMembers")}
                   </span>
                 </p>
                 {!stripeEnabled ? (
                   <p className="rounded-lg border-2 border-honey bg-honey-soft p-3 text-sm font-bold text-forest-950">
-                    Stripe is not connected yet. You can save this, but the “Join now”
-                    button only appears once Stripe keys are added to the site.
+                    {t("online.stripeNotConnected")}
                   </p>
                 ) : null}
               </>
@@ -211,16 +214,16 @@ export function PlanForm({
       </div>
 
       <div className="flex min-w-0 flex-col gap-6">
-        <Panel title="Visibility">
+        <Panel title={t("visibility.title")}>
           <div className="flex flex-col gap-3">
             <SwitchField
-              label="Shown on the website"
-              description="Turn off to hide the plan. Existing members are not affected."
+              label={t("visibility.shown")}
+              description={t("visibility.shownDescription")}
               checked={isActive}
               onCheckedChange={(value) => setValue("isActive", value, { shouldDirty: true })}
             />
             <SwitchField
-              label="Highlight as “Most popular”"
+              label={t("visibility.highlight")}
               checked={isHighlighted}
               onCheckedChange={(value) =>
                 setValue("isHighlighted", value, { shouldDirty: true })
@@ -229,11 +232,11 @@ export function PlanForm({
           </div>
         </Panel>
 
-        <Panel title="Web address">
+        <Panel title={t("address.title")}>
           <TextField
-            label="Slug"
-            help="Used in links such as /membership/slug. Lowercase letters, numbers and dashes."
-            error={errors.slug?.message}
+            label={t("address.slug")}
+            help={t("address.slugHelp")}
+            error={msg(errors.slug?.message)}
             defaultValue={initial.slug}
             {...register("slug", {
               onChange: () => setSlugEdited(true),
@@ -244,7 +247,7 @@ export function PlanForm({
         <FormError message={formError} />
         <div className="flex flex-wrap gap-3">
           <Button type="submit" size="lg" disabled={pending}>
-            {pending ? "Saving…" : id ? "Save changes" : "Create plan"}
+            {pending ? tCommon("saving") : id ? tCommon("saveChanges") : t("create")}
           </Button>
           <Button
             type="button"
@@ -252,33 +255,29 @@ export function PlanForm({
             size="lg"
             onClick={() => router.push("/admin/plans")}
           >
-            Cancel
+            {tCommon("cancel")}
           </Button>
         </div>
 
         {id ? (
           <Panel
-            title="Delete this plan"
-            description="A plan that has had members is hidden instead of deleted, and its members are not affected."
+            title={t("delete.title")}
+            description={t("delete.description")}
           >
             <ConfirmAction
               trigger={
                 <Button type="button" variant="destructive">
                   <Trash2Icon aria-hidden="true" />
-                  Delete plan
+                  {t("delete.button")}
                 </Button>
               }
-              title="Delete this plan?"
-              description="It will be removed from the website."
-              confirmLabel="Delete"
+              title={t("delete.confirmTitle")}
+              description={t("delete.confirmDescription")}
+              confirmLabel={tCommon("delete")}
               action={async () => {
                 const result = await runAction(() => deletePlan(id));
                 if (result.ok) {
-                  toast.success(
-                    result.hidden
-                      ? "This plan has members, so it was hidden instead."
-                      : "Plan deleted.",
-                  );
+                  toast.success(result.hidden ? t("delete.hidden") : t("delete.done"));
                   router.push("/admin/plans");
                 }
                 return result;

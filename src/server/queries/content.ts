@@ -32,6 +32,7 @@ const FALLBACK_SETTINGS: SiteSettings = {
   disclaimerFr:
     "Nous offrons uniquement des services non médicaux et non urgents. Nous n'offrons pas de soins infirmiers, de soins personnels ni d'intervention d'urgence.",
   notificationEmails: [],
+  staffLocale: "EN",
   updatedAt: new Date(0),
 };
 

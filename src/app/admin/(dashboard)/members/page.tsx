@@ -1,16 +1,20 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { DataTable, type DataColumn } from "@/components/admin/data-table";
 import { ListToolbar } from "@/components/admin/list-toolbar";
 import {
   activeParams,
-  formatDay,
-  label,
   PageHeader,
   Pagination,
   StatusBadge,
 } from "@/components/admin/ui";
+import { pick } from "@/lib/localize";
 import { exportMembersCsv } from "@/server/actions/admin/inbox";
+import {
+  getAdminFormat,
+  getAdminLabels,
+  getAdminLocale,
+  getAdminT,
+} from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import {
   listMemberships,
@@ -19,22 +23,13 @@ import {
 } from "@/server/queries/admin";
 import { requireAdmin } from "@/server/session";
 
-export const metadata: Metadata = { title: "Members" };
+export async function generateMetadata() {
+  const t = await getAdminT("Nav");
+  return { title: t("members") };
+}
 
 // Admin pages wait on the session by design (see the dashboard layout).
 export const instant = false;
-
-const COLUMNS: DataColumn[] = [
-  // On a phone only Member and Status are shown; the member cell then
-  // carries the plan.
-  { id: "member", header: "Member", sortKey: "payerName", className: "whitespace-normal" },
-  { id: "recipient", header: "Visits for", className: "hidden md:table-cell" },
-  { id: "plan", header: "Plan", className: "hidden sm:table-cell" },
-  { id: "status", header: "Status", sortKey: "status" },
-  { id: "started", header: "Started", sortKey: "createdAt", className: "hidden lg:table-cell" },
-  { id: "next", header: "Next billing", sortKey: "currentPeriodEnd", className: "hidden sm:table-cell" },
-  { id: "area", header: "Area", className: "hidden xl:table-cell" },
-];
 
 export default async function MembersPage({
   searchParams,
@@ -45,39 +40,58 @@ export default async function MembersPage({
     listMemberships(filters),
     prisma.plan.findMany({
       where: { memberships: { some: {} } },
-      select: { id: true, nameEn: true },
+      select: { id: true, nameEn: true, nameFr: true },
       orderBy: { sortOrder: "asc" },
     }),
   ]);
+  const [locale, t, tCommon, labels, format] = await Promise.all([
+    getAdminLocale(),
+    getAdminT("Members"),
+    getAdminT("Common"),
+    getAdminLabels(),
+    getAdminFormat(),
+  ]);
+
+  const columns: DataColumn[] = [
+    // On a phone only Member and Status are shown; the member cell then
+    // carries the plan.
+    { id: "member", header: t("fields.member"), sortKey: "payerName", className: "whitespace-normal" },
+    { id: "recipient", header: t("fields.visitsFor"), className: "hidden md:table-cell" },
+    { id: "plan", header: t("fields.plan"), className: "hidden sm:table-cell" },
+    { id: "status", header: tCommon("status"), sortKey: "status" },
+    { id: "started", header: t("fields.started"), sortKey: "createdAt", className: "hidden lg:table-cell" },
+    { id: "next", header: t("fields.nextBilling"), sortKey: "currentPeriodEnd", className: "hidden sm:table-cell" },
+    { id: "area", header: t("fields.area"), className: "hidden xl:table-cell" },
+  ];
 
   return (
     <>
-      <PageHeader
-        title="Members"
-        description="Monthly memberships bought online. Billing is handled by Stripe."
-      />
+      <PageHeader title={t("title")} description={t("description")} />
       <ListToolbar
-        searchPlaceholder="Search by name, phone or email"
+        searchPlaceholder={t("searchPlaceholder")}
         filters={[
           {
             param: "status",
-            label: "Status",
-            allLabel: "All paid memberships",
-            options: MEMBERSHIP_STATUSES.map((value) => ({ value, label: label(value) })),
+            label: tCommon("status"),
+            allLabel: t("allStatuses"),
+            options: MEMBERSHIP_STATUSES.map((value) => ({ value, label: labels(value) })),
           },
           {
             param: "plan",
-            label: "Plan",
-            allLabel: "All plans",
-            options: plans.map((plan) => ({ value: plan.id, label: plan.nameEn })),
+            label: t("fields.plan"),
+            allLabel: t("allPlans"),
+            options: plans.map((plan) => ({
+              value: plan.id,
+              label: pick(locale, plan.nameEn, plan.nameFr),
+            })),
           },
         ]}
         exportAction={exportMembersCsv.bind(null, filters)}
       />
       <DataTable
-        columns={COLUMNS}
+        columns={columns}
         sort={sort}
-        emptyMessage="No memberships match these filters."
+        emptyMessage={t("empty")}
         rows={rows.map((row) => ({
           id: row.id,
           href: `/admin/members/${row.id}`,
@@ -91,28 +105,30 @@ export default async function MembersPage({
                   {row.payerName}
                 </Link>
                 <span className="block text-sm text-muted-foreground sm:hidden">
-                  {row.plan.nameEn}
+                  {pick(locale, row.plan.nameEn, row.plan.nameFr)}
                 </span>
               </>
             ),
             recipient:
-              row.requesterRole === "SELF" ? "Themselves" : (row.recipientName ?? "—"),
-            plan: row.plan.nameEn,
+              row.requesterRole === "SELF" ? labels("SELF") : (row.recipientName ?? "—"),
+            plan: pick(locale, row.plan.nameEn, row.plan.nameFr),
             status: (
               <span className="flex flex-col items-start gap-1">
                 <StatusBadge status={row.status} />
                 {row.cancelAtPeriodEnd && row.status !== "CANCELED" ? (
-                  <span className="text-xs font-bold text-ink-muted">Ends at period end</span>
+                  <span className="text-xs font-bold text-ink-muted">
+                    {t("endsAtPeriodEnd")}
+                  </span>
                 ) : null}
               </span>
             ),
-            started: <span className="whitespace-nowrap">{formatDay(row.createdAt)}</span>,
+            started: <span className="whitespace-nowrap">{format.day(row.createdAt)}</span>,
             next:
               row.status === "CANCELED" || row.cancelAtPeriodEnd ? (
                 "—"
               ) : (
                 <span className="whitespace-nowrap">
-                  {formatDay(row.currentPeriodEnd) || "—"}
+                  {format.day(row.currentPeriodEnd) || "—"}
                 </span>
               ),
             area: row.area,

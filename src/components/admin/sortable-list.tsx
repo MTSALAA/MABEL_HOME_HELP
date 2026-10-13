@@ -18,6 +18,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVerticalIcon, PencilIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useId, useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -26,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import type { AdminResult } from "@/lib/validation/admin";
 import { cn } from "@/lib/utils";
-import { runAction } from "./run-action";
+import { useRunAction } from "./run-action";
 
 export type SortableItem = {
   id: string;
@@ -51,6 +52,8 @@ function Row({
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: item.id });
+  const t = useTranslations("Admin.Common");
+  const runAction = useRunAction();
   const [flags, setFlags] = useState(item.flags);
   const [syncedFlags, setSyncedFlags] = useState(item.flags);
   const [pending, startTransition] = useTransition();
@@ -88,7 +91,7 @@ function Row({
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <button
           type="button"
-          aria-label={`Reorder ${item.title}`}
+          aria-label={t("reorder", { title: item.title })}
           className="flex size-10 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-ink-muted hover:bg-cream-100 active:cursor-grabbing"
           {...attributes}
           {...listeners}
@@ -136,7 +139,7 @@ function Row({
         <Button asChild variant="outline" size="sm">
           <Link href={item.editHref}>
             <PencilIcon aria-hidden="true" />
-            Edit
+            {t("edit")}
           </Link>
         </Button>
       </div>
@@ -181,6 +184,8 @@ export function SortableList({
   flagAction: FlagAction;
   emptyMessage: string;
 }) {
+  const t = useTranslations("Admin.Common");
+  const runAction = useRunAction();
   const [ordered, setOrdered] = useState(items);
   const [syncedItems, setSyncedItems] = useState(items);
   const [, startTransition] = useTransition();
@@ -211,7 +216,7 @@ export function SortableList({
     startTransition(async () => {
       const result = await runAction(() => reorderAction(next.map((item) => item.id)));
       if (result.ok) {
-        toast.success("Order saved.");
+        toast.success(t("orderSaved"));
       } else {
         setOrdered(previous);
         toast.error(result.error);

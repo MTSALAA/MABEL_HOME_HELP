@@ -1,51 +1,56 @@
 import { PlusIcon } from "lucide-react";
-import type { Metadata } from "next";
 import Link from "next/link";
 import { SortableList } from "@/components/admin/sortable-list";
 import { PageHeader } from "@/components/admin/ui";
 import { Button } from "@/components/ui/button";
+import { pick } from "@/lib/localize";
 import { reorderServices, setServiceFlag } from "@/server/actions/admin/content";
+import { getAdminLocale, getAdminT } from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import { requireAdmin } from "@/server/session";
 
-export const metadata: Metadata = { title: "Services" };
+export async function generateMetadata() {
+  const t = await getAdminT("Nav");
+  return { title: t("services") };
+}
 
 // Admin pages wait on the session by design (see the dashboard layout).
 export const instant = false;
 
 export default async function ServicesAdminPage() {
   await requireAdmin();
-  const services = await prisma.service.findMany({
-    orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
-  });
+  const [services, locale, t] = await Promise.all([
+    prisma.service.findMany({
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+    }),
+    getAdminLocale(),
+    getAdminT("Services"),
+  ]);
 
   return (
     <>
-      <PageHeader
-        title="Services"
-        description="Drag to change the order on the website. Changes are live as soon as you make them."
-      >
+      <PageHeader title={t("title")} description={t("description")}>
         <Button asChild>
           <Link href="/admin/services/new">
             <PlusIcon aria-hidden="true" />
-            Add a service
+            {t("add")}
           </Link>
         </Button>
       </PageHeader>
       <SortableList
-        emptyMessage="No services yet. Add the first one."
+        emptyMessage={t("empty")}
         reorderAction={reorderServices}
         flagAction={setServiceFlag}
         items={services.map((service) => ({
           id: service.id,
-          title: service.titleEn,
-          subtitle: service.descriptionEn,
+          title: pick(locale, service.titleEn, service.titleFr),
+          subtitle: pick(locale, service.descriptionEn, service.descriptionFr),
           editHref: `/admin/services/${service.id}`,
           thumbnail: service.imageUrl ?? `/illustrations/${service.illustration}.svg`,
-          badges: service.titleFr ? undefined : ["No French title"],
+          badges: service.titleFr ? undefined : [t("noFrenchTitle")],
           flags: [
-            { key: "isActive", label: "Shown", value: service.isActive },
-            { key: "isFeatured", label: "Featured", value: service.isFeatured },
+            { key: "isActive", label: t("shown"), value: service.isActive },
+            { key: "isFeatured", label: t("featured"), value: service.isFeatured },
           ],
         }))}
       />

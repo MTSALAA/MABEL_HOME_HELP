@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AuthCard } from "@/components/admin/auth-card";
 import { ResetPasswordForm } from "@/components/admin/auth-forms";
+import { getAdminT } from "@/server/admin-i18n";
 
-export const metadata: Metadata = { title: "Choose a password" };
+export async function generateMetadata() {
+  const t = await getAdminT("Auth");
+  return { title: t("reset.title") };
+}
 
 export default function ResetPasswordPage() {
   return (
-    <AuthCard
-      title="Choose a password"
-      description="Pick a password you don't use anywhere else."
-    >
+    <AuthCard screen="reset">
       {/* The form reads the one-time token from the URL. */}
       <Suspense fallback={<div className="h-56" aria-busy="true" />}>
         <ResetPasswordForm />

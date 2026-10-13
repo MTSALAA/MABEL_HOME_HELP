@@ -39,7 +39,17 @@ async function getBusinessContact() {
     ownerRecipients: recipients,
     phone: settings?.phone ? formatPhone(settings.phone) : null,
     replyTo: settings?.email ?? undefined,
-  };
+    // Emails to the team use the language chosen in the admin settings.
+    staffLocale: settings ? fromDbLocale(settings.staffLocale) : "en",
+  } as const;
+}
+
+function staffTranslator(locale: AppLocale) {
+  return createTranslator({
+    locale,
+    messages: MESSAGES[locale],
+    namespace: "Emails.staff",
+  });
 }
 
 /** Shared frame for emails sent to visitors and members, in their language. */
@@ -65,15 +75,16 @@ function visitorContent(
   };
 }
 
-/** Owner notifications are always in English. */
+/** Shared frame for emails sent to the team, in the staff language. */
 function ownerContent(
+  locale: AppLocale,
   heading: string,
   paragraphs: string[],
   details: { label: string; value: string | null | undefined }[],
   cta: { label: string; url: string },
 ): EmailContent {
   return {
-    lang: "en",
+    lang: locale,
     preview: heading,
     heading,
     paragraphs,
@@ -81,23 +92,9 @@ function ownerContent(
       .filter((row) => row.value && row.value.trim() !== "")
       .map((row) => ({ label: row.label, value: row.value as string })),
     cta,
-    footer: "Sent by the Mabel Home Help website.",
+    footer: staffTranslator(locale)("footer"),
   };
 }
-
-const ROLE_LABEL = {
-  SELF: "Themselves",
-  FAMILY: "A family member",
-  OTHER: "Someone else",
-} as const;
-
-const CONTACT_LABEL = { CALL: "Call", TEXT: "Text", EMAIL: "Email" } as const;
-
-const INTENT_LABEL = {
-  SPONSOR_VISITS: "Sponsor visits",
-  NOMINATE_SENIOR: "Nominate a senior in need",
-  OTHER: "Other",
-} as const;
 
 export async function sendRequestEmails(
   request: BookingRequest,
@@ -105,38 +102,44 @@ export async function sendRequestEmails(
 ): Promise<void> {
   const contact = await getBusinessContact();
   const isBooking = request.type === "BOOKING";
+  const staff = staffTranslator(contact.staffLocale);
 
   await sendEmail({
 
     kind: "request.owner",
     to: contact.ownerRecipients,
-    subject: isBooking
-      ? `New service request from ${request.fullName}`
-      : `New message from ${request.fullName}`,
+    subject: staff(isBooking ? "request.subjectBooking" : "request.subjectMessage", {
+      name: request.fullName,
+    }),
     replyTo: request.email ?? undefined,
     content: ownerContent(
-      isBooking ? "New service request" : "New contact message",
-      [`${request.fullName} sent a ${isBooking ? "service request" : "message"} through the website.`],
+      contact.staffLocale,
+      staff(isBooking ? "request.headingBooking" : "request.headingMessage"),
       [
-        { label: "Name", value: request.fullName },
-        { label: "Phone", value: formatPhone(request.phone) },
-        { label: "Email", value: request.email },
-        {
-          label: "Requesting for",
-          value: request.requesterRole ? ROLE_LABEL[request.requesterRole] : null,
-        },
-        { label: "Service", value: related.serviceTitle },
-        { label: "Plan", value: related.planName },
-        { label: "Area", value: request.area },
-        {
-          label: "Contact by",
-          value: request.contactMethod ? CONTACT_LABEL[request.contactMethod] : null,
-        },
-        { label: "Preferred time", value: request.preferredTime },
-        { label: "Message", value: request.message },
-        { label: "Language", value: request.locale === "FR" ? "French" : "English" },
+        staff(isBooking ? "request.bodyBooking" : "request.bodyMessage", {
+          name: request.fullName,
+        }),
       ],
-      { label: "Open in admin", url: `${SITE_URL}/admin/requests/${request.id}` },
+      [
+        { label: staff("labels.name"), value: request.fullName },
+        { label: staff("labels.phone"), value: formatPhone(request.phone) },
+        { label: staff("labels.email"), value: request.email },
+        {
+          label: staff("labels.requestingFor"),
+          value: request.requesterRole ? staff(`role.${request.requesterRole}`) : null,
+        },
+        { label: staff("labels.service"), value: related.serviceTitle },
+        { label: staff("labels.plan"), value: related.planName },
+        { label: staff("labels.area"), value: request.area },
+        {
+          label: staff("labels.contactBy"),
+          value: request.contactMethod ? staff(`contact.${request.contactMethod}`) : null,
+        },
+        { label: staff("labels.preferredTime"), value: request.preferredTime },
+        { label: staff("labels.message"), value: request.message },
+        { label: staff("labels.language"), value: staff(`languageName.${request.locale}`) },
+      ],
+      { label: staff("openInAdmin"), url: `${SITE_URL}/admin/requests/${request.id}` },
     ),
   });
 
@@ -161,26 +164,31 @@ export async function sendRequestEmails(
 
 export async function sendSponsorEmails(inquiry: SponsorInquiry): Promise<void> {
   const contact = await getBusinessContact();
+  const staff = staffTranslator(contact.staffLocale);
 
   await sendEmail({
 
     kind: "sponsor.owner",
     to: contact.ownerRecipients,
-    subject: `New Sponsor a Senior inquiry from ${inquiry.fullName}`,
+    subject: staff("sponsor.subject", { name: inquiry.fullName }),
     replyTo: inquiry.email,
     content: ownerContent(
-      "New Sponsor a Senior inquiry",
-      [`${inquiry.fullName} would like to talk about Sponsor a Senior.`],
+      contact.staffLocale,
+      staff("sponsor.heading"),
+      [staff("sponsor.body", { name: inquiry.fullName })],
       [
-        { label: "Name", value: inquiry.fullName },
-        { label: "Email", value: inquiry.email },
-        { label: "Phone", value: inquiry.phone ? formatPhone(inquiry.phone) : null },
-        { label: "Organization", value: inquiry.organization },
-        { label: "Wants to", value: INTENT_LABEL[inquiry.intent] },
-        { label: "Message", value: inquiry.message },
-        { label: "Language", value: inquiry.locale === "FR" ? "French" : "English" },
+        { label: staff("labels.name"), value: inquiry.fullName },
+        { label: staff("labels.email"), value: inquiry.email },
+        {
+          label: staff("labels.phone"),
+          value: inquiry.phone ? formatPhone(inquiry.phone) : null,
+        },
+        { label: staff("labels.organization"), value: inquiry.organization },
+        { label: staff("labels.wantsTo"), value: staff(`intent.${inquiry.intent}`) },
+        { label: staff("labels.message"), value: inquiry.message },
+        { label: staff("labels.language"), value: staff(`languageName.${inquiry.locale}`) },
       ],
-      { label: "Open in admin", url: `${SITE_URL}/admin/sponsors/${inquiry.id}` },
+      { label: staff("openInAdmin"), url: `${SITE_URL}/admin/sponsors/${inquiry.id}` },
     ),
   });
 
@@ -198,28 +206,38 @@ export async function sendSponsorEmails(inquiry: SponsorInquiry): Promise<void> 
   });
 }
 
-function membershipOwnerDetails(membership: Membership, plan: Plan) {
+function membershipOwnerDetails(
+  locale: AppLocale,
+  membership: Membership,
+  plan: Plan,
+) {
+  const staff = staffTranslator(locale);
   return [
-    { label: "Plan", value: plan.nameEn },
-    { label: "Payer", value: membership.payerName },
-    { label: "Payer phone", value: formatPhone(membership.payerPhone) },
-    { label: "Payer email", value: membership.payerEmail },
+    { label: staff("labels.plan"), value: pick(locale, plan.nameEn, plan.nameFr) },
+    { label: staff("labels.payer"), value: membership.payerName },
+    { label: staff("labels.payerPhone"), value: formatPhone(membership.payerPhone) },
+    { label: staff("labels.payerEmail"), value: membership.payerEmail },
     {
-      label: "Visits are for",
+      label: staff("labels.visitsFor"),
       value:
         membership.requesterRole === "SELF"
-          ? "The payer"
-          : (membership.recipientName ?? ROLE_LABEL[membership.requesterRole]),
+          ? staff("labels.thePayer")
+          : (membership.recipientName ?? staff(`role.${membership.requesterRole}`)),
     },
     {
-      label: "Recipient phone",
+      label: staff("labels.recipientPhone"),
       value: membership.recipientPhone ? formatPhone(membership.recipientPhone) : null,
     },
-    { label: "Address", value: membership.serviceAddress },
-    { label: "Area", value: membership.area },
-    { label: "Notes", value: membership.notes },
-    { label: "Language", value: membership.locale === "FR" ? "French" : "English" },
+    { label: staff("labels.address"), value: membership.serviceAddress },
+    { label: staff("labels.area"), value: membership.area },
+    { label: staff("labels.notes"), value: membership.notes },
+    { label: staff("labels.language"), value: staff(`languageName.${membership.locale}`) },
   ];
+}
+
+/** Name and plan as the team reads them, for the subject and first line. */
+function membershipStaffWords(locale: AppLocale, membership: Membership, plan: Plan) {
+  return { name: membership.payerName, plan: pick(locale, plan.nameEn, plan.nameFr) };
 }
 
 export async function sendMembershipActivatedEmails(
@@ -227,6 +245,8 @@ export async function sendMembershipActivatedEmails(
   plan: Plan,
 ): Promise<void> {
   const contact = await getBusinessContact();
+  const staff = staffTranslator(contact.staffLocale);
+  const words = membershipStaffWords(contact.staffLocale, membership, plan);
   const locale = fromDbLocale(membership.locale);
   const t = translator(locale);
   const manageUrl = `${SITE_URL}${locale === "fr" ? "/fr" : ""}/membership/manage`;
@@ -266,15 +286,14 @@ export async function sendMembershipActivatedEmails(
 
     kind: "membership.owner",
     to: contact.ownerRecipients,
-    subject: `New member: ${membership.payerName} (${plan.nameEn})`,
+    subject: staff("member.subject", words),
     replyTo: membership.payerEmail,
     content: ownerContent(
-      "New membership",
-      [
-        `${membership.payerName} just joined ${plan.nameEn}. Call within one business day to schedule the first visit.`,
-      ],
-      membershipOwnerDetails(membership, plan),
-      { label: "Open in admin", url: `${SITE_URL}/admin/members/${membership.id}` },
+      contact.staffLocale,
+      staff("member.heading"),
+      [staff("member.body", words)],
+      membershipOwnerDetails(contact.staffLocale, membership, plan),
+      { label: staff("openInAdmin"), url: `${SITE_URL}/admin/members/${membership.id}` },
     ),
   });
 }
@@ -284,6 +303,8 @@ export async function sendPaymentFailedEmails(
   plan: Plan,
 ): Promise<void> {
   const contact = await getBusinessContact();
+  const staff = staffTranslator(contact.staffLocale);
+  const words = membershipStaffWords(contact.staffLocale, membership, plan);
   const locale = fromDbLocale(membership.locale);
   const t = translator(locale);
   const manageUrl = `${SITE_URL}${locale === "fr" ? "/fr" : ""}/membership/manage`;
@@ -308,14 +329,13 @@ export async function sendPaymentFailedEmails(
 
     kind: "paymentFailed.owner",
     to: contact.ownerRecipients,
-    subject: `Payment failed: ${membership.payerName} (${plan.nameEn})`,
+    subject: staff("paymentFailed.subject", words),
     content: ownerContent(
-      "Membership payment failed",
-      [
-        `The card payment for ${membership.payerName}'s ${plan.nameEn} membership failed. Stripe will retry automatically, and the member has been asked to update their card.`,
-      ],
-      membershipOwnerDetails(membership, plan).slice(0, 4),
-      { label: "Open in admin", url: `${SITE_URL}/admin/members/${membership.id}` },
+      contact.staffLocale,
+      staff("paymentFailed.heading"),
+      [staff("paymentFailed.body", words)],
+      membershipOwnerDetails(contact.staffLocale, membership, plan).slice(0, 4),
+      { label: staff("openInAdmin"), url: `${SITE_URL}/admin/members/${membership.id}` },
     ),
   });
 }
@@ -325,15 +345,18 @@ export async function sendMembershipCanceledEmail(
   plan: Plan,
 ): Promise<void> {
   const contact = await getBusinessContact();
+  const staff = staffTranslator(contact.staffLocale);
+  const words = membershipStaffWords(contact.staffLocale, membership, plan);
   await sendEmail({
     kind: "membership.ended.owner",
     to: contact.ownerRecipients,
-    subject: `Membership ended: ${membership.payerName} (${plan.nameEn})`,
+    subject: staff("ended.subject", words),
     content: ownerContent(
-      "Membership ended",
-      [`${membership.payerName}'s ${plan.nameEn} membership has ended. No further payments will be taken.`],
-      membershipOwnerDetails(membership, plan).slice(0, 4),
-      { label: "Open in admin", url: `${SITE_URL}/admin/members/${membership.id}` },
+      contact.staffLocale,
+      staff("ended.heading"),
+      [staff("ended.body", words)],
+      membershipOwnerDetails(contact.staffLocale, membership, plan).slice(0, 4),
+      { label: staff("openInAdmin"), url: `${SITE_URL}/admin/members/${membership.id}` },
     ),
   });
 }
@@ -349,23 +372,22 @@ export async function sendUnmatchedPaymentAlert(payment: {
   customerEmail: string | null;
 }): Promise<void> {
   const contact = await getBusinessContact();
+  const staff = staffTranslator(contact.staffLocale);
   await sendEmail({
     kind: "membership.unmatched.owner",
     to: contact.ownerRecipients,
-    subject: "Action needed: a membership payment has no sign-up record",
+    subject: staff("unmatched.subject"),
     content: ownerContent(
-      "A payment needs your attention",
+      contact.staffLocale,
+      staff("unmatched.heading"),
+      [staff("unmatched.body1"), staff("unmatched.body2")],
       [
-        "Stripe reports a paid membership checkout, but the website has no sign-up record for it. The customer is being billed and does not appear in the Members list.",
-        "Open the customer in Stripe, contact them for their visit details, and either add them by hand or cancel and refund the subscription.",
+        { label: staff("labels.customerEmail"), value: payment.customerEmail },
+        { label: staff("labels.stripeCustomer"), value: payment.customerId },
+        { label: staff("labels.stripeSubscription"), value: payment.subscriptionId },
+        { label: staff("labels.checkoutSession"), value: payment.sessionId },
       ],
-      [
-        { label: "Customer email", value: payment.customerEmail },
-        { label: "Stripe customer", value: payment.customerId },
-        { label: "Stripe subscription", value: payment.subscriptionId },
-        { label: "Checkout session", value: payment.sessionId },
-      ],
-      { label: "Open Stripe", url: "https://dashboard.stripe.com/subscriptions" },
+      { label: staff("unmatched.openStripe"), url: "https://dashboard.stripe.com/subscriptions" },
     ),
   });
 }
@@ -399,27 +421,21 @@ export async function sendAdminPasswordEmail(
   url: string,
   kind: "reset" | "invite",
 ): Promise<void> {
-  const isInvite = kind === "invite";
+  const { staffLocale } = await getBusinessContact();
+  const staff = staffTranslator(staffLocale);
+  const key = kind === "invite" ? "invite" : "reset";
   await sendEmail({
     kind: "admin.password",
     to: email,
-    subject: isInvite
-      ? "You've been invited to the Mabel Home Help admin"
-      : "Reset your Mabel Home Help admin password",
+    subject: staff(`password.${key}Subject`),
     content: {
-      lang: "en",
-      preview: isInvite ? "Set your password to get started." : "Reset your password.",
-      heading: isInvite ? "Set up your admin account" : "Reset your password",
-      paragraphs: [
-        isInvite
-          ? "You've been given access to the Mabel Home Help admin dashboard. Choose a password to get started."
-          : "We received a request to reset the password for your admin account.",
-      ],
-      cta: { label: isInvite ? "Choose my password" : "Reset my password", url },
-      afterCta: [
-        "This link works for one hour. If you didn't expect this email, you can ignore it.",
-      ],
-      footer: "Sent by the Mabel Home Help website.",
+      lang: staffLocale,
+      preview: staff(`password.${key}Preview`),
+      heading: staff(`password.${key}Heading`),
+      paragraphs: [staff(`password.${key}Body`)],
+      cta: { label: staff(`password.${key}Cta`), url },
+      afterCta: [staff("password.expiry")],
+      footer: staff("footer"),
     },
   });
 }

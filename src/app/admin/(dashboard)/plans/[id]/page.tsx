@@ -1,12 +1,16 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PlanForm } from "@/components/admin/plan-form";
 import { PageHeader } from "@/components/admin/ui";
+import { pick } from "@/lib/localize";
+import { getAdminLocale, getAdminT } from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import { requireAdmin } from "@/server/session";
 import { isStripeEnabled } from "@/server/stripe";
 
-export const metadata: Metadata = { title: "Edit plan" };
+export async function generateMetadata() {
+  const t = await getAdminT("Plans");
+  return { title: t("editTitle") };
+}
 
 // Admin pages wait on the session by design (see the dashboard layout).
 export const instant = false;
@@ -23,14 +27,15 @@ export default async function EditPlanPage({
     },
   });
   if (!plan) notFound();
+  const [locale, t] = await Promise.all([getAdminLocale(), getAdminT("Plans")]);
 
   return (
     <>
       <PageHeader
-        title={plan.nameEn}
-        description="Edit this plan."
+        title={pick(locale, plan.nameEn, plan.nameFr)}
+        description={t("editDescription")}
         backHref="/admin/plans"
-        backLabel="All plans"
+        backLabel={t("all")}
       />
       <PlanForm
         id={plan.id}

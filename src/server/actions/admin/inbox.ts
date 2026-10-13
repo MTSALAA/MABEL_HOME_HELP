@@ -3,13 +3,15 @@
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { toCsv } from "@/lib/csv";
+import { pick } from "@/lib/localize";
 import { emptyToNull } from "@/lib/utils";
+import { isId, notesSchema, type AdminResult } from "@/lib/validation/admin";
 import {
-  INVALID,
-  isId,
-  notesSchema,
-  type AdminResult,
-} from "@/lib/validation/admin";
+  getAdminFormat,
+  getAdminLabels,
+  getAdminLocale,
+  getAdminT,
+} from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import {
   membershipWhere,
@@ -38,8 +40,9 @@ export async function updateRequestStatus(
   status: string,
 ): Promise<AdminResult> {
   await requireAdmin();
+  const t = await getAdminT("Common");
   const next = REQUEST_STATUSES.find((value) => value === status);
-  if (!isId(id) || !next) return { ok: false, error: INVALID };
+  if (!isId(id) || !next) return { ok: false, error: t("invalidRequest") };
 
   await prisma.bookingRequest.update({ where: { id }, data: { status: next } });
   refresh();
@@ -51,9 +54,10 @@ export async function updateRequestNotes(
   values: unknown,
 ): Promise<AdminResult> {
   await requireAdmin();
+  const t = await getAdminT("Common");
   const parsed = notesSchema.safeParse(values);
-  if (!isId(id)) return { ok: false, error: INVALID };
-  if (!parsed.success) return { ok: false, error: "The note is too long." };
+  if (!isId(id)) return { ok: false, error: t("invalidRequest") };
+  if (!parsed.success) return { ok: false, error: t("noteTooLong") };
 
   await prisma.bookingRequest.update({
     where: { id },
@@ -73,11 +77,18 @@ export async function deleteRequest(id: string): Promise<void> {
 
 export async function exportRequestsCsv(filters: ListFilters): Promise<CsvResult> {
   await requireAdmin();
+  const [t, tCommon, labels, format, locale] = await Promise.all([
+    getAdminT("Requests"),
+    getAdminT("Common"),
+    getAdminLabels(),
+    getAdminFormat(),
+    getAdminLocale(),
+  ]);
   const rows = await prisma.bookingRequest.findMany({
     where: requestWhere(filters),
     include: {
-      service: { select: { titleEn: true } },
-      plan: { select: { nameEn: true } },
+      service: { select: { titleEn: true, titleFr: true } },
+      plan: { select: { nameEn: true, nameFr: true } },
     },
     orderBy: { createdAt: "desc" },
     take: EXPORT_LIMIT,
@@ -85,37 +96,37 @@ export async function exportRequestsCsv(filters: ListFilters): Promise<CsvResult
 
   const csv = toCsv(
     [
-      "Received",
-      "Type",
-      "Status",
-      "Name",
-      "Phone",
-      "Email",
-      "Requesting for",
-      "Service",
-      "Plan",
-      "Area",
-      "Contact by",
-      "Preferred time",
-      "Message",
-      "Language",
-      "Admin notes",
+      t("fields.received"),
+      t("fields.type"),
+      tCommon("status"),
+      t("fields.name"),
+      t("fields.phone"),
+      t("fields.email"),
+      t("fields.requestingFor"),
+      t("fields.service"),
+      t("fields.plan"),
+      t("fields.area"),
+      t("fields.contactBy"),
+      t("fields.preferredTime"),
+      t("fields.message"),
+      t("fields.language"),
+      t("fields.adminNotes"),
     ],
     rows.map((row) => [
-      row.createdAt,
-      row.type,
-      row.status,
+      format.dateTime(row.createdAt),
+      labels(row.type),
+      labels(row.status),
       row.fullName,
       row.phone,
       row.email,
-      row.requesterRole,
-      row.service?.titleEn,
-      row.plan?.nameEn,
-      row.area,
-      row.contactMethod,
+      labels(row.requesterRole),
+      row.service ? pick(locale, row.service.titleEn, row.service.titleFr) : null,
+      row.plan ? pick(locale, row.plan.nameEn, row.plan.nameFr) : null,
+      row.area === "OTHER" ? t("areaOther") : row.area,
+      labels(row.contactMethod),
       row.preferredTime,
       row.message,
-      row.locale,
+      labels(row.locale),
       row.adminNotes,
     ]),
   );
@@ -129,8 +140,9 @@ export async function updateSponsorStatus(
   status: string,
 ): Promise<AdminResult> {
   await requireAdmin();
+  const t = await getAdminT("Common");
   const next = SPONSOR_STATUSES.find((value) => value === status);
-  if (!isId(id) || !next) return { ok: false, error: INVALID };
+  if (!isId(id) || !next) return { ok: false, error: t("invalidRequest") };
 
   await prisma.sponsorInquiry.update({ where: { id }, data: { status: next } });
   refresh();
@@ -142,9 +154,10 @@ export async function updateSponsorNotes(
   values: unknown,
 ): Promise<AdminResult> {
   await requireAdmin();
+  const t = await getAdminT("Common");
   const parsed = notesSchema.safeParse(values);
-  if (!isId(id)) return { ok: false, error: INVALID };
-  if (!parsed.success) return { ok: false, error: "The note is too long." };
+  if (!isId(id)) return { ok: false, error: t("invalidRequest") };
+  if (!parsed.success) return { ok: false, error: t("noteTooLong") };
 
   await prisma.sponsorInquiry.update({
     where: { id },
@@ -162,6 +175,12 @@ export async function deleteSponsor(id: string): Promise<void> {
 
 export async function exportSponsorsCsv(filters: ListFilters): Promise<CsvResult> {
   await requireAdmin();
+  const [t, tCommon, labels, format] = await Promise.all([
+    getAdminT("Sponsors"),
+    getAdminT("Common"),
+    getAdminLabels(),
+    getAdminFormat(),
+  ]);
   const rows = await prisma.sponsorInquiry.findMany({
     where: sponsorWhere(filters),
     orderBy: { createdAt: "desc" },
@@ -170,27 +189,28 @@ export async function exportSponsorsCsv(filters: ListFilters): Promise<CsvResult
 
   const csv = toCsv(
     [
-      "Received",
-      "Status",
-      "Name",
-      "Email",
-      "Phone",
-      "Organization",
-      "Wants to",
-      "Message",
-      "Language",
-      "Admin notes",
+      t("fields.received"),
+      tCommon("status"),
+      t("fields.name"),
+      t("fields.email"),
+      t("fields.phone"),
+      t("fields.organization"),
+      t("fields.wantsTo"),
+      t("fields.message"),
+      t("fields.language"),
+      t("fields.adminNotes"),
     ],
     rows.map((row) => [
-      row.createdAt,
-      row.status,
+      format.dateTime(row.createdAt),
+      labels(row.status),
       row.fullName,
       row.email,
       row.phone,
       row.organization,
-      row.intent,
+      // "OTHER" is also a requester role, whose label does not fit here.
+      row.intent === "OTHER" ? t("intentOther") : labels(row.intent),
       row.message,
-      row.locale,
+      labels(row.locale),
       row.adminNotes,
     ]),
   );
@@ -204,9 +224,10 @@ export async function updateMembershipNotes(
   values: unknown,
 ): Promise<AdminResult> {
   await requireAdmin();
+  const t = await getAdminT("Common");
   const parsed = notesSchema.safeParse(values);
-  if (!isId(id)) return { ok: false, error: INVALID };
-  if (!parsed.success) return { ok: false, error: "The note is too long." };
+  if (!isId(id)) return { ok: false, error: t("invalidRequest") };
+  if (!parsed.success) return { ok: false, error: t("noteTooLong") };
 
   await prisma.membership.update({
     where: { id },
@@ -222,13 +243,17 @@ export async function updateMembershipNotes(
  */
 export async function cancelMembership(id: string): Promise<AdminResult> {
   await requireAdmin();
-  if (!isId(id)) return { ok: false, error: INVALID };
+  const [t, tCommon] = await Promise.all([
+    getAdminT("Members.errors"),
+    getAdminT("Common"),
+  ]);
+  if (!isId(id)) return { ok: false, error: tCommon("invalidRequest") };
   const membership = await prisma.membership.findUnique({ where: { id } });
   if (!membership?.stripeSubscriptionId) {
-    return { ok: false, error: "This membership has no Stripe subscription." };
+    return { ok: false, error: t("noSubscription") };
   }
   if (membership.status === "CANCELED") {
-    return { ok: false, error: "This membership has already ended." };
+    return { ok: false, error: t("alreadyEnded") };
   }
 
   try {
@@ -247,56 +272,60 @@ export async function cancelMembership(id: string): Promise<AdminResult> {
     return { ok: true };
   } catch (error) {
     reportError(error, "admin.cancelMembership");
-    return {
-      ok: false,
-      error: "Stripe could not schedule the cancellation. Try again or use the Stripe dashboard.",
-    };
+    return { ok: false, error: t("stripeFailed") };
   }
 }
 
 export async function exportMembersCsv(filters: ListFilters): Promise<CsvResult> {
   await requireAdmin();
+  const [t, tCommon, labels, format, locale] = await Promise.all([
+    getAdminT("Members"),
+    getAdminT("Common"),
+    getAdminLabels(),
+    getAdminFormat(),
+    getAdminLocale(),
+  ]);
   const rows = await prisma.membership.findMany({
     where: membershipWhere(filters),
-    include: { plan: { select: { nameEn: true } } },
+    include: { plan: { select: { nameEn: true, nameFr: true } } },
     orderBy: { createdAt: "desc" },
     take: EXPORT_LIMIT,
   });
 
   const csv = toCsv(
     [
-      "Started",
-      "Status",
-      "Plan",
-      "Payer",
-      "Payer phone",
-      "Payer email",
-      "Visits for",
-      "Recipient",
-      "Recipient phone",
-      "Address",
-      "Area",
-      "Next billing",
-      "Cancels at period end",
-      "Language",
-      "Sign-up notes",
-      "Admin notes",
+      t("fields.started"),
+      tCommon("status"),
+      t("fields.plan"),
+      t("fields.payer"),
+      t("fields.payerPhone"),
+      t("fields.payerEmail"),
+      t("fields.visitsFor"),
+      t("fields.recipient"),
+      t("fields.recipientPhone"),
+      t("fields.address"),
+      t("fields.area"),
+      t("fields.nextBilling"),
+      t("fields.cancelsAtPeriodEnd"),
+      t("fields.language"),
+      t("fields.signUpNotes"),
+      t("fields.adminNotes"),
     ],
     rows.map((row) => [
-      row.createdAt,
-      row.status,
-      row.plan.nameEn,
+      format.day(row.createdAt),
+      labels(row.status),
+      pick(locale, row.plan.nameEn, row.plan.nameFr),
       row.payerName,
       row.payerPhone,
       row.payerEmail,
-      row.requesterRole,
+      labels(row.requesterRole),
       row.recipientName,
       row.recipientPhone,
       row.serviceAddress,
       row.area,
-      row.currentPeriodEnd,
-      row.cancelAtPeriodEnd,
-      row.locale,
+      format.day(row.currentPeriodEnd),
+      tCommon(row.cancelAtPeriodEnd ? "yes" : "no"),
+      labels(row.locale),
       row.notes,
       row.adminNotes,
     ]),

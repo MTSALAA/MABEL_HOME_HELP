@@ -4,31 +4,37 @@ import {
   MessageSquareTextIcon,
   PhoneIcon,
 } from "lucide-react";
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ConfirmAction, NotesForm } from "@/components/admin/detail-controls";
 import {
   DetailList,
-  formatDateTime,
-  formatDay,
-  label,
   PageHeader,
   Panel,
   StatusBadge,
 } from "@/components/admin/ui";
 import { Button } from "@/components/ui/button";
+import { pick } from "@/lib/localize";
 import { formatCad } from "@/lib/money";
 import { formatPhone, smsHref, telHref } from "@/lib/phone";
 import {
   cancelMembership,
   updateMembershipNotes,
 } from "@/server/actions/admin/inbox";
+import {
+  getAdminFormat,
+  getAdminLabels,
+  getAdminLocale,
+  getAdminT,
+} from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import { reportError } from "@/server/report-error";
 import { requireAdmin } from "@/server/session";
 import { getPeriodEnd, getStripe } from "@/server/stripe";
 
-export const metadata: Metadata = { title: "Member" };
+export async function generateMetadata() {
+  const t = await getAdminT("Members");
+  return { title: t("detailTitle") };
+}
 
 // Admin pages wait on the session by design (see the dashboard layout).
 export const instant = false;
@@ -63,6 +69,14 @@ export default async function MemberDetailPage({
   });
   if (!membership) notFound();
 
+  const [locale, t, tCommon, labels, format] = await Promise.all([
+    getAdminLocale(),
+    getAdminT("Members"),
+    getAdminT("Common"),
+    getAdminLabels(),
+    getAdminFormat(),
+  ]);
+
   const live = await getLiveBilling(membership.stripeSubscriptionId);
   const amountCents = live?.amountCents ?? membership.plan.monthlyCents;
   const periodEnd = live?.periodEnd ?? membership.currentPeriodEnd;
@@ -73,57 +87,62 @@ export default async function MemberDetailPage({
     ? `https://dashboard.stripe.com/${isTestMode ? "test/" : ""}customers/${membership.stripeCustomerId}`
     : null;
   const forSelf = membership.requesterRole === "SELF";
+  const planName = pick(locale, membership.plan.nameEn, membership.plan.nameFr);
+  const periodEndDay = format.day(periodEnd);
 
   return (
     <>
       <PageHeader
         title={membership.payerName}
-        description={`${membership.plan.nameEn} · joined ${formatDay(membership.createdAt)}`}
+        description={t("joined", {
+          plan: planName,
+          date: format.day(membership.createdAt),
+        })}
         backHref="/admin/members"
-        backLabel="All members"
+        backLabel={t("backToList")}
       >
         <StatusBadge status={membership.status} />
       </PageHeader>
 
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <div className="flex min-w-0 flex-col gap-6">
-          <Panel title="Contact the payer">
+          <Panel title={t("contactPayer")}>
             <div className="flex flex-wrap gap-2">
               <Button asChild>
                 <a href={telHref(membership.payerPhone)}>
                   <PhoneIcon aria-hidden="true" />
-                  Call {formatPhone(membership.payerPhone)}
+                  {tCommon("callNumber", { phone: formatPhone(membership.payerPhone) })}
                 </a>
               </Button>
               <Button asChild variant="outline">
                 <a href={smsHref(membership.payerPhone)}>
                   <MessageSquareTextIcon aria-hidden="true" />
-                  Text
+                  {tCommon("sendText")}
                 </a>
               </Button>
               <Button asChild variant="outline">
                 <a href={`mailto:${membership.payerEmail}`}>
                   <MailIcon aria-hidden="true" />
-                  Email
+                  {tCommon("sendEmail")}
                 </a>
               </Button>
             </div>
           </Panel>
 
-          <Panel title="Who and where">
+          <Panel title={t("whoAndWhere")}>
             <DetailList
               rows={[
-                { label: "Payer", value: membership.payerName },
-                { label: "Payer phone", value: formatPhone(membership.payerPhone) },
-                { label: "Payer email", value: membership.payerEmail },
+                { label: t("fields.payer"), value: membership.payerName },
+                { label: t("fields.payerPhone"), value: formatPhone(membership.payerPhone) },
+                { label: t("fields.payerEmail"), value: membership.payerEmail },
                 {
-                  label: "Visits are for",
+                  label: t("fields.visitsAreFor"),
                   value: forSelf
-                    ? "The payer"
-                    : (membership.recipientName ?? label(membership.requesterRole)),
+                    ? t("thePayer")
+                    : (membership.recipientName ?? labels(membership.requesterRole)),
                 },
                 {
-                  label: "Recipient phone",
+                  label: t("fields.recipientPhone"),
                   value: membership.recipientPhone ? (
                     <a
                       href={telHref(membership.recipientPhone)}
@@ -133,11 +152,11 @@ export default async function MemberDetailPage({
                     </a>
                   ) : null,
                 },
-                { label: "Service address", value: membership.serviceAddress },
-                { label: "Area", value: membership.area },
-                { label: "Notes from sign-up", value: membership.notes },
-                { label: "Language", value: label(membership.locale) },
-                { label: "Terms accepted", value: formatDateTime(membership.consentAt) },
+                { label: t("fields.serviceAddress"), value: membership.serviceAddress },
+                { label: t("fields.area"), value: membership.area },
+                { label: t("fields.notesFromSignUp"), value: membership.notes },
+                { label: t("fields.language"), value: labels(membership.locale) },
+                { label: t("fields.termsAccepted"), value: format.dateTime(membership.consentAt) },
               ]}
             />
           </Panel>
@@ -145,39 +164,40 @@ export default async function MemberDetailPage({
 
         <div className="flex min-w-0 flex-col gap-6">
           <Panel
-            title="Billing"
-            description={
-              live
-                ? "Live from Stripe."
-                : "From the last update Stripe sent. Live details are unavailable right now."
-            }
+            title={t("billing.title")}
+            description={live ? t("billing.live") : t("billing.stale")}
           >
             <DetailList
               rows={[
-                { label: "Plan", value: membership.plan.nameEn },
+                { label: t("fields.plan"), value: planName },
                 {
-                  label: "Amount",
+                  label: t("billing.amount"),
                   value:
-                    amountCents !== null ? `${formatCad(amountCents, "en")} per month` : null,
+                    amountCents !== null
+                      ? t("billing.perMonth", { price: formatCad(amountCents, locale) })
+                      : null,
                 },
-                { label: "Stripe status", value: live?.status ?? label(membership.status) },
+                {
+                  label: t("billing.stripeStatus"),
+                  value: live?.status ?? labels(membership.status),
+                },
                 {
                   label: ended
-                    ? "Ended"
+                    ? t("billing.ended")
                     : cancelScheduled
-                      ? "Ends on"
-                      : "Next billing date",
+                      ? t("billing.endsOn")
+                      : t("billing.nextBillingDate"),
                   value: ended
-                    ? formatDay(membership.canceledAt)
-                    : formatDay(periodEnd),
+                    ? format.day(membership.canceledAt)
+                    : periodEndDay,
                 },
                 {
-                  label: "Cancellation",
+                  label: t("billing.cancellation"),
                   value: ended
                     ? null
                     : cancelScheduled
-                      ? "Scheduled for the end of the paid period"
-                      : "Not scheduled",
+                      ? t("billing.cancellationScheduled")
+                      : t("billing.cancellationNotScheduled"),
                 },
               ]}
             />
@@ -186,17 +206,24 @@ export default async function MemberDetailPage({
                 <Button asChild variant="outline">
                   <a href={stripeCustomerUrl} target="_blank" rel="noreferrer">
                     <ExternalLinkIcon aria-hidden="true" />
-                    Open in Stripe
+                    {t("billing.openInStripe")}
                   </a>
                 </Button>
               ) : null}
               {!ended && !cancelScheduled && membership.stripeSubscriptionId ? (
                 <ConfirmAction
-                  trigger={<Button variant="destructive">Cancel at period end</Button>}
-                  title="Cancel this membership?"
-                  description={`${membership.payerName} keeps their visits until ${formatDay(periodEnd) || "the end of the paid period"}, then billing stops. Refunds and immediate cancellation are done in the Stripe dashboard.`}
-                  confirmLabel="Cancel membership"
-                  successMessage="Cancellation scheduled."
+                  trigger={<Button variant="destructive">{t("cancel.button")}</Button>}
+                  title={t("cancel.title")}
+                  description={
+                    periodEndDay
+                      ? t("cancel.description", {
+                          name: membership.payerName,
+                          date: periodEndDay,
+                        })
+                      : t("cancel.descriptionNoDate", { name: membership.payerName })
+                  }
+                  confirmLabel={t("cancel.confirm")}
+                  successMessage={t("cancel.success")}
                   action={cancelMembership.bind(null, membership.id)}
                 />
               ) : null}

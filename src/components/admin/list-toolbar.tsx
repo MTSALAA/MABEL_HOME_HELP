@@ -1,13 +1,14 @@
 "use client";
 
 import { DownloadIcon, SearchIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { AdminResult } from "@/lib/validation/admin";
-import { runAction } from "./run-action";
+import { useRunAction } from "./run-action";
 
 export type ToolbarFilter = {
   param: string;
@@ -32,6 +33,8 @@ export function ListToolbar({
   filters: ToolbarFilter[];
   exportAction: ExportAction;
 }) {
+  const t = useTranslations("Admin.Common");
+  const runAction = useRunAction();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -62,7 +65,7 @@ export function ListToolbar({
     startExport(async () => {
       const result = await runAction(() => exportAction());
       if (!result.ok || !result.csv) {
-        toast.error(result.ok ? "Nothing to export." : result.error);
+        toast.error(result.ok ? t("nothingToExport") : result.error);
         return;
       }
       const url = URL.createObjectURL(
@@ -82,7 +85,7 @@ export function ListToolbar({
     <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end">
       <div className="relative flex-1">
         <label htmlFor="list-search" className="sr-only">
-          Search
+          {t("search")}
         </label>
         <SearchIcon
           className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-muted"
@@ -128,7 +131,7 @@ export function ListToolbar({
         disabled={exporting}
       >
         <DownloadIcon aria-hidden="true" />
-        {exporting ? "Exporting…" : "Export CSV"}
+        {exporting ? t("exporting") : t("exportCsv")}
       </Button>
     </div>
   );

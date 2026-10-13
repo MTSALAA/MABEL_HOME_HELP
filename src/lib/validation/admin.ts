@@ -5,19 +5,23 @@ import { isValidPhone } from "@/lib/phone";
 // See validation/public.ts: avoids a blocked new Function() probe under the CSP.
 z.config({ jitless: true });
 
-const requiredText = (max: number) =>
-  z.string().trim().min(1, "This field is required.").max(max, "Too long.");
+// Every message below is a key of "Admin.Validation" in messages/*.json, not
+// the text itself: the admin exists in English and French. Forms turn a key
+// into text with useValidationMessage() (components/admin/form-fields.tsx).
 
-const optionalText = (max: number) => z.string().trim().max(max, "Too long.");
+const requiredText = (max: number) =>
+  z.string().trim().min(1, "required").max(max, "tooLong");
+
+const optionalText = (max: number) => z.string().trim().max(max, "tooLong");
 
 const slug = z
   .string()
   .trim()
-  .min(2, "Slug is too short.")
-  .max(80, "Slug is too long.")
+  .min(2, "slugShort")
+  .max(80, "slugLong")
   .regex(
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-    "Use lowercase letters, numbers and dashes only.",
+    "slugFormat",
   );
 
 export const serviceSchema = z.object({
@@ -26,14 +30,14 @@ export const serviceSchema = z.object({
   descriptionEn: requiredText(600),
   descriptionFr: optionalText(600),
   slug,
-  illustration: z.enum(SERVICE_ILLUSTRATIONS, "Choose an illustration."),
+  illustration: z.enum(SERVICE_ILLUSTRATIONS, "illustration"),
   imageUrl: z
     .string()
     .trim()
-    .max(500)
+    .max(500, "tooLong")
     .refine(
       (value) => value === "" || /^https:\/\/[^\s]+$/.test(value),
-      "Must be an https:// address.",
+      "httpsUrl",
     ),
   isActive: z.boolean(),
   isFeatured: z.boolean(),
@@ -56,26 +60,26 @@ export const planSchema = z
     isHighlighted: z.boolean(),
     isPurchasable: z.boolean(),
     // Dollars as typed by the owner, e.g. "200" or "200.00".
-    monthlyAmount: z.string().trim().max(12),
+    monthlyAmount: z.string().trim().max(12, "tooLong"),
   })
   .refine(
     (data) =>
       !data.isPurchasable || /^\d{1,5}(\.\d{1,2})?$/.test(data.monthlyAmount),
     {
       path: ["monthlyAmount"],
-      message: "Enter the monthly amount in dollars, for example 200 or 199.99.",
+      message: "monthlyAmount",
     },
   )
   .refine(
     (data) => !data.isPurchasable || Number(data.monthlyAmount) >= 1,
-    { path: ["monthlyAmount"], message: "The amount must be at least $1." },
+    { path: ["monthlyAmount"], message: "amountMin" },
   );
 
 export type PlanInput = z.input<typeof planSchema>;
 
 const areaList = z
-  .array(z.string().trim().min(1).max(80))
-  .max(30, "Too many areas.");
+  .array(z.string().trim().min(1, "required").max(80, "tooLong"))
+  .max(30, "tooManyAreas");
 
 export const settingsSchema = z
   .object({
@@ -85,29 +89,28 @@ export const settingsSchema = z
     phone: z
       .string()
       .trim()
-      .max(30)
-      .refine(
-        (value) => value === "" || isValidPhone(value),
-        "Enter a valid 10-digit phone number, or leave it empty.",
-      ),
+      .max(30, "tooLong")
+      .refine((value) => value === "" || isValidPhone(value), "phone"),
     email: z
       .string()
       .trim()
-      .max(254)
+      .max(254, "tooLong")
       .refine(
         (value) => value === "" || z.email().safeParse(value).success,
-        "Enter a valid email, or leave it empty.",
+        "emailOrEmpty",
       ),
     location: requiredText(120),
-    serviceAreasEn: areaList.min(1, "Add at least one service area."),
+    serviceAreasEn: areaList.min(1, "areaRequired"),
     serviceAreasFr: areaList,
     hoursEn: optionalText(200),
     hoursFr: optionalText(200),
     disclaimerEn: requiredText(600),
     disclaimerFr: optionalText(600),
     notificationEmails: z
-      .array(z.email("One of the notification emails is not valid."))
-      .max(10, "Too many notification emails."),
+      .array(z.email("notificationEmail"))
+      .max(10, "tooManyNotificationEmails"),
+    // Language of the emails sent to the team.
+    staffLocale: z.enum(["EN", "FR"], "required"),
   })
   .refine(
     (data) =>
@@ -115,22 +118,21 @@ export const settingsSchema = z
       data.serviceAreasFr.length === data.serviceAreasEn.length,
     {
       path: ["serviceAreasFr"],
-      message:
-        "The French list must have the same number of areas, in the same order, as the English list (or be empty).",
+      message: "areasMismatch",
     },
   );
 
 export type SettingsInput = z.input<typeof settingsSchema>;
 
 export const loginSchema = z.object({
-  email: z.email("Enter a valid email."),
-  password: z.string().min(1, "Enter your password.").max(200),
+  email: z.email("email"),
+  password: z.string().min(1, "password").max(200, "tooLong"),
 });
 
 export type LoginInput = z.input<typeof loginSchema>;
 
 export const forgotPasswordSchema = z.object({
-  email: z.email("Enter a valid email."),
+  email: z.email("email"),
 });
 
 export const resetPasswordSchema = z
@@ -138,28 +140,25 @@ export const resetPasswordSchema = z
     token: z.string().min(1).max(500),
     password: z
       .string()
-      .min(10, "Use at least 10 characters.")
-      .max(128, "Too long."),
+      .min(10, "passwordMin")
+      .max(128, "tooLong"),
     confirm: z.string(),
   })
   .refine((data) => data.password === data.confirm, {
     path: ["confirm"],
-    message: "The passwords don't match.",
+    message: "passwordMismatch",
   });
 
 export const inviteUserSchema = z.object({
   name: requiredText(100),
-  email: z.email("Enter a valid email."),
+  email: z.email("email"),
 });
 
 export type InviteUserInput = z.input<typeof inviteUserSchema>;
 
 export const notesSchema = z.object({
-  notes: z.string().trim().max(5000, "Too long."),
+  notes: z.string().trim().max(5000, "tooLong"),
 });
-
-/** Generic reply when a Server Action is called with arguments it can't use. */
-export const INVALID = "That request was not valid. Refresh the page and try again.";
 
 const idSchema = z.string().min(1).max(64);
 
@@ -174,9 +173,14 @@ export function isIdList(value: unknown): value is string[] {
 
 export type AdminResult<T = unknown> =
   | ({ ok: true } & T)
+  // `error` is ready-to-show text in the admin's language; `fieldErrors`
+  // holds "Admin.Validation" keys.
   | { ok: false; error: string; fieldErrors?: Record<string, string> };
 
-/** Flattens a ZodError into one message per field for admin forms. */
+/**
+ * Flattens a ZodError into one entry per field for admin forms. The values are
+ * "Admin.Validation" keys (see the top of this file), translated by the form.
+ */
 export function toFieldErrors(error: z.ZodError): Record<string, string> {
   const result: Record<string, string> = {};
   for (const issue of error.issues) {

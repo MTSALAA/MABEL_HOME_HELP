@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import { AuthCard } from "@/components/admin/auth-card";
 import { ForgotPasswordForm } from "@/components/admin/auth-forms";
+import { getAdminT } from "@/server/admin-i18n";
 
-export const metadata: Metadata = { title: "Forgot password" };
+export async function generateMetadata() {
+  const t = await getAdminT("Auth");
+  return { title: t("forgot.title") };
+}
 
 export default function ForgotPasswordPage() {
   return (
-    <AuthCard
-      title="Forgot your password?"
-      description="Enter your admin email and we'll send you a link to choose a new one."
-    >
+    <AuthCard screen="forgot">
       <ForgotPasswordForm />
     </AuthCard>
   );

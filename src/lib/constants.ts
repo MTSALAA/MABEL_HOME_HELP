@@ -41,3 +41,6 @@ export const AUTH_COOKIE_PREFIX = "mabel";
 
 /** Requests and sponsor inquiries are deleted after this long (privacy policy). */
 export const REQUEST_RETENTION_MONTHS = 24;
+
+/** Remembers the language an admin picked for the dashboard (not the site). */
+export const ADMIN_LOCALE_COOKIE = "mabel_admin_locale";

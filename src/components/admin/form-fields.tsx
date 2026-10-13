@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useId, type ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,6 +8,19 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+
+/**
+ * Turns a validation key from lib/validation/admin.ts ("required",
+ * "tooLong"...) into text in the admin's language. Anything that is not a
+ * known key is shown as it is.
+ */
+export function useValidationMessage() {
+  const t = useTranslations("Admin.Validation");
+  return (key: string | undefined): string | undefined => {
+    if (!key) return undefined;
+    return t.has(key) ? t(key) : key;
+  };
+}
 
 function FieldFrame({
   id,
@@ -138,8 +152,9 @@ export function LanguageTabs({
   englishHasError?: boolean;
   frenchHasError?: boolean;
 }) {
+  const t = useTranslations("Admin.Common");
   const dot = (
-    <span className="size-2 rounded-full bg-danger" aria-label="has errors" role="img" />
+    <span className="size-2 rounded-full bg-danger" aria-label={t("hasErrors")} role="img" />
   );
   return (
     <Tabs defaultValue="en">
@@ -164,7 +179,7 @@ export function LanguageTabs({
         className="mt-4 flex flex-col gap-4 data-[state=inactive]:hidden"
       >
         <p className="text-sm text-muted-foreground">
-          Anything left empty here is shown in English on the French site.
+          {t("frenchFallback")}
         </p>
         {french}
       </TabsContent>

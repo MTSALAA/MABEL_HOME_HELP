@@ -1,12 +1,16 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ServiceForm } from "@/components/admin/service-form";
 import { PageHeader } from "@/components/admin/ui";
 import { SERVICE_ILLUSTRATIONS, type ServiceIllustration } from "@/lib/constants";
+import { pick } from "@/lib/localize";
+import { getAdminLocale, getAdminT } from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import { requireAdmin } from "@/server/session";
 
-export const metadata: Metadata = { title: "Edit service" };
+export async function generateMetadata() {
+  const t = await getAdminT("Services");
+  return { title: t("editTitle") };
+}
 
 // Admin pages wait on the session by design (see the dashboard layout).
 export const instant = false;
@@ -18,6 +22,7 @@ export default async function EditServicePage({
   const { id } = await params;
   const service = await prisma.service.findUnique({ where: { id } });
   if (!service) notFound();
+  const [locale, t] = await Promise.all([getAdminLocale(), getAdminT("Services")]);
 
   const illustration = (SERVICE_ILLUSTRATIONS as readonly string[]).includes(
     service.illustration,
@@ -28,10 +33,10 @@ export default async function EditServicePage({
   return (
     <>
       <PageHeader
-        title={service.titleEn}
-        description="Edit this service."
+        title={pick(locale, service.titleEn, service.titleFr)}
+        description={t("editDescription")}
         backHref="/admin/services"
-        backLabel="All services"
+        backLabel={t("all")}
       />
       <ServiceForm
         id={service.id}

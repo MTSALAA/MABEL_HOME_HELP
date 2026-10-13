@@ -9,12 +9,12 @@ import {
   planSchema,
   serviceSchema,
   settingsSchema,
-  INVALID,
   isId,
   isIdList,
   toFieldErrors,
   type AdminResult,
 } from "@/lib/validation/admin";
+import { getAdminT } from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import { reportError } from "@/server/report-error";
 import { requireAdmin } from "@/server/session";
@@ -26,7 +26,11 @@ function publish() {
   refresh();
 }
 
-const CHECK_FORM = "Please check the highlighted fields.";
+// Error texts in the admin's language, looked up only when one is needed.
+// Call them after requireAdmin().
+const invalidRequest = async () => (await getAdminT("Common"))("invalidRequest");
+const checkFields = async () => (await getAdminT("Common"))("checkFields");
+const orderNotSaved = async () => (await getAdminT("Common"))("orderNotSaved");
 
 // --- Services -----------------------------------------------------------------
 
@@ -35,10 +39,10 @@ export async function saveService(
   values: unknown,
 ): Promise<AdminResult<{ id?: string }>> {
   await requireAdmin();
-  if (id !== null && !isId(id)) return { ok: false, error: INVALID };
+  if (id !== null && !isId(id)) return { ok: false, error: await invalidRequest() };
   const parsed = serviceSchema.safeParse(values);
   if (!parsed.success) {
-    return { ok: false, error: CHECK_FORM, fieldErrors: toFieldErrors(parsed.error) };
+    return { ok: false, error: await checkFields(), fieldErrors: toFieldErrors(parsed.error) };
   }
   const data = parsed.data;
 
@@ -49,8 +53,9 @@ export async function saveService(
   if (clash) {
     return {
       ok: false,
-      error: CHECK_FORM,
-      fieldErrors: { slug: "Another service already uses this slug." },
+      error: await checkFields(),
+      // Already translated: the form shows any text that is not a validation key.
+      fieldErrors: { slug: (await getAdminT("Services"))("slugTaken") },
     };
   }
 
@@ -87,9 +92,9 @@ export async function setServiceFlag(
   value: boolean,
 ): Promise<AdminResult> {
   await requireAdmin();
-  if (!isId(id) || typeof value !== "boolean") return { ok: false, error: INVALID };
+  if (!isId(id) || typeof value !== "boolean") return { ok: false, error: await invalidRequest() };
   if (flag !== "isActive" && flag !== "isFeatured") {
-    return { ok: false, error: INVALID };
+    return { ok: false, error: await invalidRequest() };
   }
   await prisma.service.update({ where: { id }, data: { [flag]: value } });
   publish();
@@ -99,7 +104,7 @@ export async function setServiceFlag(
 export async function reorderServices(orderedIds: string[]): Promise<AdminResult> {
   await requireAdmin();
   if (!isIdList(orderedIds)) {
-    return { ok: false, error: "Could not save the new order." };
+    return { ok: false, error: await orderNotSaved() };
   }
   await prisma.$transaction(
     orderedIds.map((id, index) =>
@@ -118,7 +123,7 @@ export async function deleteService(
   id: string,
 ): Promise<AdminResult<{ hidden?: boolean }>> {
   await requireAdmin();
-  if (!isId(id)) return { ok: false, error: INVALID };
+  if (!isId(id)) return { ok: false, error: await invalidRequest() };
   const referenced = await prisma.bookingRequest.count({ where: { serviceId: id } });
   if (referenced > 0) {
     await prisma.service.update({ where: { id }, data: { isActive: false } });
@@ -137,12 +142,14 @@ export async function savePlan(
   values: unknown,
 ): Promise<AdminResult<{ id?: string; warning?: string }>> {
   await requireAdmin();
-  if (id !== null && !isId(id)) return { ok: false, error: INVALID };
+  if (id !== null && !isId(id)) return { ok: false, error: await invalidRequest() };
   const parsed = planSchema.safeParse(values);
   if (!parsed.success) {
-    return { ok: false, error: CHECK_FORM, fieldErrors: toFieldErrors(parsed.error) };
+    return { ok: false, error: await checkFields(), fieldErrors: toFieldErrors(parsed.error) };
   }
   const data = parsed.data;
+  // Fetched before anything is written, for the messages further down.
+  const t = await getAdminT("Plans");
 
   const clash = await prisma.plan.findFirst({
     where: { slug: data.slug, ...(id ? { NOT: { id } } : {}) },
@@ -151,8 +158,9 @@ export async function savePlan(
   if (clash) {
     return {
       ok: false,
-      error: CHECK_FORM,
-      fieldErrors: { slug: "Another plan already uses this slug." },
+      error: await checkFields(),
+      // Already translated: the form shows any text that is not a validation key.
+      fieldErrors: { slug: t("slugTaken") },
     };
   }
 
@@ -188,8 +196,7 @@ export async function savePlan(
   let warning: string | undefined;
   if (plan.isPurchasable) {
     if (!isStripeEnabled()) {
-      warning =
-        "Saved. Stripe is not fully connected yet, so this plan can't be bought online until it is. Save the plan again afterwards.";
+      warning = t("warnings.stripeNotConnected");
     } else {
       try {
         const synced = await syncPlanWithStripe(plan);
@@ -204,8 +211,7 @@ export async function savePlan(
           where: { id: plan.id },
           data: { stripePriceId: null },
         });
-        warning =
-          "Saved, but Stripe could not create the price. The plan can't be bought online until you save it again successfully.";
+        warning = t("warnings.stripeFailed");
       }
     }
   }
@@ -220,9 +226,9 @@ export async function setPlanFlag(
   value: boolean,
 ): Promise<AdminResult> {
   await requireAdmin();
-  if (!isId(id) || typeof value !== "boolean") return { ok: false, error: INVALID };
+  if (!isId(id) || typeof value !== "boolean") return { ok: false, error: await invalidRequest() };
   if (flag !== "isActive" && flag !== "isHighlighted") {
-    return { ok: false, error: INVALID };
+    return { ok: false, error: await invalidRequest() };
   }
   await prisma.plan.update({ where: { id }, data: { [flag]: value } });
   publish();
@@ -232,7 +238,7 @@ export async function setPlanFlag(
 export async function reorderPlans(orderedIds: string[]): Promise<AdminResult> {
   await requireAdmin();
   if (!isIdList(orderedIds)) {
-    return { ok: false, error: "Could not save the new order." };
+    return { ok: false, error: await orderNotSaved() };
   }
   await prisma.$transaction(
     orderedIds.map((id, index) =>
@@ -251,7 +257,7 @@ export async function deletePlan(
   id: string,
 ): Promise<AdminResult<{ hidden?: boolean }>> {
   await requireAdmin();
-  if (!isId(id)) return { ok: false, error: INVALID };
+  if (!isId(id)) return { ok: false, error: await invalidRequest() };
 
   const [memberships, requests] = await Promise.all([
     prisma.membership.count({ where: { planId: id } }),
@@ -273,7 +279,7 @@ export async function saveSettings(values: unknown): Promise<AdminResult> {
   await requireAdmin();
   const parsed = settingsSchema.safeParse(values);
   if (!parsed.success) {
-    return { ok: false, error: CHECK_FORM, fieldErrors: toFieldErrors(parsed.error) };
+    return { ok: false, error: await checkFields(), fieldErrors: toFieldErrors(parsed.error) };
   }
   const data = parsed.data;
 
@@ -291,6 +297,7 @@ export async function saveSettings(values: unknown): Promise<AdminResult> {
     disclaimerEn: data.disclaimerEn,
     disclaimerFr: emptyToNull(data.disclaimerFr),
     notificationEmails: data.notificationEmails.map((email) => email.toLowerCase()),
+    staffLocale: data.staffLocale,
   };
 
   await prisma.siteSettings.upsert({

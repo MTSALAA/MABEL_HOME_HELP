@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition, type ReactNode } from "react";
 import { toast } from "sonner";
 import {
@@ -16,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { AdminResult } from "@/lib/validation/admin";
-import { runAction } from "./run-action";
+import { useRunAction } from "./run-action";
 
 /** Status dropdown that saves as soon as a value is picked. */
 export function StatusSelect({
@@ -28,13 +29,15 @@ export function StatusSelect({
   options: { value: string; label: string }[];
   action: (status: string) => Promise<AdminResult>;
 }) {
+  const t = useTranslations("Admin.Common");
+  const runAction = useRunAction();
   const [pending, startTransition] = useTransition();
   const [current, setCurrent] = useState(value);
 
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor="status-select" className="text-sm font-bold text-forest-900">
-        Status
+        {t("status")}
       </label>
       <select
         id="status-select"
@@ -47,7 +50,7 @@ export function StatusSelect({
           startTransition(async () => {
             const result = await runAction(() => action(next));
             if (result.ok) {
-              toast.success("Status updated.");
+              toast.success(t("statusUpdated"));
             } else {
               setCurrent(previous);
               toast.error(result.error);
@@ -74,6 +77,8 @@ export function NotesForm({
   initial: string;
   action: (values: { notes: string }) => Promise<AdminResult>;
 }) {
+  const t = useTranslations("Admin.Common");
+  const runAction = useRunAction();
   const [pending, startTransition] = useTransition();
   const [notes, setNotes] = useState(initial);
 
@@ -83,14 +88,14 @@ export function NotesForm({
         event.preventDefault();
         startTransition(async () => {
           const result = await runAction(() => action({ notes }));
-          if (result.ok) toast.success("Notes saved.");
+          if (result.ok) toast.success(t("notesSaved"));
           else toast.error(result.error);
         });
       }}
       className="flex flex-col gap-3"
     >
       <label htmlFor="admin-notes" className="text-sm font-bold text-forest-900">
-        Private notes
+        {t("privateNotes")}
       </label>
       <Textarea
         id="admin-notes"
@@ -98,11 +103,11 @@ export function NotesForm({
         onChange={(event) => setNotes(event.target.value)}
         rows={5}
         maxLength={5000}
-        placeholder="Only admins can see these."
+        placeholder={t("notesPlaceholder")}
         className="bg-white"
       />
       <Button type="submit" variant="secondary" className="self-start" disabled={pending}>
-        {pending ? "Saving…" : "Save notes"}
+        {pending ? t("saving") : t("saveNotes")}
       </Button>
     </form>
   );
@@ -127,6 +132,8 @@ export function ConfirmAction({
   // Actions that redirect resolve to nothing.
   action: () => Promise<AdminResult | void>;
 }) {
+  const t = useTranslations("Admin.Common");
+  const runAction = useRunAction();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
@@ -139,7 +146,7 @@ export function ConfirmAction({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={pending}>{t("cancel")}</AlertDialogCancel>
           <AlertDialogAction
             disabled={pending}
             className={destructive ? "bg-destructive text-white hover:bg-destructive/90" : undefined}
@@ -156,7 +163,7 @@ export function ConfirmAction({
               });
             }}
           >
-            {pending ? "Working…" : confirmLabel}
+            {pending ? t("working") : confirmLabel}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

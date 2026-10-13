@@ -14,8 +14,9 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// The admin is English only and sits outside the [locale] segment, so it has
-// its own root layout.
+// The admin sits outside the [locale] segment, so it has its own root layout.
+// Its language is a per-browser preference: <AdminIntl> provides it inside
+// each screen, because this layout is part of the static shell.
 export default function AdminRootLayout({ children }: LayoutProps<"/admin">) {
   return (
     <html lang="en" className={`${headingFont.variable} ${bodyFont.variable}`}>

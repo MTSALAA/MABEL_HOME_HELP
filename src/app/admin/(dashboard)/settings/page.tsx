@@ -1,25 +1,28 @@
-import type { Metadata } from "next";
 import { SettingsForm } from "@/components/admin/settings-form";
 import { PageHeader } from "@/components/admin/ui";
 import { formatPhone } from "@/lib/phone";
+import { getAdminT } from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import { requireAdmin } from "@/server/session";
 
-export const metadata: Metadata = { title: "Settings" };
+export async function generateMetadata() {
+  const t = await getAdminT("Nav");
+  return { title: t("settings") };
+}
 
 // Admin pages wait on the session by design (see the dashboard layout).
 export const instant = false;
 
 export default async function SettingsPage() {
   await requireAdmin();
-  const settings = await prisma.siteSettings.findUnique({ where: { id: 1 } });
+  const [settings, t] = await Promise.all([
+    prisma.siteSettings.findUnique({ where: { id: 1 } }),
+    getAdminT("Settings"),
+  ]);
 
   return (
     <>
-      <PageHeader
-        title="Settings"
-        description="Contact details and wording used across the website."
-      />
+      <PageHeader title={t("title")} description={t("description")} />
       <SettingsForm
         initial={{
           businessName: settings?.businessName ?? "Mabel Home Help",
@@ -35,6 +38,7 @@ export default async function SettingsPage() {
           disclaimerEn: settings?.disclaimerEn ?? "",
           disclaimerFr: settings?.disclaimerFr ?? "",
           notificationEmails: settings?.notificationEmails ?? [],
+          staffLocale: settings?.staffLocale ?? "EN",
         }}
       />
     </>

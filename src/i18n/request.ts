@@ -2,6 +2,7 @@ import * as rootParams from "next/root-params";
 import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { getAdminLocale } from "@/server/admin-i18n";
 import { routing } from "./routing";
 
 export default getRequestConfig(async ({ locale }) => {
@@ -10,10 +11,15 @@ export default getRequestConfig(async ({ locale }) => {
   // and Route Handlers, so those always pass the locale explicitly.
   if (!locale) {
     const segment = await rootParams.locale();
-    if (!hasLocale(routing.locales, segment)) {
+    if (segment === undefined) {
+      // No [locale] segment: this is the admin, where the language is a
+      // personal preference rather than part of the address.
+      locale = await getAdminLocale();
+    } else if (hasLocale(routing.locales, segment)) {
+      locale = segment;
+    } else {
       notFound();
     }
-    locale = segment;
   }
 
   return {

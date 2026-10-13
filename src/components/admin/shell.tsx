@@ -13,6 +13,7 @@ import {
   UserCogIcon,
   UsersIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
@@ -28,6 +29,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { signOutAction } from "@/server/actions/auth";
+import { LanguageSwitch } from "./language-switch";
 
 export type ShellBadges = {
   requests: number;
@@ -36,14 +38,14 @@ export type ShellBadges = {
 };
 
 const NAV = [
-  { href: "/admin", label: "Overview", Icon: LayoutDashboardIcon, badge: null },
-  { href: "/admin/requests", label: "Requests", Icon: ClipboardListIcon, badge: "requests" },
-  { href: "/admin/members", label: "Members", Icon: UsersIcon, badge: "pastDue" },
-  { href: "/admin/sponsors", label: "Sponsor inquiries", Icon: HandHeartIcon, badge: "sponsors" },
-  { href: "/admin/services", label: "Services", Icon: HeartHandshakeIcon, badge: null },
-  { href: "/admin/plans", label: "Plans & pricing", Icon: TagIcon, badge: null },
-  { href: "/admin/settings", label: "Settings", Icon: SettingsIcon, badge: null },
-  { href: "/admin/users", label: "Admin users", Icon: UserCogIcon, badge: null },
+  { href: "/admin", key: "overview", Icon: LayoutDashboardIcon, badge: null },
+  { href: "/admin/requests", key: "requests", Icon: ClipboardListIcon, badge: "requests" },
+  { href: "/admin/members", key: "members", Icon: UsersIcon, badge: "pastDue" },
+  { href: "/admin/sponsors", key: "sponsors", Icon: HandHeartIcon, badge: "sponsors" },
+  { href: "/admin/services", key: "services", Icon: HeartHandshakeIcon, badge: null },
+  { href: "/admin/plans", key: "plans", Icon: TagIcon, badge: null },
+  { href: "/admin/settings", key: "settings", Icon: SettingsIcon, badge: null },
+  { href: "/admin/users", key: "users", Icon: UserCogIcon, badge: null },
 ] as const;
 
 function NavList({
@@ -54,11 +56,12 @@ function NavList({
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
+  const t = useTranslations("Admin.Nav");
 
   return (
-    <nav aria-label="Admin" className="flex-1 overflow-y-auto px-3 py-4">
+    <nav aria-label={t("label")} className="flex-1 overflow-y-auto px-3 py-4">
       <ul className="flex flex-col gap-1">
-        {NAV.map(({ href, label, Icon, badge }) => {
+        {NAV.map(({ href, key, Icon, badge }) => {
           const active =
             href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
           const count = badge ? badges[badge] : 0;
@@ -76,7 +79,7 @@ function NavList({
                 )}
               >
                 <Icon className="size-5 shrink-0" aria-hidden="true" />
-                <span className="flex-1">{label}</span>
+                <span className="flex-1">{t(key)}</span>
                 {count > 0 ? (
                   <span
                     className={cn(
@@ -88,7 +91,8 @@ function NavList({
                   >
                     {count}
                     <span className="sr-only">
-                      {badge === "pastDue" ? " past due" : " new"}
+                      {" "}
+                      {badge === "pastDue" ? t("badgePastDue") : t("badgeNew")}
                     </span>
                   </span>
                 ) : null}
@@ -102,8 +106,10 @@ function NavList({
 }
 
 function SidebarFooter({ name, email }: { name: string; email: string }) {
+  const t = useTranslations("Admin.Nav");
   return (
     <div className="border-t border-cream-50/15 p-4">
+      <LanguageSwitch tone="dark" className="mb-3 flex" />
       <a
         href="/"
         target="_blank"
@@ -111,7 +117,7 @@ function SidebarFooter({ name, email }: { name: string; email: string }) {
         className="mb-3 flex min-h-10 items-center gap-2 rounded-lg px-2 text-sm font-bold text-cream-50/85 hover:bg-cream-50/10 hover:text-white"
       >
         <ExternalLinkIcon className="size-4" aria-hidden="true" />
-        View the website
+        {t("viewWebsite")}
       </a>
       <p className="truncate px-2 text-sm font-bold text-cream-50">{name}</p>
       <p className="truncate px-2 text-xs text-forest-300">{email}</p>
@@ -122,7 +128,7 @@ function SidebarFooter({ name, email }: { name: string; email: string }) {
           className="w-full border-cream-50/30 bg-transparent text-cream-50 hover:bg-cream-50/10 hover:text-white"
         >
           <LogOutIcon aria-hidden="true" />
-          Sign out
+          {t("signOut")}
         </Button>
       </form>
     </div>
@@ -139,6 +145,7 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const t = useTranslations("Admin.Nav");
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[17rem_1fr]">
@@ -161,7 +168,7 @@ export function AdminShell({
           </Link>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon-lg" aria-label="Open menu">
+              <Button variant="outline" size="icon-lg" aria-label={t("openMenu")}>
                 <MenuIcon aria-hidden="true" />
               </Button>
             </SheetTrigger>
@@ -173,7 +180,7 @@ export function AdminShell({
                 <SheetTitle className="text-left">
                   <Logo tone="light" />
                 </SheetTitle>
-                <SheetDescription className="sr-only">Admin navigation</SheetDescription>
+                <SheetDescription className="sr-only">{t("navigation")}</SheetDescription>
               </SheetHeader>
               <NavList badges={badges} onNavigate={() => setOpen(false)} />
               <SidebarFooter name={admin.name} email={admin.email} />

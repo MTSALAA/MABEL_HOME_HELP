@@ -105,7 +105,7 @@ export async function listRequests(filters: ListFilters) {
   const [rows, total] = await Promise.all([
     prisma.bookingRequest.findMany({
       where,
-      include: { service: { select: { titleEn: true } } },
+      include: { service: { select: { titleEn: true, titleFr: true } } },
       orderBy: { [sort.field]: sort.direction },
       skip: (filters.page - 1) * ADMIN_PAGE_SIZE,
       take: ADMIN_PAGE_SIZE,
@@ -195,7 +195,7 @@ export async function listMemberships(filters: ListFilters) {
   const [rows, total] = await Promise.all([
     prisma.membership.findMany({
       where,
-      include: { plan: { select: { nameEn: true } } },
+      include: { plan: { select: { nameEn: true, nameFr: true } } },
       orderBy: { [sort.field]: sort.direction },
       skip: (filters.page - 1) * ADMIN_PAGE_SIZE,
       take: ADMIN_PAGE_SIZE,
@@ -228,18 +228,18 @@ export async function getOverview() {
     prisma.bookingRequest.findMany({
       orderBy: { createdAt: "desc" },
       take: 5,
-      include: { service: { select: { titleEn: true } } },
+      include: { service: { select: { titleEn: true, titleFr: true } } },
     }),
     prisma.membership.findMany({
       where: { status: { not: "PENDING" } },
       orderBy: { createdAt: "desc" },
       take: 5,
-      include: { plan: { select: { nameEn: true } } },
+      include: { plan: { select: { nameEn: true, nameFr: true } } },
     }),
     prisma.siteSettings.findUnique({ where: { id: 1 } }),
     prisma.plan.findMany({
       where: { isActive: true, isPurchasable: true, stripePriceId: null },
-      select: { id: true, nameEn: true },
+      select: { id: true, nameEn: true, nameFr: true },
     }),
   ]);
 

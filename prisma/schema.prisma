@@ -119,6 +119,8 @@ model SiteSettings {
   disclaimerEn       String
   disclaimerFr       String?
   notificationEmails String[]
+  // Language of the emails sent to the team (notifications, invitations).
+  staffLocale        Locale   @default(EN)
   updatedAt          DateTime @updatedAt
 }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { CircleAlertIcon, CircleCheckIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition, type FormEvent, type ReactNode } from "react";
@@ -12,7 +13,8 @@ import {
   resetPasswordAction,
   signInAction,
 } from "@/server/actions/auth";
-import { runAction } from "./run-action";
+import { useValidationMessage } from "./form-fields";
+import { useRunAction } from "./run-action";
 
 function Notice({ tone, children }: { tone: "error" | "success"; children: ReactNode }) {
   const Icon = tone === "error" ? CircleAlertIcon : CircleCheckIcon;
@@ -31,11 +33,15 @@ function Notice({ tone, children }: { tone: "error" | "success"; children: React
   );
 }
 
+/** `message` is a validation key sent back by the Server Action. */
 function FieldError({ message }: { message?: string }) {
-  return message ? <p className="text-sm font-bold text-danger">{message}</p> : null;
+  const text = useValidationMessage()(message);
+  return text ? <p className="text-sm font-bold text-danger">{text}</p> : null;
 }
 
 export function LoginForm() {
+  const t = useTranslations("Admin.Auth");
+  const runAction = useRunAction();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
@@ -64,15 +70,15 @@ export function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       {searchParams.get("reset") === "1" ? (
-        <Notice tone="success">Your password was changed. Sign in with the new one.</Notice>
+        <Notice tone="success">{t("passwordChanged")}</Notice>
       ) : null}
       {error ? <Notice tone="error">{error}</Notice> : null}
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("email")}</Label>
         <Input id="email" name="email" type="email" autoComplete="username" required className="h-11" />
       </div>
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("password")}</Label>
         <Input
           id="password"
           name="password"
@@ -83,19 +89,21 @@ export function LoginForm() {
         />
       </div>
       <Button type="submit" size="lg" className="h-11" disabled={pending}>
-        {pending ? "Signing in…" : "Sign in"}
+        {pending ? t("signingIn") : t("signIn")}
       </Button>
       <Link
         href="/admin/forgot-password"
         className="self-center text-sm font-bold text-forest-700 underline underline-offset-4"
       >
-        Forgot your password?
+        {t("forgotLink")}
       </Link>
     </form>
   );
 }
 
 export function ForgotPasswordForm() {
+  const t = useTranslations("Admin.Auth");
+  const runAction = useRunAction();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
@@ -117,13 +125,13 @@ export function ForgotPasswordForm() {
     return (
       <div className="flex flex-col gap-4">
         <Notice tone="success">
-          If that email belongs to an admin, a reset link is on its way. It works for one hour.
+          {t("resetSent")}
         </Notice>
         <Link
           href="/admin/login"
           className="self-center text-sm font-bold text-forest-700 underline underline-offset-4"
         >
-          Back to sign in
+          {t("backToSignIn")}
         </Link>
       </div>
     );
@@ -133,29 +141,32 @@ export function ForgotPasswordForm() {
     <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       {error ? <Notice tone="error">{error}</Notice> : null}
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("email")}</Label>
         <Input id="email" name="email" type="email" autoComplete="username" required className="h-11" />
       </div>
       <Button type="submit" size="lg" className="h-11" disabled={pending}>
-        {pending ? "Sending…" : "Email me a reset link"}
+        {pending ? t("sending") : t("emailLink")}
       </Button>
       <Link
         href="/admin/login"
         className="self-center text-sm font-bold text-forest-700 underline underline-offset-4"
       >
-        Back to sign in
+        {t("backToSignIn")}
       </Link>
     </form>
   );
 }
 
 export function ResetPasswordForm() {
+  const t = useTranslations("Admin.Auth");
+  const tCommon = useTranslations("Admin.Common");
+  const runAction = useRunAction();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(
-    searchParams.get("error") ? "This link has expired or was already used." : null,
+    searchParams.get("error") ? t("linkExpired") : null,
   );
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -183,13 +194,13 @@ export function ResetPasswordForm() {
     return (
       <div className="flex flex-col gap-4">
         <Notice tone="error">
-          {error ?? "This link is not valid. Request a new one."}
+          {error ?? t("linkInvalid")}
         </Notice>
         <Link
           href="/admin/forgot-password"
           className="self-center text-sm font-bold text-forest-700 underline underline-offset-4"
         >
-          Request a new link
+          {t("requestNewLink")}
         </Link>
       </div>
     );
@@ -199,7 +210,7 @@ export function ResetPasswordForm() {
     <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       {error ? <Notice tone="error">{error}</Notice> : null}
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="password">New password</Label>
+        <Label htmlFor="password">{t("newPassword")}</Label>
         <Input
           id="password"
           name="password"
@@ -210,12 +221,12 @@ export function ResetPasswordForm() {
           className="h-11"
         />
         <p id="password-help" className="text-sm text-muted-foreground">
-          At least 10 characters.
+          {t("passwordHelp")}
         </p>
         <FieldError message={fieldErrors.password} />
       </div>
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="confirm">Repeat the new password</Label>
+        <Label htmlFor="confirm">{t("repeatPassword")}</Label>
         <Input
           id="confirm"
           name="confirm"
@@ -227,7 +238,7 @@ export function ResetPasswordForm() {
         <FieldError message={fieldErrors.confirm} />
       </div>
       <Button type="submit" size="lg" className="h-11" disabled={pending}>
-        {pending ? "Saving…" : "Save new password"}
+        {pending ? tCommon("saving") : t("saveNewPassword")}
       </Button>
     </form>
   );

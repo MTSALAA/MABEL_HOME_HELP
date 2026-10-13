@@ -10,17 +10,17 @@ import {
   toFieldErrors,
   type AdminResult,
 } from "@/lib/validation/admin";
+import { getAdminT } from "@/server/admin-i18n";
 import { auth } from "@/server/auth";
 import { prisma } from "@/server/db";
 import { RATE_LIMITS, rateLimit } from "@/server/rate-limit";
 import { reportError } from "@/server/report-error";
 import { getClientIp } from "@/server/request-meta";
 
-const TOO_MANY = "Too many attempts. Please wait 15 minutes and try again.";
-// One message for every failure, so the form never reveals which emails exist.
-const BAD_CREDENTIALS = "Incorrect email or password.";
-
 export async function signInAction(values: unknown): Promise<AdminResult> {
+  const t = await getAdminT("Auth.errors");
+  // One message for every failure, so the form never reveals which emails exist.
+  const BAD_CREDENTIALS = t("badCredentials");
   const parsed = loginSchema.safeParse(values);
   if (!parsed.success) {
     return { ok: false, error: BAD_CREDENTIALS, fieldErrors: toFieldErrors(parsed.error) };
@@ -35,7 +35,7 @@ export async function signInAction(values: unknown): Promise<AdminResult> {
     rateLimit(`login:ip:${ip}`, RATE_LIMITS.loginPerIp),
     rateLimit(`login:email:${email}`, RATE_LIMITS.loginPerEmail),
   ]);
-  if (allowed.includes(false)) return { ok: false, error: TOO_MANY };
+  if (allowed.includes(false)) return { ok: false, error: t("tooMany") };
 
   try {
     // The nextCookies plugin sets the session cookie on this response.
@@ -74,9 +74,10 @@ export async function signOutAction(): Promise<void> {
 export async function requestPasswordResetAction(
   values: unknown,
 ): Promise<AdminResult> {
+  const t = await getAdminT("Auth.errors");
   const parsed = forgotPasswordSchema.safeParse(values);
   if (!parsed.success) {
-    return { ok: false, error: "Enter a valid email.", fieldErrors: toFieldErrors(parsed.error) };
+    return { ok: false, error: t("invalidEmail"), fieldErrors: toFieldErrors(parsed.error) };
   }
   const email = parsed.data.email.toLowerCase();
 
@@ -85,7 +86,7 @@ export async function requestPasswordResetAction(
     rateLimit(`reset:ip:${ip}`, RATE_LIMITS.passwordResetPerIp),
     rateLimit(`reset:email:${email}`, RATE_LIMITS.passwordResetPerEmail),
   ]);
-  if (allowed.includes(false)) return { ok: false, error: TOO_MANY };
+  if (allowed.includes(false)) return { ok: false, error: t("tooMany") };
 
   // Looked up and sent after the response, so the reply takes the same time
   // whether or not the email belongs to an admin.
@@ -108,11 +109,12 @@ export async function requestPasswordResetAction(
 }
 
 export async function resetPasswordAction(values: unknown): Promise<AdminResult> {
+  const t = await getAdminT("Auth.errors");
   const parsed = resetPasswordSchema.safeParse(values);
   if (!parsed.success) {
     return {
       ok: false,
-      error: "Please check the form.",
+      error: t("checkForm"),
       fieldErrors: toFieldErrors(parsed.error),
     };
   }
@@ -125,7 +127,7 @@ export async function resetPasswordAction(values: unknown): Promise<AdminResult>
   } catch {
     return {
       ok: false,
-      error: "This link has expired or was already used. Request a new one.",
+      error: t("linkUsed"),
     };
   }
 }

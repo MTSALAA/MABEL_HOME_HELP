@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -11,9 +12,10 @@ import {
   LanguageTabs,
   TextAreaField,
   TextField,
+  useValidationMessage,
 } from "./form-fields";
 import { Panel } from "./ui";
-import { runAction } from "./run-action";
+import { useRunAction } from "./run-action";
 
 // Lists are edited as one item per line, which makes adding, removing and
 // reordering as simple as editing text.
@@ -34,6 +36,10 @@ function toLines(value: string): string[] {
 }
 
 export function SettingsForm({ initial }: { initial: SettingsInput }) {
+  const t = useTranslations("Admin.Settings");
+  const tCommon = useTranslations("Admin.Common");
+  const msg = useValidationMessage();
+  const runAction = useRunAction();
   const [pending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | null>(null);
   const {
@@ -70,46 +76,46 @@ export function SettingsForm({ initial }: { initial: SettingsInput }) {
         }
         return;
       }
-      toast.success("Settings saved. The website is updated.");
+      toast.success(t("saved"));
     });
   });
 
   return (
     <form onSubmit={onSubmit} noValidate className="grid gap-6 lg:grid-cols-2">
       <Panel
-        title="Contact details"
-        description="Shown in the header, footer and contact page of the website."
+        title={t("contact.title")}
+        description={t("contact.description")}
       >
         <div className="flex flex-col gap-4">
           <TextField
-            label="Business name"
-            error={errors.businessName?.message}
+            label={t("contact.businessName")}
+            error={msg(errors.businessName?.message)}
             defaultValue={defaults.businessName}
             {...register("businessName")}
           />
           <TextField
-            label="Phone number"
+            label={t("contact.phone")}
             type="tel"
             inputMode="tel"
             placeholder="(780) 555-0123"
-            help="Powers the Call Now and Text Us buttons. Leave empty to hide them."
-            error={errors.phone?.message}
+            help={t("contact.phoneHelp")}
+            error={msg(errors.phone?.message)}
             defaultValue={defaults.phone}
             {...register("phone")}
           />
           <TextField
-            label="Business email"
+            label={t("contact.email")}
             type="email"
-            placeholder="hello@example.com"
-            help="Shown on the website and used as the reply address for emails to visitors."
-            error={errors.email?.message}
+            placeholder={t("contact.emailPlaceholder")}
+            help={t("contact.emailHelp")}
+            error={msg(errors.email?.message)}
             defaultValue={defaults.email}
             {...register("email")}
           />
           <TextField
-            label="Location"
-            help="For example “Edmonton, Alberta, Canada”."
-            error={errors.location?.message}
+            label={t("contact.location")}
+            help={t("contact.locationHelp")}
+            error={msg(errors.location?.message)}
             defaultValue={defaults.location}
             {...register("location")}
           />
@@ -117,23 +123,41 @@ export function SettingsForm({ initial }: { initial: SettingsInput }) {
       </Panel>
 
       <Panel
-        title="Notifications"
-        description="Who gets an email when a request, sponsor inquiry or membership comes in."
+        title={t("notifications.title")}
+        description={t("notifications.description")}
       >
         <TextAreaField
-          label="Notification emails"
+          label={t("notifications.emails")}
           rows={4}
-          placeholder={"owner@example.com\nassistant@example.com"}
-          help="One per line. If empty, notifications go to the business email."
-          error={errors.notificationEmails?.message}
+          placeholder={t("notifications.emailsPlaceholder")}
+          help={t("notifications.emailsHelp")}
+          error={msg(errors.notificationEmails?.message)}
           defaultValue={defaults.notificationEmails}
           {...register("notificationEmails")}
         />
+        <div className="mt-4 flex flex-col gap-1.5">
+          <label htmlFor="staff-locale" className="text-sm leading-none font-medium">
+            {t("notifications.staffLanguage")}
+          </label>
+          <select
+            id="staff-locale"
+            aria-describedby="staff-locale-help"
+            defaultValue={defaults.staffLocale}
+            className="h-10 rounded-md border border-input bg-white px-3 font-bold sm:max-w-xs"
+            {...register("staffLocale")}
+          >
+            <option value="EN">English</option>
+            <option value="FR">Français</option>
+          </select>
+          <p id="staff-locale-help" className="text-sm text-muted-foreground">
+            {t("notifications.staffLanguageHelp")}
+          </p>
+        </div>
       </Panel>
 
       <Panel
-        title="Text in both languages"
-        description="Tagline, service areas, hours and the scope disclaimer."
+        title={t("text.title")}
+        description={t("text.description")}
         className="lg:col-span-2"
       >
         <LanguageTabs
@@ -146,31 +170,31 @@ export function SettingsForm({ initial }: { initial: SettingsInput }) {
           english={
             <div className="grid gap-4 lg:grid-cols-2">
               <TextField
-                label="Tagline"
-                error={errors.taglineEn?.message}
+                label={t("fields.tagline")}
+                error={msg(errors.taglineEn?.message)}
                 defaultValue={defaults.taglineEn}
                 {...register("taglineEn")}
               />
               <TextField
-                label="Hours (optional)"
-                placeholder="Monday to Friday, 9 am to 5 pm"
-                error={errors.hoursEn?.message}
+                label={t("fields.hours")}
+                placeholder={t("fields.hoursPlaceholder")}
+                error={msg(errors.hoursEn?.message)}
                 defaultValue={defaults.hoursEn}
                 {...register("hoursEn")}
               />
               <TextAreaField
-                label="Service areas"
+                label={t("fields.serviceAreas")}
                 rows={6}
-                help="One per line, in the order they should appear. These are also the choices in the booking form."
-                error={errors.serviceAreasEn?.message}
+                help={t("fields.serviceAreasHelp")}
+                error={msg(errors.serviceAreasEn?.message)}
                 defaultValue={defaults.serviceAreasEn}
                 {...register("serviceAreasEn")}
               />
               <TextAreaField
-                label="Scope disclaimer"
+                label={t("fields.disclaimer")}
                 rows={6}
-                help="Shown on every page."
-                error={errors.disclaimerEn?.message}
+                help={t("fields.disclaimerHelp")}
+                error={msg(errors.disclaimerEn?.message)}
                 defaultValue={defaults.disclaimerEn}
                 {...register("disclaimerEn")}
               />
@@ -179,33 +203,33 @@ export function SettingsForm({ initial }: { initial: SettingsInput }) {
           french={
             <div className="grid gap-4 lg:grid-cols-2">
               <TextField
-                label="Slogan"
+                label={t("french.tagline")}
                 lang="fr"
-                error={errors.taglineFr?.message}
+                error={msg(errors.taglineFr?.message)}
                 defaultValue={defaults.taglineFr}
                 {...register("taglineFr")}
               />
               <TextField
-                label="Heures (facultatif)"
+                label={t("french.hours")}
                 lang="fr"
-                error={errors.hoursFr?.message}
+                error={msg(errors.hoursFr?.message)}
                 defaultValue={defaults.hoursFr}
                 {...register("hoursFr")}
               />
               <TextAreaField
-                label="Secteurs desservis"
+                label={t("french.serviceAreas")}
                 lang="fr"
                 rows={6}
-                help="One per line, in the same order and the same number as the English list."
-                error={errors.serviceAreasFr?.message}
+                help={t("french.serviceAreasHelp")}
+                error={msg(errors.serviceAreasFr?.message)}
                 defaultValue={defaults.serviceAreasFr}
                 {...register("serviceAreasFr")}
               />
               <TextAreaField
-                label="Avis sur la portée des services"
+                label={t("french.disclaimer")}
                 lang="fr"
                 rows={6}
-                error={errors.disclaimerFr?.message}
+                error={msg(errors.disclaimerFr?.message)}
                 defaultValue={defaults.disclaimerFr}
                 {...register("disclaimerFr")}
               />
@@ -218,7 +242,7 @@ export function SettingsForm({ initial }: { initial: SettingsInput }) {
         <FormError message={formError} />
         <div>
           <Button type="submit" size="lg" disabled={pending}>
-            {pending ? "Saving…" : "Save settings"}
+            {pending ? tCommon("saving") : t("save")}
           </Button>
         </div>
       </div>

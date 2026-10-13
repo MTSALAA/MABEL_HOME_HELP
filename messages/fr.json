@@ -512,6 +512,641 @@
       "body": "Utilisez le bouton ci-dessous pour mettre à jour votre carte, consulter vos factures ou annuler. Le lien est valide pendant 30 minutes.",
       "cta": "Ouvrir mon abonnement",
       "ignore": "Si vous n'avez pas fait cette demande, vous pouvez ignorer ce courriel."
+    },
+    "staff": {
+      "footer": "Envoyé par le site Web de Mabel Home Help.",
+      "openInAdmin": "Ouvrir dans l'administration",
+      "labels": {
+        "name": "Nom",
+        "phone": "Téléphone",
+        "email": "Courriel",
+        "requestingFor": "Demande pour",
+        "service": "Service",
+        "plan": "Forfait",
+        "area": "Secteur",
+        "contactBy": "Contacter par",
+        "preferredTime": "Moment préféré",
+        "message": "Message",
+        "language": "Langue",
+        "organization": "Organisme",
+        "wantsTo": "Souhaite",
+        "payer": "Payeur",
+        "payerPhone": "Téléphone du payeur",
+        "payerEmail": "Courriel du payeur",
+        "visitsFor": "Visites pour",
+        "thePayer": "Le payeur",
+        "recipientPhone": "Téléphone du bénéficiaire",
+        "address": "Adresse",
+        "notes": "Notes",
+        "customerEmail": "Courriel du client",
+        "stripeCustomer": "Client Stripe",
+        "stripeSubscription": "Abonnement Stripe",
+        "checkoutSession": "Session de paiement"
+      },
+      "role": {
+        "SELF": "La personne elle-même",
+        "FAMILY": "Un membre de la famille",
+        "OTHER": "Une autre personne"
+      },
+      "contact": {
+        "CALL": "Appel",
+        "TEXT": "Texto",
+        "EMAIL": "Courriel"
+      },
+      "intent": {
+        "SPONSOR_VISITS": "Parrainer des visites",
+        "NOMINATE_SENIOR": "Proposer un aîné dans le besoin",
+        "OTHER": "Autre"
+      },
+      "languageName": {
+        "EN": "Anglais",
+        "FR": "Français"
+      },
+      "request": {
+        "subjectBooking": "Nouvelle demande de service de {name}",
+        "subjectMessage": "Nouveau message de {name}",
+        "headingBooking": "Nouvelle demande de service",
+        "headingMessage": "Nouveau message",
+        "bodyBooking": "{name} a envoyé une demande de service à partir du site Web.",
+        "bodyMessage": "{name} a envoyé un message à partir du site Web."
+      },
+      "sponsor": {
+        "subject": "Nouvelle demande de parrainage de {name}",
+        "heading": "Nouvelle demande de parrainage",
+        "body": "{name} aimerait discuter du programme Parrainer un aîné."
+      },
+      "member": {
+        "subject": "Nouveau membre : {name} ({plan})",
+        "heading": "Nouvel abonnement",
+        "body": "{name} vient de s'abonner au forfait {plan}. Appelez dans un délai d'un jour ouvrable pour planifier la première visite."
+      },
+      "paymentFailed": {
+        "subject": "Paiement échoué : {name} ({plan})",
+        "heading": "Échec du paiement d'un abonnement",
+        "body": "Le paiement par carte de l'abonnement {plan} de {name} a échoué. Stripe réessaiera automatiquement, et le membre a été invité à mettre sa carte à jour."
+      },
+      "ended": {
+        "subject": "Abonnement terminé : {name} ({plan})",
+        "heading": "Abonnement terminé",
+        "body": "L'abonnement {plan} de {name} a pris fin. Aucun autre paiement ne sera prélevé."
+      },
+      "unmatched": {
+        "subject": "Action requise : un paiement d'abonnement n'a pas de dossier d'inscription",
+        "heading": "Un paiement demande votre attention",
+        "body1": "Stripe signale un paiement d'abonnement réussi, mais le site Web n'a aucun dossier d'inscription correspondant. Le client est facturé et n'apparaît pas dans la liste des membres.",
+        "body2": "Ouvrez la fiche du client dans Stripe, communiquez avec lui pour obtenir les détails de ses visites, puis ajoutez-le manuellement ou annulez et remboursez l'abonnement.",
+        "openStripe": "Ouvrir Stripe"
+      },
+      "password": {
+        "inviteSubject": "Vous avez été invité à l'administration de Mabel Home Help",
+        "resetSubject": "Réinitialisez votre mot de passe d'administration Mabel Home Help",
+        "invitePreview": "Choisissez votre mot de passe pour commencer.",
+        "resetPreview": "Réinitialisez votre mot de passe.",
+        "inviteHeading": "Configurez votre compte d'administrateur",
+        "resetHeading": "Réinitialisez votre mot de passe",
+        "inviteBody": "Vous avez maintenant accès au tableau de bord d'administration de Mabel Home Help. Choisissez un mot de passe pour commencer.",
+        "resetBody": "Nous avons reçu une demande de réinitialisation du mot de passe de votre compte d'administrateur.",
+        "inviteCta": "Choisir mon mot de passe",
+        "resetCta": "Réinitialiser mon mot de passe",
+        "expiry": "Ce lien est valide pendant une heure. Si vous n'attendiez pas ce courriel, vous pouvez l'ignorer."
+      }
+    }
+  },
+  "Admin": {
+    "Common": {
+      "language": "Langue",
+      "back": "Retour",
+      "actionFailed": "L'opération a échoué. Vérifiez votre connexion, actualisez la page et réessayez.",
+      "search": "Rechercher",
+      "exportCsv": "Exporter en CSV",
+      "exporting": "Exportation…",
+      "nothingToExport": "Rien à exporter.",
+      "status": "Statut",
+      "statusUpdated": "Statut mis à jour.",
+      "privateNotes": "Notes privées",
+      "notesPlaceholder": "Visibles uniquement par les administrateurs.",
+      "save": "Enregistrer",
+      "saveChanges": "Enregistrer les modifications",
+      "saving": "Enregistrement…",
+      "saveNotes": "Enregistrer les notes",
+      "notesSaved": "Notes enregistrées.",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "working": "En cours…",
+      "edit": "Modifier",
+      "hasErrors": "contient des erreurs",
+      "frenchFallback": "Tout champ laissé vide ici s'affiche en anglais sur le site en français.",
+      "reorder": "Déplacer {title}",
+      "orderSaved": "Ordre enregistré.",
+      "loading": "Chargement",
+      "notSure": "Pas encore décidé",
+      "yes": "Oui",
+      "no": "Non",
+      "pagination": {
+        "label": "Pagination",
+        "showing": "{from} à {to} sur {total}",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "pageOf": "Page {page} sur {pages}"
+      },
+      "invalidRequest": "Cette demande n'était pas valide. Actualisez la page et réessayez.",
+      "callNumber": "Appeler le {phone}",
+      "sendText": "Texter",
+      "sendEmail": "Envoyer un courriel",
+      "noteTooLong": "La note est trop longue.",
+      "checkFields": "Veuillez vérifier les champs en surbrillance.",
+      "orderNotSaved": "Le nouvel ordre n'a pas pu être enregistré."
+    },
+    "Nav": {
+      "label": "Administration",
+      "overview": "Vue d'ensemble",
+      "requests": "Demandes",
+      "members": "Membres",
+      "sponsors": "Demandes de parrainage",
+      "services": "Services",
+      "plans": "Forfaits et tarifs",
+      "settings": "Paramètres",
+      "users": "Administrateurs",
+      "viewWebsite": "Voir le site Web",
+      "signOut": "Se déconnecter",
+      "openMenu": "Ouvrir le menu",
+      "navigation": "Navigation de l'administration",
+      "badgeNew": "à traiter",
+      "badgePastDue": "en retard de paiement"
+    },
+    "Labels": {
+      "NEW": "Nouvelle",
+      "CONTACTED": "Contactée",
+      "SCHEDULED": "Planifiée",
+      "DONE": "Terminée",
+      "CLOSED": "Fermée",
+      "ARCHIVED": "Archivée",
+      "ACTIVE": "Actif",
+      "PAST_DUE": "Paiement en retard",
+      "CANCELED": "Terminé",
+      "PENDING": "Paiement non finalisé",
+      "BOOKING": "Demande de service",
+      "GENERAL": "Message",
+      "SELF": "La personne elle-même",
+      "FAMILY": "Un membre de la famille",
+      "OTHER": "Une autre personne",
+      "CALL": "Appel",
+      "TEXT": "Texto",
+      "EMAIL": "Courriel",
+      "SPONSOR_VISITS": "Parrainer des visites",
+      "NOMINATE_SENIOR": "Proposer un aîné",
+      "EN": "Anglais",
+      "FR": "Français"
+    },
+    "Errors": {
+      "screenTitle": "Cet écran n'a pas pu être chargé",
+      "screenText": "Rien n'a été modifié. Réessayez; si le problème persiste, notez l'heure et la référence ci-dessous pour votre développeur.",
+      "reference": "Référence : {code}",
+      "tryAgain": "Réessayer",
+      "notFoundTitle": "Page introuvable",
+      "notFoundText": "Cette page d'administration n'existe pas, ou l'élément a été supprimé.",
+      "notFoundLink": "Retour au tableau de bord"
+    },
+    "Auth": {
+      "login": {
+        "title": "Connexion",
+        "description": "Tableau de bord de Mabel Home Help."
+      },
+      "forgot": {
+        "title": "Mot de passe oublié?",
+        "description": "Entrez votre courriel d'administrateur et nous vous enverrons un lien pour en choisir un nouveau."
+      },
+      "reset": {
+        "title": "Choisir un mot de passe",
+        "description": "Choisissez un mot de passe que vous n'utilisez nulle part ailleurs."
+      },
+      "passwordChanged": "Votre mot de passe a été modifié. Connectez-vous avec le nouveau.",
+      "email": "Courriel",
+      "password": "Mot de passe",
+      "signingIn": "Connexion…",
+      "signIn": "Se connecter",
+      "forgotLink": "Mot de passe oublié?",
+      "resetSent": "Si ce courriel appartient à un administrateur, un lien de réinitialisation est en route. Il est valide pendant une heure.",
+      "backToSignIn": "Retour à la connexion",
+      "sending": "Envoi…",
+      "emailLink": "M'envoyer un lien de réinitialisation",
+      "linkExpired": "Ce lien a expiré ou a déjà été utilisé.",
+      "linkInvalid": "Ce lien n'est pas valide. Demandez-en un nouveau.",
+      "requestNewLink": "Demander un nouveau lien",
+      "newPassword": "Nouveau mot de passe",
+      "passwordHelp": "Au moins 10 caractères.",
+      "repeatPassword": "Répétez le nouveau mot de passe",
+      "saveNewPassword": "Enregistrer le nouveau mot de passe",
+      "errors": {
+        "tooMany": "Trop de tentatives. Veuillez attendre 15 minutes et réessayer.",
+        "badCredentials": "Courriel ou mot de passe incorrect.",
+        "invalidEmail": "Entrez un courriel valide.",
+        "checkForm": "Veuillez vérifier le formulaire.",
+        "linkUsed": "Ce lien a expiré ou a déjà été utilisé. Demandez-en un nouveau."
+      }
+    },
+    "Overview": {
+      "hello": "Bonjour, {name}",
+      "lead": "Voici ce qui demande votre attention.",
+      "warnings": {
+        "email": "L'envoi de courriels n'est pas configuré (RESEND_API_KEY). Les demandes sont enregistrées ici, mais aucun courriel de notification ou de confirmation n'est envoyé.",
+        "sender": "Aucune adresse d'expéditeur n'est définie (EMAIL_FROM); les courriels partent donc d'une adresse de test que la plupart des visiteurs ne recevront jamais.",
+        "spam": "La protection contre le pourriel n'est pas configurée (clés Turnstile). Les formulaires ne sont protégés que par des vérifications de base.",
+        "rateLimit": "La limitation de débit n'est pas reliée à Upstash; les limites sur les formulaires et la connexion sont donc plus faibles que prévu.",
+        "phone": "Aucun numéro de téléphone n'est défini; les boutons Appeler et Texter sont donc masqués sur le site.",
+        "phoneAction": "Ajouter le numéro de téléphone",
+        "businessEmail": "Aucun courriel d'entreprise n'est défini. Les notifications n'ont nulle part où aller, sauf si des courriels de notification sont indiqués.",
+        "businessEmailAction": "Ajouter le courriel",
+        "stripe": "Stripe n'est pas connecté; les abonnements ne peuvent donc pas encore être achetés en ligne. Les visiteurs voient « Demander ce forfait » à la place.",
+        "stripeAction": "Vérifier les forfaits",
+        "stripeWebhook": "Stripe n'est connecté qu'à moitié : le secret du webhook (STRIPE_WEBHOOK_SECRET) est manquant. L'achat en ligne reste désactivé tant qu'il n'est pas défini, afin que personne ne puisse payer sans être enregistré.",
+        "planPrice": "« {plan} » est marqué Achat en ligne, mais n'a pas encore de prix Stripe.",
+        "planPriceAction": "Ouvrir le forfait et l'enregistrer"
+      },
+      "stats": {
+        "newRequests": "Nouvelles demandes",
+        "requestsThisWeek": "Demandes cette semaine",
+        "activeMembers": "Membres actifs",
+        "pastDueMembers": "Membres en retard de paiement",
+        "newSponsors": "Nouvelles demandes de parrainage"
+      },
+      "latestRequests": "Dernières demandes",
+      "noRequests": "Aucune demande pour l'instant.",
+      "latestMemberships": "Derniers abonnements",
+      "noMemberships": "Aucun abonnement pour l'instant."
+    },
+    "Validation": {
+      "required": "Ce champ est obligatoire.",
+      "tooLong": "Trop long.",
+      "slugShort": "L'identifiant est trop court.",
+      "slugLong": "L'identifiant est trop long.",
+      "slugFormat": "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",
+      "illustration": "Choisissez une illustration.",
+      "httpsUrl": "L'adresse doit commencer par https://.",
+      "monthlyAmount": "Entrez le montant mensuel en dollars, par exemple 200 ou 199.99.",
+      "amountMin": "Le montant doit être d'au moins 1 $.",
+      "tooManyAreas": "Trop de secteurs.",
+      "phone": "Entrez un numéro de téléphone valide à 10 chiffres, ou laissez le champ vide.",
+      "emailOrEmpty": "Entrez un courriel valide, ou laissez le champ vide.",
+      "areaRequired": "Ajoutez au moins un secteur desservi.",
+      "notificationEmail": "L'un des courriels de notification n'est pas valide.",
+      "tooManyNotificationEmails": "Trop de courriels de notification.",
+      "areasMismatch": "La liste en français doit contenir le même nombre de secteurs, dans le même ordre, que la liste en anglais (ou être vide).",
+      "email": "Entrez un courriel valide.",
+      "password": "Entrez votre mot de passe.",
+      "passwordMin": "Utilisez au moins 10 caractères.",
+      "passwordMismatch": "Les mots de passe ne correspondent pas.",
+      "emailTaken": "Un administrateur utilise déjà ce courriel."
+    },
+    "Users": {
+      "title": "Administrateurs",
+      "description": "Les personnes qui peuvent se connecter à ce tableau de bord. Chacune a un accès complet.",
+      "whoHasAccess": "Qui a accès",
+      "deactivated": "Désactivé",
+      "added": "{email} · ajouté le {date}",
+      "inviteTitle": "Inviter quelqu'un",
+      "inviteDescription": "La personne reçoit un courriel avec un lien pour choisir son propre mot de passe.",
+      "name": "Nom",
+      "email": "Courriel",
+      "sending": "Envoi…",
+      "sendInvitation": "Envoyer l'invitation",
+      "invitationSent": "Invitation envoyée. Si le courriel n'arrive pas, la personne peut utiliser « Mot de passe oublié? » sur la page de connexion.",
+      "thisIsYou": "C'est vous",
+      "reactivate": "Réactiver",
+      "reactivated": "{name} peut de nouveau se connecter.",
+      "deactivate": "Désactiver",
+      "deactivateTitle": "Désactiver {name}?",
+      "deactivateDescription": "La personne est déconnectée immédiatement et ne peut plus se connecter. Vous pourrez la réactiver plus tard.",
+      "deactivatedToast": "{name} a été désactivé.",
+      "errors": {
+        "checkFields": "Veuillez vérifier les champs en surbrillance.",
+        "ownAccount": "Vous ne pouvez pas désactiver votre propre compte.",
+        "lastAdmin": "Au moins un administrateur doit rester actif."
+      }
+    },
+    "Requests": {
+      "title": "Demandes",
+      "detailTitle": "Demande",
+      "description": "Demandes de service et messages envoyés à partir du site Web. Ils sont conservés pendant {months} mois, puis supprimés automatiquement.",
+      "searchPlaceholder": "Rechercher par nom, téléphone ou courriel",
+      "allStatuses": "Toutes sauf les archivées",
+      "allTypes": "Tous les types",
+      "empty": "Aucune demande ne correspond à ces filtres.",
+      "areaOther": "Autre",
+      "areaOtherDetail": "Autre (hors des secteurs indiqués)",
+      "backToList": "Toutes les demandes",
+      "received": "{type, select, GENERAL {Message reçu le {date}} other {Demande de service reçue le {date}}}",
+      "contact": "Contact",
+      "details": "Détails",
+      "fields": {
+        "received": "Reçue le",
+        "type": "Type",
+        "name": "Nom",
+        "phone": "Téléphone",
+        "email": "Courriel",
+        "requestingFor": "Demande faite pour",
+        "service": "Service",
+        "plan": "Forfait",
+        "planOfInterest": "Forfait souhaité",
+        "area": "Secteur",
+        "contactBy": "Mode de contact",
+        "prefersContactBy": "Mode de contact préféré",
+        "preferredTime": "Moment préféré",
+        "message": "Message",
+        "language": "Langue",
+        "consentGiven": "Consentement donné le",
+        "adminNotes": "Notes privées"
+      },
+      "delete": {
+        "title": "Supprimer cette demande",
+        "description": "La supprime définitivement, par exemple lorsqu'une personne demande la suppression de ses renseignements.",
+        "button": "Supprimer définitivement",
+        "confirmTitle": "Supprimer cette demande?",
+        "confirmDescription": "Cette action supprime définitivement la demande de {name} et ne peut pas être annulée."
+      }
+    },
+    "Sponsors": {
+      "title": "Demandes de parrainage",
+      "detailTitle": "Demande de parrainage",
+      "description": "Personnes et organismes intéressés par le programme Parrainer un aîné.",
+      "searchPlaceholder": "Rechercher par nom, courriel, téléphone ou organisme",
+      "allStatuses": "Toutes sauf les archivées",
+      "empty": "Aucune demande de parrainage ne correspond à ces filtres.",
+      "intentOther": "Autre chose",
+      "backToList": "Toutes les demandes de parrainage",
+      "received": "Demande de parrainage reçue le {date}",
+      "contact": "Contact",
+      "details": "Détails",
+      "fields": {
+        "received": "Reçue le",
+        "name": "Nom",
+        "email": "Courriel",
+        "phone": "Téléphone",
+        "organization": "Organisme",
+        "wantsTo": "Souhaite",
+        "message": "Message",
+        "language": "Langue",
+        "consentGiven": "Consentement donné le",
+        "adminNotes": "Notes privées"
+      },
+      "delete": {
+        "title": "Supprimer cette demande",
+        "description": "La supprime définitivement, par exemple lorsqu'une personne demande la suppression de ses renseignements.",
+        "button": "Supprimer définitivement",
+        "confirmTitle": "Supprimer cette demande?",
+        "confirmDescription": "Cette action supprime définitivement la demande de {name} et ne peut pas être annulée."
+      }
+    },
+    "Members": {
+      "title": "Membres",
+      "detailTitle": "Membre",
+      "description": "Abonnements mensuels achetés en ligne. La facturation est gérée par Stripe.",
+      "searchPlaceholder": "Rechercher par nom, téléphone ou courriel",
+      "allStatuses": "Tous les abonnements payés",
+      "allPlans": "Tous les forfaits",
+      "empty": "Aucun abonnement ne correspond à ces filtres.",
+      "endsAtPeriodEnd": "Se termine à la fin de la période",
+      "backToList": "Tous les membres",
+      "joined": "{plan} · membre depuis le {date}",
+      "contactPayer": "Joindre le payeur",
+      "whoAndWhere": "Qui et où",
+      "thePayer": "Le payeur",
+      "fields": {
+        "member": "Membre",
+        "visitsFor": "Visites pour",
+        "plan": "Forfait",
+        "started": "Début",
+        "nextBilling": "Prochaine facturation",
+        "area": "Secteur",
+        "payer": "Payeur",
+        "payerPhone": "Téléphone du payeur",
+        "payerEmail": "Courriel du payeur",
+        "visitsAreFor": "Les visites sont pour",
+        "recipient": "Bénéficiaire",
+        "recipientPhone": "Téléphone du bénéficiaire",
+        "serviceAddress": "Adresse du service",
+        "address": "Adresse",
+        "notesFromSignUp": "Notes fournies à l'inscription",
+        "signUpNotes": "Notes d'inscription",
+        "language": "Langue",
+        "termsAccepted": "Conditions acceptées le",
+        "cancelsAtPeriodEnd": "Annulation à la fin de la période",
+        "adminNotes": "Notes privées"
+      },
+      "billing": {
+        "title": "Facturation",
+        "live": "En direct de Stripe.",
+        "stale": "Selon la dernière mise à jour envoyée par Stripe. Les données en direct ne sont pas disponibles pour le moment.",
+        "amount": "Montant",
+        "perMonth": "{price} par mois",
+        "stripeStatus": "Statut Stripe",
+        "ended": "Terminé le",
+        "endsOn": "Prend fin le",
+        "nextBillingDate": "Prochaine date de facturation",
+        "cancellation": "Annulation",
+        "cancellationScheduled": "Planifiée pour la fin de la période payée",
+        "cancellationNotScheduled": "Non planifiée",
+        "openInStripe": "Ouvrir dans Stripe"
+      },
+      "cancel": {
+        "button": "Annuler à la fin de la période",
+        "title": "Annuler cet abonnement?",
+        "description": "{name} conserve ses visites jusqu'au {date}, puis la facturation cesse. Les remboursements et l'annulation immédiate se font dans le tableau de bord Stripe.",
+        "descriptionNoDate": "{name} conserve ses visites jusqu'à la fin de la période payée, puis la facturation cesse. Les remboursements et l'annulation immédiate se font dans le tableau de bord Stripe.",
+        "confirm": "Annuler l'abonnement",
+        "success": "Annulation planifiée."
+      },
+      "errors": {
+        "noSubscription": "Cet abonnement n'est lié à aucun abonnement Stripe.",
+        "alreadyEnded": "Cet abonnement a déjà pris fin.",
+        "stripeFailed": "Stripe n'a pas pu planifier l'annulation. Réessayez ou utilisez le tableau de bord Stripe."
+      }
+    },
+    "Services": {
+      "title": "Services",
+      "description": "Faites glisser les éléments pour changer leur ordre sur le site. Les changements sont en ligne dès que vous les faites.",
+      "add": "Ajouter un service",
+      "all": "Tous les services",
+      "empty": "Aucun service pour l'instant. Ajoutez le premier.",
+      "noFrenchTitle": "Sans titre en français",
+      "shown": "Affiché",
+      "featured": "En vedette",
+      "editTitle": "Modifier le service",
+      "editDescription": "Modifiez ce service.",
+      "create": "Créer le service",
+      "saved": "Service enregistré. Le site est à jour.",
+      "slugTaken": "Un autre service utilise déjà cet identifiant.",
+      "textPanel": "Texte",
+      "fields": {
+        "title": "Titre",
+        "description": "Description"
+      },
+      "french": {
+        "title": "Titre",
+        "description": "Description"
+      },
+      "illustration": {
+        "title": "Illustration",
+        "description": "Choisissez le dessin affiché sur la carte du service.",
+        "ownImage": "Ou utilisez votre propre image (facultatif)",
+        "ownImageHelp": "L'adresse https:// complète d'une photo. Lorsqu'elle est indiquée, elle remplace l'illustration."
+      },
+      "illustrations": {
+        "senior-home-check-ins": "Visites de vérification à domicile",
+        "companionship": "Compagnie",
+        "garbage-recycling": "Ordures et recyclage",
+        "light-house-cleaning": "Entretien ménager léger",
+        "garage-cleaning": "Nettoyage du garage",
+        "car-cleaning": "Nettoyage de voiture",
+        "snow-removal": "Déneigement",
+        "lawn-yard-maintenance": "Entretien de la pelouse et du terrain",
+        "grocery-pharmacy-pickup": "Épicerie et pharmacie",
+        "errands-shopping": "Courses et magasinage",
+        "family-updates": "Nouvelles à la famille",
+        "acreage-rural-help": "Aide pour propriétés rurales",
+        "basic-roadside-assistance": "Assistance routière de base"
+      },
+      "visibility": {
+        "title": "Visibilité",
+        "shown": "Affiché sur le site",
+        "shownDescription": "Désactivez cette option pour masquer ce service sans le supprimer.",
+        "featured": "En vedette sur la page d'accueil",
+        "featuredDescription": "Jusqu'à six services en vedette s'affichent sous « Comment nous aidons »."
+      },
+      "address": {
+        "title": "Adresse Web",
+        "slug": "Identifiant",
+        "slugHelp": "Utilisé dans les liens comme /book?service=identifiant. Lettres minuscules, chiffres et tirets."
+      },
+      "delete": {
+        "title": "Supprimer ce service",
+        "description": "Si des demandes mentionnent déjà ce service, il est plutôt masqué afin que leur historique reste lisible.",
+        "button": "Supprimer le service",
+        "confirmTitle": "Supprimer ce service?",
+        "confirmDescription": "Il sera retiré du site.",
+        "hidden": "Ce service est utilisé par des demandes existantes; il a donc plutôt été masqué.",
+        "done": "Service supprimé."
+      }
+    },
+    "Plans": {
+      "title": "Forfaits et tarifs",
+      "description": "Faites glisser les éléments pour changer leur ordre sur le site. Les changements sont en ligne dès que vous les faites.",
+      "add": "Ajouter un forfait",
+      "all": "Tous les forfaits",
+      "empty": "Aucun forfait pour l'instant. Ajoutez le premier.",
+      "shown": "Affiché",
+      "mostPopular": "Le plus populaire",
+      "editTitle": "Modifier le forfait",
+      "editDescription": "Modifiez ce forfait.",
+      "create": "Créer le forfait",
+      "saved": "Forfait enregistré. Le site est à jour.",
+      "slugTaken": "Un autre forfait utilise déjà cet identifiant.",
+      "badges": {
+        "buyOnline": "Achat en ligne",
+        "stripeNotConnected": "Achat en ligne : Stripe non connecté",
+        "needsSaving": "Achat en ligne : à enregistrer",
+        "activeMembers": "{count, plural, one {# membre actif} other {# membres actifs}}"
+      },
+      "textPanel": "Texte",
+      "fields": {
+        "name": "Nom du forfait",
+        "priceText": "Prix affiché sur le site",
+        "priceTextHelp": "Texte libre, par exemple « $200/month », « $15–$20 per visit » ou « Custom quote ».",
+        "includes": "Comprend",
+        "includesHelp": "Par exemple « 4 visits » ou « Up to 45 minutes ».",
+        "note": "Courte note (facultatif)"
+      },
+      "french": {
+        "name": "Nom du forfait",
+        "priceText": "Prix affiché sur le site",
+        "priceTextHelp": "Par exemple « 200 $ par mois » ou « Sur devis ».",
+        "includes": "Comprend",
+        "note": "Courte note (facultatif)"
+      },
+      "online": {
+        "title": "Achat en ligne",
+        "description": "Permettez aux visiteurs de s'abonner à ce forfait par carte, avec une facturation mensuelle.",
+        "buyOnline": "Achat en ligne",
+        "buyOnlineDescription": "Affiche un bouton « S'abonner ». Si l'option est désactivée, les visiteurs voient « Demander ce forfait ».",
+        "amount": "Montant mensuel (CAD)",
+        "amountHelp": "Le montant réellement facturé chaque mois. Assurez-vous qu'il correspond au prix affiché ci-dessus.",
+        "changingPrice": "La modification du montant crée un nouveau prix pour les nouveaux membres seulement.",
+        "creatingPrice": "L'enregistrement crée le prix dans Stripe pour vous.",
+        "currentMembers": "{count, plural, one {Le membre actuel conserve le prix auquel il s'est abonné.} other {Les # membres actuels conservent le prix auquel ils se sont abonnés.}}",
+        "existingMembers": "Les membres existants conservent toujours le prix auquel ils se sont abonnés.",
+        "stripeNotConnected": "Stripe n'est pas encore connecté. Vous pouvez enregistrer ce forfait, mais le bouton « S'abonner » n'apparaîtra qu'une fois les clés Stripe ajoutées au site."
+      },
+      "visibility": {
+        "title": "Visibilité",
+        "shown": "Affiché sur le site",
+        "shownDescription": "Désactivez cette option pour masquer le forfait. Les membres existants ne sont pas touchés.",
+        "highlight": "Mettre en évidence comme « Le plus populaire »"
+      },
+      "address": {
+        "title": "Adresse Web",
+        "slug": "Identifiant",
+        "slugHelp": "Utilisé dans les liens comme /membership/identifiant. Lettres minuscules, chiffres et tirets."
+      },
+      "warnings": {
+        "stripeNotConnected": "Enregistré. Stripe n'est pas encore entièrement connecté; ce forfait ne pourra donc pas être acheté en ligne d'ici là. Enregistrez de nouveau le forfait par la suite.",
+        "stripeFailed": "Enregistré, mais Stripe n'a pas pu créer le prix. Le forfait ne pourra pas être acheté en ligne tant que vous ne l'aurez pas enregistré de nouveau avec succès."
+      },
+      "delete": {
+        "title": "Supprimer ce forfait",
+        "description": "Un forfait qui a déjà eu des membres est masqué plutôt que supprimé, et ses membres ne sont pas touchés.",
+        "button": "Supprimer le forfait",
+        "confirmTitle": "Supprimer ce forfait?",
+        "confirmDescription": "Il sera retiré du site.",
+        "hidden": "Ce forfait a des membres; il a donc plutôt été masqué.",
+        "done": "Forfait supprimé."
+      }
+    },
+    "Settings": {
+      "title": "Paramètres",
+      "description": "Coordonnées et textes utilisés partout sur le site.",
+      "save": "Enregistrer les paramètres",
+      "saved": "Paramètres enregistrés. Le site est à jour.",
+      "contact": {
+        "title": "Coordonnées",
+        "description": "Affichées dans l'en-tête, le pied de page et la page Contact du site.",
+        "businessName": "Nom de l'entreprise",
+        "phone": "Numéro de téléphone",
+        "phoneHelp": "Sert aux boutons Appeler et Texter. Laissez le champ vide pour les masquer.",
+        "email": "Courriel de l'entreprise",
+        "emailPlaceholder": "bonjour@example.com",
+        "emailHelp": "Affiché sur le site et utilisé comme adresse de réponse pour les courriels envoyés aux visiteurs.",
+        "location": "Emplacement",
+        "locationHelp": "Par exemple « Edmonton, Alberta, Canada »."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Qui reçoit un courriel lorsqu'une demande, une demande de parrainage ou un abonnement arrive.",
+        "emails": "Courriels de notification",
+        "emailsPlaceholder": "proprietaire@example.com\nadjointe@example.com",
+        "emailsHelp": "Un par ligne. Si le champ est vide, les notifications sont envoyées au courriel de l'entreprise.",
+        "staffLanguage": "Langue des courriels envoyés à l'équipe",
+        "staffLanguageHelp": "Utilisée pour les nouvelles demandes, les nouveaux membres, les problèmes de paiement et les invitations d'administrateurs. Les courriels aux visiteurs suivent toujours la langue qu'ils ont utilisée sur le site."
+      },
+      "text": {
+        "title": "Textes dans les deux langues",
+        "description": "Slogan, secteurs desservis, heures d'ouverture et avis sur la portée des services."
+      },
+      "fields": {
+        "tagline": "Slogan",
+        "hours": "Heures d'ouverture (facultatif)",
+        "hoursPlaceholder": "Monday to Friday, 9 am to 5 pm",
+        "serviceAreas": "Secteurs desservis",
+        "serviceAreasHelp": "Un par ligne, dans l'ordre où ils doivent apparaître. Ce sont aussi les choix offerts dans le formulaire de réservation.",
+        "disclaimer": "Avis sur la portée des services",
+        "disclaimerHelp": "Affiché sur chaque page."
+      },
+      "french": {
+        "tagline": "Slogan",
+        "hours": "Heures d'ouverture (facultatif)",
+        "serviceAreas": "Secteurs desservis",
+        "serviceAreasHelp": "Un par ligne, dans le même ordre et en même nombre que dans la liste en anglais.",
+        "disclaimer": "Avis sur la portée des services"
+      }
     }
   }
 }

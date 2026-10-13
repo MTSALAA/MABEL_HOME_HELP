@@ -1,14 +1,15 @@
 import { TriangleAlertIcon } from "lucide-react";
-import type { Metadata } from "next";
 import Link from "next/link";
 import { after } from "next/server";
-import {
-  formatDateTime,
-  PageHeader,
-  Panel,
-  StatusBadge,
-} from "@/components/admin/ui";
+import { PageHeader, Panel, StatusBadge } from "@/components/admin/ui";
+import { pick } from "@/lib/localize";
 import { formatPhone } from "@/lib/phone";
+import {
+  getAdminFormat,
+  getAdminLabels,
+  getAdminLocale,
+  getAdminT,
+} from "@/server/admin-i18n";
 import { isEmailConfigured } from "@/server/email/send";
 import { runHousekeeping } from "@/server/housekeeping";
 import { getOverview } from "@/server/queries/admin";
@@ -17,7 +18,10 @@ import { requireAdmin } from "@/server/session";
 import { isStripeEnabled, missingStripeConfig } from "@/server/stripe";
 import { isTurnstileEnabled } from "@/server/turnstile";
 
-export const metadata: Metadata = { title: "Overview" };
+export async function generateMetadata() {
+  const t = await getAdminT("Nav");
+  return { title: t("overview") };
+}
 
 // Admin pages wait on the session by design (see the dashboard layout).
 export const instant = false;
@@ -54,7 +58,14 @@ function Stat({
 
 export default async function OverviewPage() {
   const admin = await requireAdmin();
-  const overview = await getOverview();
+  const [overview, locale, t, tCommon, labels, format] = await Promise.all([
+    getOverview(),
+    getAdminLocale(),
+    getAdminT("Overview"),
+    getAdminT("Common"),
+    getAdminLabels(),
+    getAdminFormat(),
+  ]);
   // Routine clean-up runs after the page has been sent (see housekeeping.ts).
   after(runHousekeeping);
 
@@ -65,66 +76,68 @@ export default async function OverviewPage() {
   // hosting settings, not here, so they have no link.
   if (isProduction && !isEmailConfigured()) {
     warnings.push({
-      text: "Email sending is not set up (RESEND_API_KEY). Requests are saved here, but no notification or confirmation emails are being sent.",
+      text: t("warnings.email"),
     });
   }
   if (isProduction && isEmailConfigured() && !process.env.EMAIL_FROM) {
     warnings.push({
-      text: "No sender address is set (EMAIL_FROM), so emails go out from a test address that most visitors will never receive.",
+      text: t("warnings.sender"),
     });
   }
   if (isProduction && !isTurnstileEnabled()) {
     warnings.push({
-      text: "Spam protection is not set up (Turnstile keys). The forms are only protected by basic checks.",
+      text: t("warnings.spam"),
     });
   }
   if (isProduction && !hasSharedRateLimit()) {
     warnings.push({
-      text: "Rate limiting is not connected to Upstash, so the limits on forms and sign-in are weaker than intended.",
+      text: t("warnings.rateLimit"),
     });
   }
 
   if (overview.missingPhone) {
     warnings.push({
-      text: "No phone number is set, so the Call Now and Text Us buttons are hidden on the website.",
+      text: t("warnings.phone"),
       href: "/admin/settings",
-      action: "Add the phone number",
+      action: t("warnings.phoneAction"),
     });
   }
   if (overview.missingEmail) {
     warnings.push({
-      text: "No business email is set. Notifications have nowhere to go unless notification emails are listed.",
+      text: t("warnings.businessEmail"),
       href: "/admin/settings",
-      action: "Add the email",
+      action: t("warnings.businessEmailAction"),
     });
   }
   const stripeGap = missingStripeConfig();
   if (stripeGap === "all") {
     warnings.push({
-      text: "Stripe is not connected, so memberships can't be bought online yet. Visitors see “Request this plan” instead.",
+      text: t("warnings.stripe"),
       href: "/admin/plans",
-      action: "Review plans",
+      action: t("warnings.stripeAction"),
     });
   } else if (stripeGap === "webhook") {
     warnings.push({
-      text: "Stripe is only half connected: the webhook secret (STRIPE_WEBHOOK_SECRET) is missing. Online purchase stays switched off until it is set, so nobody can pay without being recorded.",
+      text: t("warnings.stripeWebhook"),
     });
   }
   // Only meaningful once Stripe is connected; before that the warning above
   // already covers every plan.
   for (const plan of isStripeEnabled() ? overview.plansMissingPrice : []) {
     warnings.push({
-      text: `“${plan.nameEn}” is marked Buy online but has no Stripe price yet.`,
+      text: t("warnings.planPrice", {
+        plan: pick(locale, plan.nameEn, plan.nameFr),
+      }),
       href: `/admin/plans/${plan.id}`,
-      action: "Open the plan and save it",
+      action: t("warnings.planPriceAction"),
     });
   }
 
   return (
     <>
       <PageHeader
-        title={`Hello, ${admin.name.split(" ")[0]}`}
-        description="Here's what needs your attention."
+        title={t("hello", { name: admin.name.split(" ")[0] })}
+        description={t("lead")}
       />
 
       {warnings.length > 0 ? (
@@ -152,22 +165,22 @@ export default async function OverviewPage() {
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <Stat label="New requests" value={overview.newRequests} href="/admin/requests?status=NEW" />
-        <Stat label="Requests this week" value={overview.requestsThisWeek} href="/admin/requests" />
-        <Stat label="Active members" value={overview.activeMembers} href="/admin/members?status=ACTIVE" />
+        <Stat label={t("stats.newRequests")} value={overview.newRequests} href="/admin/requests?status=NEW" />
+        <Stat label={t("stats.requestsThisWeek")} value={overview.requestsThisWeek} href="/admin/requests" />
+        <Stat label={t("stats.activeMembers")} value={overview.activeMembers} href="/admin/members?status=ACTIVE" />
         <Stat
-          label="Past-due members"
+          label={t("stats.pastDueMembers")}
           value={overview.pastDueMembers}
           href="/admin/members?status=PAST_DUE"
           tone="alert"
         />
-        <Stat label="New sponsor inquiries" value={overview.newSponsors} href="/admin/sponsors?status=NEW" />
+        <Stat label={t("stats.newSponsors")} value={overview.newSponsors} href="/admin/sponsors?status=NEW" />
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-2">
-        <Panel title="Latest requests">
+        <Panel title={t("latestRequests")}>
           {overview.recentRequests.length === 0 ? (
-            <p className="text-muted-foreground">No requests yet.</p>
+            <p className="text-muted-foreground">{t("noRequests")}</p>
           ) : (
             <ul className="divide-y divide-cream-300">
               {overview.recentRequests.map((request) => (
@@ -181,9 +194,12 @@ export default async function OverviewPage() {
                         {request.fullName}
                       </span>
                       <span className="block truncate text-sm text-muted-foreground">
-                        {request.service?.titleEn ??
-                          (request.type === "GENERAL" ? "Message" : "Not sure yet")}{" "}
-                        · {formatPhone(request.phone)} · {formatDateTime(request.createdAt)}
+                        {request.service
+                          ? pick(locale, request.service.titleEn, request.service.titleFr)
+                          : request.type === "GENERAL"
+                            ? labels("GENERAL")
+                            : tCommon("notSure")}{" "}
+                        · {formatPhone(request.phone)} · {format.dateTime(request.createdAt)}
                       </span>
                     </span>
                     <StatusBadge status={request.status} />
@@ -194,9 +210,9 @@ export default async function OverviewPage() {
           )}
         </Panel>
 
-        <Panel title="Latest memberships">
+        <Panel title={t("latestMemberships")}>
           {overview.recentMemberships.length === 0 ? (
-            <p className="text-muted-foreground">No memberships yet.</p>
+            <p className="text-muted-foreground">{t("noMemberships")}</p>
           ) : (
             <ul className="divide-y divide-cream-300">
               {overview.recentMemberships.map((membership) => (
@@ -210,7 +226,8 @@ export default async function OverviewPage() {
                         {membership.payerName}
                       </span>
                       <span className="block truncate text-sm text-muted-foreground">
-                        {membership.plan.nameEn} · {formatDateTime(membership.createdAt)}
+                        {pick(locale, membership.plan.nameEn, membership.plan.nameFr)} ·{" "}
+                        {format.dateTime(membership.createdAt)}
                       </span>
                     </span>
                     <StatusBadge status={membership.status} />

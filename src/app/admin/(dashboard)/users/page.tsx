@@ -1,30 +1,37 @@
-import type { Metadata } from "next";
-import { formatDay, PageHeader, Panel } from "@/components/admin/ui";
+import { PageHeader, Panel } from "@/components/admin/ui";
 import { InviteUserForm, UserActiveButton } from "@/components/admin/users-panel";
 import { Badge } from "@/components/ui/badge";
+import { getAdminFormat, getAdminT } from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import { requireAdmin } from "@/server/session";
 
-export const metadata: Metadata = { title: "Admin users" };
+export async function generateMetadata() {
+  const t = await getAdminT("Nav");
+  return { title: t("users") };
+}
 
 // Admin pages wait on the session by design (see the dashboard layout).
 export const instant = false;
 
 export default async function UsersPage() {
   const admin = await requireAdmin();
-  const users = await prisma.user.findMany({
-    orderBy: { createdAt: "asc" },
-    select: { id: true, name: true, email: true, isActive: true, createdAt: true },
-  });
+  const [users, t, format] = await Promise.all([
+    prisma.user.findMany({
+      orderBy: { createdAt: "asc" },
+      select: { id: true, name: true, email: true, isActive: true, createdAt: true },
+    }),
+    getAdminT("Users"),
+    getAdminFormat(),
+  ]);
 
   return (
     <>
       <PageHeader
-        title="Admin users"
-        description="People who can sign in to this dashboard. Everyone here has full access."
+        title={t("title")}
+        description={t("description")}
       />
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-        <Panel title="Who has access">
+        <Panel title={t("whoHasAccess")}>
           <ul className="divide-y divide-cream-300">
             {users.map((user) => (
               <li
@@ -34,10 +41,10 @@ export default async function UsersPage() {
                 <div className="min-w-0">
                   <p className="flex flex-wrap items-center gap-2 font-bold text-forest-900">
                     <span className="truncate">{user.name}</span>
-                    {user.isActive ? null : <Badge variant="secondary">Deactivated</Badge>}
+                    {user.isActive ? null : <Badge variant="secondary">{t("deactivated")}</Badge>}
                   </p>
                   <p className="truncate text-sm text-muted-foreground">
-                    {user.email} · added {formatDay(user.createdAt)}
+                    {t("added", { email: user.email, date: format.day(user.createdAt) })}
                   </p>
                 </div>
                 <UserActiveButton
@@ -51,8 +58,8 @@ export default async function UsersPage() {
           </ul>
         </Panel>
         <Panel
-          title="Invite someone"
-          description="They get an email with a link to choose their own password."
+          title={t("inviteTitle")}
+          description={t("inviteDescription")}
         >
           <InviteUserForm />
         </Panel>

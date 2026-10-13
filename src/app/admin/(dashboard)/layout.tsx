@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { AdminIntl } from "@/components/admin/intl";
 import { AdminShell } from "@/components/admin/shell";
 import { Skeleton } from "@/components/ui/skeleton";
 import { prisma } from "@/server/db";
@@ -13,12 +14,14 @@ async function AuthenticatedShell({ children }: { children: React.ReactNode }) {
   ]);
 
   return (
-    <AdminShell
-      admin={{ name: admin.name, email: admin.email }}
-      badges={{ requests, sponsors, pastDue }}
-    >
-      {children}
-    </AdminShell>
+    <AdminIntl>
+      <AdminShell
+        admin={{ name: admin.name, email: admin.email }}
+        badges={{ requests, sponsors, pastDue }}
+      >
+        {children}
+      </AdminShell>
+    </AdminIntl>
   );
 }
 

@@ -1,5 +1,4 @@
 import { MailIcon, PhoneIcon, Trash2Icon } from "lucide-react";
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   ConfirmAction,
@@ -8,8 +7,6 @@ import {
 } from "@/components/admin/detail-controls";
 import {
   DetailList,
-  formatDateTime,
-  label,
   PageHeader,
   Panel,
   StatusBadge,
@@ -21,11 +18,15 @@ import {
   updateSponsorNotes,
   updateSponsorStatus,
 } from "@/server/actions/admin/inbox";
+import { getAdminFormat, getAdminLabels, getAdminT } from "@/server/admin-i18n";
 import { prisma } from "@/server/db";
 import { SPONSOR_STATUSES } from "@/server/queries/admin";
 import { requireAdmin } from "@/server/session";
 
-export const metadata: Metadata = { title: "Sponsor inquiry" };
+export async function generateMetadata() {
+  const t = await getAdminT("Sponsors");
+  return { title: t("detailTitle") };
+}
 
 // Admin pages wait on the session by design (see the dashboard layout).
 export const instant = false;
@@ -38,49 +39,66 @@ export default async function SponsorDetailPage({
   const inquiry = await prisma.sponsorInquiry.findUnique({ where: { id } });
   if (!inquiry) notFound();
 
+  const [t, tCommon, labels, format] = await Promise.all([
+    getAdminT("Sponsors"),
+    getAdminT("Common"),
+    getAdminLabels(),
+    getAdminFormat(),
+  ]);
+
   return (
     <>
       <PageHeader
         title={inquiry.fullName}
-        description={`Sponsor inquiry received ${formatDateTime(inquiry.createdAt)}`}
+        description={t("received", { date: format.dateTime(inquiry.createdAt) })}
         backHref="/admin/sponsors"
-        backLabel="All sponsor inquiries"
+        backLabel={t("backToList")}
       >
         <StatusBadge status={inquiry.status} />
       </PageHeader>
 
       <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <div className="flex min-w-0 flex-col gap-6">
-          <Panel title="Contact">
+          <Panel title={t("contact")}>
             <div className="flex flex-wrap gap-2">
               <Button asChild>
                 <a href={`mailto:${inquiry.email}`}>
                   <MailIcon aria-hidden="true" />
-                  Email
+                  {tCommon("sendEmail")}
                 </a>
               </Button>
               {inquiry.phone ? (
                 <Button asChild variant="outline">
                   <a href={telHref(inquiry.phone)}>
                     <PhoneIcon aria-hidden="true" />
-                    Call {formatPhone(inquiry.phone)}
+                    {tCommon("callNumber", { phone: formatPhone(inquiry.phone) })}
                   </a>
                 </Button>
               ) : null}
             </div>
           </Panel>
 
-          <Panel title="Details">
+          <Panel title={t("details")}>
             <DetailList
               rows={[
-                { label: "Name", value: inquiry.fullName },
-                { label: "Email", value: inquiry.email },
-                { label: "Phone", value: inquiry.phone ? formatPhone(inquiry.phone) : null },
-                { label: "Organization", value: inquiry.organization },
-                { label: "Wants to", value: label(inquiry.intent) },
-                { label: "Message", value: inquiry.message },
-                { label: "Language", value: label(inquiry.locale) },
-                { label: "Consent given", value: formatDateTime(inquiry.consentAt) },
+                { label: t("fields.name"), value: inquiry.fullName },
+                { label: t("fields.email"), value: inquiry.email },
+                {
+                  label: t("fields.phone"),
+                  value: inquiry.phone ? formatPhone(inquiry.phone) : null,
+                },
+                { label: t("fields.organization"), value: inquiry.organization },
+                {
+                  label: t("fields.wantsTo"),
+                  // "OTHER" is also a requester role, whose label does not fit here.
+                  value:
+                    inquiry.intent === "OTHER"
+                      ? t("intentOther")
+                      : labels(inquiry.intent),
+                },
+                { label: t("fields.message"), value: inquiry.message },
+                { label: t("fields.language"), value: labels(inquiry.locale) },
+                { label: t("fields.consentGiven"), value: format.dateTime(inquiry.consentAt) },
               ]}
             />
           </Panel>
@@ -90,7 +108,7 @@ export default async function SponsorDetailPage({
           <Panel>
             <StatusSelect
               value={inquiry.status}
-              options={SPONSOR_STATUSES.map((value) => ({ value, label: label(value) }))}
+              options={SPONSOR_STATUSES.map((value) => ({ value, label: labels(value) }))}
               action={updateSponsorStatus.bind(null, inquiry.id)}
             />
           </Panel>
@@ -101,19 +119,19 @@ export default async function SponsorDetailPage({
             />
           </Panel>
           <Panel
-            title="Delete this inquiry"
-            description="Removes it permanently, for example when someone asks for their information to be deleted."
+            title={t("delete.title")}
+            description={t("delete.description")}
           >
             <ConfirmAction
               trigger={
                 <Button variant="destructive">
                   <Trash2Icon aria-hidden="true" />
-                  Delete permanently
+                  {t("delete.button")}
                 </Button>
               }
-              title="Delete this inquiry?"
-              description={`This permanently removes ${inquiry.fullName}'s inquiry and cannot be undone.`}
-              confirmLabel="Delete"
+              title={t("delete.confirmTitle")}
+              description={t("delete.confirmDescription", { name: inquiry.fullName })}
+              confirmLabel={tCommon("delete")}
               action={deleteSponsor.bind(null, inquiry.id)}
             />
           </Panel>

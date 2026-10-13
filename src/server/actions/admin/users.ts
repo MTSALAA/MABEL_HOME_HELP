@@ -4,12 +4,12 @@ import { randomBytes, randomUUID } from "node:crypto";
 import { hashPassword } from "better-auth/crypto";
 import { refresh } from "next/cache";
 import {
-  INVALID,
   inviteUserSchema,
   isId,
   toFieldErrors,
   type AdminResult,
 } from "@/lib/validation/admin";
+import { getAdminT } from "@/server/admin-i18n";
 import { auth } from "@/server/auth";
 import { prisma } from "@/server/db";
 import { reportError } from "@/server/report-error";
@@ -21,11 +21,12 @@ import { requireAdmin } from "@/server/session";
  */
 export async function inviteUser(values: unknown): Promise<AdminResult> {
   await requireAdmin();
+  const t = await getAdminT("Users.errors");
   const parsed = inviteUserSchema.safeParse(values);
   if (!parsed.success) {
     return {
       ok: false,
-      error: "Please check the highlighted fields.",
+      error: t("checkFields"),
       fieldErrors: toFieldErrors(parsed.error),
     };
   }
@@ -34,8 +35,9 @@ export async function inviteUser(values: unknown): Promise<AdminResult> {
   if (await prisma.user.findUnique({ where: { email }, select: { id: true } })) {
     return {
       ok: false,
-      error: "Please check the highlighted fields.",
-      fieldErrors: { email: "An admin with this email already exists." },
+      error: t("checkFields"),
+      // A key of "Admin.Validation", like the ones from toFieldErrors().
+      fieldErrors: { email: "emailTaken" },
     };
   }
 
@@ -77,18 +79,19 @@ export async function setUserActive(
   const admin = await requireAdmin();
   // Checked strictly: a non-boolean must not slip past the guards below.
   if (!isId(userId) || typeof isActive !== "boolean") {
-    return { ok: false, error: INVALID };
+    return { ok: false, error: (await getAdminT("Common"))("invalidRequest") };
   }
 
+  const t = await getAdminT("Users.errors");
   if (!isActive) {
     if (userId === admin.id) {
-      return { ok: false, error: "You can't deactivate your own account." };
+      return { ok: false, error: t("ownAccount") };
     }
     const otherActive = await prisma.user.count({
       where: { isActive: true, NOT: { id: userId } },
     });
     if (otherActive === 0) {
-      return { ok: false, error: "At least one admin must stay active." };
+      return { ok: false, error: t("lastAdmin") };
     }
   }
 
