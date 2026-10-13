@@ -188,57 +188,62 @@ const plans = [
 ];
 
 async function main() {
-  // Content is only created when missing, so re-running the seed never
-  // overwrites what the owner has edited in the admin.
-  for (const [index, service] of services.entries()) {
-    await prisma.service.upsert({
-      where: { slug: service.slug },
+  // Starter content goes into an empty database only. Once the site has its
+  // settings row, nothing here runs again, so what the owner edited or deleted
+  // in the admin is never brought back. That makes the seed safe on every
+  // deploy (see "vercel-build" in package.json).
+  const isEmpty = (await prisma.siteSettings.count()) === 0;
+  if (isEmpty) {
+    for (const [index, service] of services.entries()) {
+      await prisma.service.upsert({
+        where: { slug: service.slug },
+        update: {},
+        create: { ...service, illustration: service.slug, sortOrder: index },
+      });
+    }
+
+    for (const [index, plan] of plans.entries()) {
+      await prisma.plan.upsert({
+        where: { slug: plan.slug },
+        update: {},
+        create: { ...plan, sortOrder: index },
+      });
+    }
+
+    await prisma.siteSettings.upsert({
+      where: { id: 1 },
       update: {},
-      create: { ...service, illustration: service.slug, sortOrder: index },
+      create: {
+        id: 1,
+        businessName: "Mabel Home Help",
+        taglineEn: "Small jobs. Friendly visits. Peace of mind.",
+        taglineFr: "Petits travaux. Visites amicales. Tranquillité d'esprit.",
+        // Phone and email are still to be confirmed by the client.
+        phone: null,
+        email: null,
+        location: "Edmonton, Alberta, Canada",
+        serviceAreasEn: [
+          "Edmonton",
+          "St. Albert",
+          "Sherwood Park",
+          "Surrounding communities",
+          "Acreages",
+        ],
+        serviceAreasFr: [
+          "Edmonton",
+          "St. Albert",
+          "Sherwood Park",
+          "Collectivités avoisinantes",
+          "Propriétés rurales",
+        ],
+        disclaimerEn:
+          "We provide non-medical, non-emergency services only. We do not provide nursing, personal care or emergency response.",
+        disclaimerFr:
+          "Nous offrons uniquement des services non médicaux et non urgents. Nous n'offrons pas de soins infirmiers, de soins personnels ni d'intervention d'urgence.",
+        notificationEmails: [],
+      },
     });
   }
-
-  for (const [index, plan] of plans.entries()) {
-    await prisma.plan.upsert({
-      where: { slug: plan.slug },
-      update: {},
-      create: { ...plan, sortOrder: index },
-    });
-  }
-
-  await prisma.siteSettings.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      id: 1,
-      businessName: "Mabel Home Help",
-      taglineEn: "Small jobs. Friendly visits. Peace of mind.",
-      taglineFr: "Petits travaux. Visites amicales. Tranquillité d'esprit.",
-      // Phone and email are still to be confirmed by the client.
-      phone: null,
-      email: null,
-      location: "Edmonton, Alberta, Canada",
-      serviceAreasEn: [
-        "Edmonton",
-        "St. Albert",
-        "Sherwood Park",
-        "Surrounding communities",
-        "Acreages",
-      ],
-      serviceAreasFr: [
-        "Edmonton",
-        "St. Albert",
-        "Sherwood Park",
-        "Collectivités avoisinantes",
-        "Propriétés rurales",
-      ],
-      disclaimerEn:
-        "We provide non-medical, non-emergency services only. We do not provide nursing, personal care or emergency response.",
-      disclaimerFr:
-        "Nous offrons uniquement des services non médicaux et non urgents. Nous n'offrons pas de soins infirmiers, de soins personnels ni d'intervention d'urgence.",
-      notificationEmails: [],
-    },
-  });
 
   const email = process.env.SEED_ADMIN_EMAIL?.trim().toLowerCase();
   const password = process.env.SEED_ADMIN_PASSWORD;
@@ -248,8 +253,10 @@ async function main() {
     );
   } else if (password.length < 10) {
     console.warn("SEED_ADMIN_PASSWORD must be at least 10 characters: skipped.");
-  } else if (await prisma.user.findUnique({ where: { email } })) {
-    console.log(`Admin ${email} already exists: left unchanged.`);
+  } else if ((await prisma.user.count()) > 0) {
+    // Only ever the first admin: an account removed in the admin must not come
+    // back on the next deploy.
+    console.log("An admin already exists: none created.");
   } else {
     const userId = randomUUID();
     await prisma.user.create({
@@ -268,7 +275,9 @@ async function main() {
   }
 
   console.log(
-    `Seed complete: ${services.length} services, ${plans.length} plans, settings.`,
+    isEmpty
+      ? `Seed complete: ${services.length} services, ${plans.length} plans, settings.`
+      : "Seed complete: content already present, left unchanged.",
   );
 }
 

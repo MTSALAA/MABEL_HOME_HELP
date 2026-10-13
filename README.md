@@ -161,7 +161,7 @@ limit, and plans show "Request this plan" instead of "Join now".
 | `npm run db:start` | Local Postgres (data in `.pgdata/`) |
 | `npm run db:migrate` | Create and apply a migration after editing `prisma/schema.prisma` |
 | `npm run db:deploy` | Apply existing migrations (used in production and CI) |
-| `npm run db:seed` | Seed content and the first admin (never overwrites existing rows) |
+| `npm run db:seed` | Starter content into an empty database, and the first admin while there are no users |
 | `npm run db:studio` | Browse the database |
 
 First end-to-end run on a machine: `npx playwright install chromium`.
@@ -192,13 +192,19 @@ from that and are easy to trip over:
 
 ## Going live
 
-1. **Hosting and database**: deploy to Vercel, create a Neon Postgres database,
-   set `DATABASE_URL` (pooled) and `DIRECT_URL` (direct). Vercel runs the
-   `vercel-build` script, which applies database migrations before every build.
-   Run `npm run db:seed` against the database once.
-2. **Auth**: set a fresh `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL` /
-   `NEXT_PUBLIC_SITE_URL` to the real domain. Seed the owner account, then sign
-   in and change the password through "Forgot your password?".
+1. **Hosting and database**: deploy to Vercel and add a Neon Postgres database
+   from the project's Storage tab. That creates `DATABASE_URL` (pooled) and
+   `DATABASE_URL_UNPOOLED` (direct) by itself; with any other host, set those
+   two by hand. Vercel runs the `vercel-build` script before every build: it
+   applies database migrations, then runs the seed. The seed only fills an
+   empty database (starter content) and only creates the first admin while
+   there are no users, so later deploys never undo what was changed in the
+   admin.
+2. **Auth**: set a fresh `BETTER_AUTH_SECRET`, and `BETTER_AUTH_URL` /
+   `NEXT_PUBLIC_SITE_URL` to the real domain. Set `SEED_ADMIN_EMAIL` and
+   `SEED_ADMIN_PASSWORD` (10 characters or more) before the first deploy: that
+   becomes the owner's sign-in. The password can be changed afterwards through
+   "Forgot your password?" once email is set up.
 3. **Email**: verify the sending domain in Resend (SPF, DKIM, DMARC), set
    `RESEND_API_KEY` and `EMAIL_FROM`.
 4. **Spam protection**: create a Cloudflare Turnstile widget, set both keys.
