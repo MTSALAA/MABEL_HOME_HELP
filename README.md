@@ -281,9 +281,14 @@ Testing payments locally: use Stripe test keys and forward webhooks with
 | [docs/CAHIER_DE_CHARGES.md](docs/CAHIER_DE_CHARGES.md) | The full specification: pages, forms, admin, data model, design system, quality bars. Section 20 lists what was built differently, section 21 the pre-launch audit |
 | [AGENTS.md](AGENTS.md) | Conventions for anyone (or any AI assistant) changing the code |
 | [SECURITY.md](SECURITY.md) | How to report a security problem |
+| [LICENSE](LICENSE) | What you may and may not do with this code |
 | [.env.example](.env.example) | Every environment variable, with what happens when it is empty |
 
 ## License
 
-Proprietary. All rights reserved. This repository is not licensed for reuse,
-redistribution or deployment by anyone other than its owner.
+Source-available, all rights reserved. See [LICENSE](LICENSE).
+
+The code is public so that it can be read and evaluated (for example by
+employers and clients). It is not open source: it may not be reused,
+redistributed or deployed by anyone other than its owner, and the Mabel Home
+Help name, logo, illustrations and copy may not be used.

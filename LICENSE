@@ -1,0 +1,36 @@
+Mabel Home Help - Source-Available, All Rights Reserved
+
+Copyright (c) 2026 MTSALAA. All rights reserved.
+
+This repository is published so that employers, clients and other reviewers
+can read and evaluate the work. Publishing it does not make it open source.
+
+You MAY:
+
+  - view and read the source code, documentation and commit history;
+  - clone or download a copy for the sole purpose of personally evaluating the
+    quality of the work (for example, a technical review during hiring);
+  - run the project locally, for that same evaluation purpose only.
+
+You may NOT, without prior written permission from the copyright holder:
+
+  - use, copy, modify, merge, publish, distribute, sublicense or sell the
+    code, or any substantial part of it;
+  - deploy or host the project, or a derivative of it, for any purpose,
+    commercial or not;
+  - use the "Mabel Home Help" name, logo, illustrations, screenshots,
+    translated copy or other brand material;
+  - use the code or content to train, fine-tune or evaluate machine-learning
+    models.
+
+Third-party packages used by this project are licensed by their own authors
+under their own terms; this license does not change those terms.
+
+THE SOFTWARE AND CONTENT ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR ITS USE.
+
+For permission requests, open a private security advisory or contact the
+repository owner through their GitHub profile: https://github.com/MTSALAA
